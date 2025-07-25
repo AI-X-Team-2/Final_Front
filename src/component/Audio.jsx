@@ -1,11 +1,13 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import Camera from "./Camera";
 
-const Audio = ({ target }) => {
+const Audio = ({ target, onResult}) => {
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
   const [audioURL, setAudioURL] = useState(null);
+  
 
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -73,7 +75,12 @@ const Audio = ({ target }) => {
       );
       console.log("요청 성공");
 
-      console.log("🎤 인식된 텍스트:", response.data.message);
+      console.log("응답받은 데이터", response.data);
+    
+      if(onResult){
+        onResult(response.data)
+      }
+      
     } catch (error) {
       console.error("전송 실패:", error);
     }
@@ -89,11 +96,9 @@ const Audio = ({ target }) => {
         {isRecording ? "녹음 중..." : "녹음 시작"}
       </button>
 
-      {audioURL && (
-        <audio controls src={audioURL} className="mt-3">
-          녹음 결과
-        </audio>
-      )}
+     
+
+      
     </div>
   );
 };

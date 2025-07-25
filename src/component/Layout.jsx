@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 
 const Layout = () => {
   return (
-    <div className='bg-white w-[50rem] min-h-screen'>
+    <div className='bg-white w-[50rem] min-h-screen overflow-y-auto'>
       <Outlet />
     </div>
   )
