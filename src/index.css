@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+:root {
+  background-color: rgb(208, 208, 208);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

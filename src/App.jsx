@@ -1,17 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
-import NotFound from './pages/NotFound';
+import ConversationAid from './pages/ConversationAid';
+import Layout from './component/Layout'; // 'Rayout'은 오타이므로 제거
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-     
-     
-   
-        <Route path="*" element={<NotFound />} />
+        {/* Layout을 라우트에 감싸서 중첩 라우팅 적용 */}
+        <Route element={<Layout />}>
+          <Route path="/conversation" element={<ConversationAid />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
