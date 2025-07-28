@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef} from "react";
 
 
-const Camera = ({onRecorded}, ref) => {
+const Camera = forwardRef(({onRecorded}, ref) => {
   const videoRef = useRef(null); // 실시간 웹캠
   const mediaRecorderRef = useRef(null);
   const [recording, setRecording] = useState(false);
@@ -76,6 +76,6 @@ const Camera = ({onRecorded}, ref) => {
       )}
     </div>
   );
-};
+});
 
 export default Camera;
