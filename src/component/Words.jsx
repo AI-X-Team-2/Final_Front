@@ -68,8 +68,9 @@ const Words = () => {
         <Audio
           target={currentWord ? currentWord.word : ""}
           onResult={handleResult}
+          onRecorded={setVideoURL}
         />
-        <Camera onRecorded={setVideoURL} />
+      
       </div>
 
       {result && (
@@ -90,31 +91,32 @@ const Words = () => {
               </span>
             </p>
           </div>
-
-          <div className="flex justify-center gap-4 mt-4 items-start">
+          <div className="flex flex-col md:flex-row justify-center gap-8 mt-4 items-start">
+            {/* 올바른 발음 영상 */}
             {currentWord && currentWord.videoPath && (
-              <div className="w-full md:w-1/2 ">
-                <div className="flex">
-                  <p className="font-semibold mb-2 text-center">
-                    올바른 발음 영상
-                  </p>
-                  <video
-                    src={currentWord.videoPath}
-                    controls
-                    className="w-full rounded shadow"
-                  />
-                  <div></div>
+              <div className="flex flex-col items-center w-full md:w-1/2">
+                <p className="font-semibold mb-2 text-center">올바른 발음 영상</p>
+                <video
+                  src={currentWord.videoPath}
+                  controls
+                  className="w-full rounded shadow"
+                />
+              </div>
+            )}
 
-                  <p className="font-semibold mb-2 text-center">당신의 발음 영상</p>
-                  <video
-                    src={videoURL}
-                    controls
-                    className="w-full rounded shadow"
-                  />
-                </div>
+            {/* 사용자 발음 영상 (조건부 렌더링) */}
+            {videoURL && (
+              <div className="flex flex-col items-center w-full md:w-1/2">
+                <p className="font-semibold mb-2 text-center">당신의 발음 영상</p>
+                <video
+                  src={videoURL}
+                  controls
+                  className="w-full rounded shadow"
+                />
               </div>
             )}
           </div>
+
 
           {/*incorrect_points는 백엔드에서 사용자의 틀린 부분에 대한 정보가 담겨있는 리스트(배열)임*/}
           <div className="mt-6">
@@ -125,9 +127,7 @@ const Words = () => {
               <div className="space-y-4">
                 {result.incorrect_points.map((point, index) => {
                   if (point.diff_detail === "누락된 단어") {
-                    {
-                      /*누락된 단어 확인*/
-                    }
+                   
                     return (
                       <div
                         key={index}
@@ -141,9 +141,7 @@ const Words = () => {
                   }
 
                   if (point.diff_detail === "추가된 단어") {
-                    {
-                      /*추가된 단어 확인*/
-                    }
+                    
                     return (
                       <div
                         key={index}
