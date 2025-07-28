@@ -1,8 +1,7 @@
-import React from "react";
-import { useState } from "react";
-import { useRef } from "react";
+import React, { forwardRef, useImperativeHandle, useState, useRef} from "react";
 
-const Camera = ({onRecorded}) => {
+
+const Camera = ({onRecorded}, ref) => {
   const videoRef = useRef(null); // 실시간 웹캠
   const mediaRecorderRef = useRef(null);
   const [recording, setRecording] = useState(false);
@@ -56,34 +55,14 @@ const Camera = ({onRecorded}) => {
     setRecording(false);
   };
 
+  useImperativeHandle(ref, () => ({
+    startCamera,
+    startRecording,
+    stopRecording
+  }))
+
   return (
     <div className="flex flex-col gap-4">
-    
-
-      <div className="flex gap-2">
-        <button
-          onClick={startCamera}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          카메라 켜기
-        </button>
-        {!recording && (
-          <button
-            onClick={startRecording}
-            className="bg-green-500 text-white px-4 py-2 rounded"
-          >
-            녹화 시작
-          </button>
-        )}
-        {recording && (
-          <button
-            onClick={stopRecording}
-            className="bg-red-500 text-white px-4 py-2 rounded"
-          >
-            녹화 중지
-          </button>
-        )}
-      </div>
 
       {recordedVideoURL && (
         <div className="mt-4">
