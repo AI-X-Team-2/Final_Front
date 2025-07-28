@@ -7,9 +7,16 @@ const Audio = ({ target, onResult}) => {
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
   const [audioURL, setAudioURL] = useState(null);
+  const cameraRef = useRef(null);
   
 
   const startRecording = async () => {
+    
+    if(cameraRef.current) {
+      await cameraRef.current.startCamera();
+      cameraRef.current.startRecording();
+    }
+
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const mediaRecorder = new MediaRecorder(stream);
 
@@ -30,15 +37,16 @@ const Audio = ({ target, onResult}) => {
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudioURL(audioUrl);
 
-      if (!audioBlob && !target) {
-        console.log("❗ audioBlob과 target 모두 준비되지 않았습니다.");
-      } else if (!audioBlob) {
-        console.log("❗ audioBlob이 준비되지 않았습니다.");
-      } else if (!target) {
-        console.log("❗ target이 준비되지 않았습니다.");
+        if (!audioBlob || !target) {
+        console.warn("❗ audioBlob 또는 target 없음");
       } else {
         await sendToServer(audioBlob, target);
       }
+
+      if(cameraRef.current) {
+        cameraRef.current.stopRecording();
+      }
+
     };
 
     mediaRecorder.start();
@@ -95,6 +103,7 @@ const Audio = ({ target, onResult}) => {
       >
         {isRecording ? "녹음 중..." : "녹음 시작"}
       </button>
+      <Camera ref={cameraRef} />
 
      
 

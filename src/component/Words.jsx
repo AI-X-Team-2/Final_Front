@@ -86,12 +86,7 @@ const Words = () => {
               </div>
             )}
             
-            {videoURL && (
-              <div className="w-full md:w-1/2">
-                <h2 className="font-semibold mb-2 text-center">내 녹화 영상</h2>
-                <video src={videoURL} controls className="w-full border rounded shadow"/>
-              </div>
-            )}
+          
           </div>
           
           {/*incorrect_points는 백엔드에서 사용자의 틀린 부분에 대한 정보가 담겨있는 리스트(배열)임*/}
