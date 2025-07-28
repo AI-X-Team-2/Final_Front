@@ -66,6 +66,13 @@ const Camera = forwardRef(({ onRecorded }, ref) => {
 
   return (
     <div className="flex flex-col gap-4">
+          <video
+      ref={videoRef}
+      autoPlay
+      muted
+      playsInline
+      className="border rounded w-[20rem] max-w-full h-auto"
+    />
       {recordedVideoURL && (
         <div className="mt-4">
           <h3 className="text-lg font-bold">당신의 입모양</h3>
