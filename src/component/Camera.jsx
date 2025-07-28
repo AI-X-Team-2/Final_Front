@@ -1,7 +1,11 @@
-import React, { forwardRef, useImperativeHandle, useState, useRef} from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useRef,
+} from "react";
 
-
-const Camera = forwardRef(({onRecorded}, ref) => {
+const Camera = forwardRef(({ onRecorded }, ref) => {
   const videoRef = useRef(null); // 실시간 웹캠
   const mediaRecorderRef = useRef(null);
   const [recording, setRecording] = useState(false);
@@ -12,11 +16,12 @@ const Camera = forwardRef(({onRecorded}, ref) => {
   const startCamera = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: true,
-    
     });
     if (videoRef.current) {
       videoRef.current.srcObject = stream;
     }
+
+    return stream;
   };
 
   // 🔴 녹화 시작
@@ -37,13 +42,11 @@ const Camera = forwardRef(({onRecorded}, ref) => {
       });
       const videoUrl = URL.createObjectURL(videoBlob);
       setRecordedVideoURL(videoUrl); // 화면에 보여줄 URL
-       if (onRecorded) {
+      if (onRecorded) {
         onRecorded(videoUrl);
       }
-
     };
 
-    
     mediaRecorderRef.current = mediaRecorder;
     mediaRecorder.start();
     setRecording(true);
@@ -58,12 +61,11 @@ const Camera = forwardRef(({onRecorded}, ref) => {
   useImperativeHandle(ref, () => ({
     startCamera,
     startRecording,
-    stopRecording
-  }))
+    stopRecording,
+  }));
 
   return (
     <div className="flex flex-col gap-4">
-
       {recordedVideoURL && (
         <div className="mt-4">
           <h3 className="text-lg font-bold">당신의 입모양</h3>

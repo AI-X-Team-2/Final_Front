@@ -12,10 +12,17 @@ const Audio = ({ target, onResult}) => {
 
   const startRecording = async () => {
     
-    if(cameraRef.current) {
-      await cameraRef.current.startCamera();
-      
+     let cameraStream = null;
+
+  if (cameraRef.current) {
+    cameraStream = await cameraRef.current.startCamera();  
+    if (cameraStream) {
+      cameraRef.current.startRecording();  
+    } else {
+      console.warn("📷 카메라 stream을 받아오지 못했습니다.");
+      return;
     }
+  }
 
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const mediaRecorder = new MediaRecorder(stream);
@@ -45,14 +52,14 @@ const Audio = ({ target, onResult}) => {
 
 
     };
-
-    cameraRef.current.startRecording();
+  
+  
     mediaRecorder.start();
     setIsRecording(true);
 
     // 5초 후 자동 정지
     setTimeout(() => {stopRecording();
-       cameraRef.current.stopRecording();
+       
       }, 5000);
   };
 
