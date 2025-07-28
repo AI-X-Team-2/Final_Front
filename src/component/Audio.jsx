@@ -14,7 +14,7 @@ const Audio = ({ target, onResult}) => {
     
     if(cameraRef.current) {
       await cameraRef.current.startCamera();
-      cameraRef.current.startRecording();
+      
     }
 
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -43,17 +43,17 @@ const Audio = ({ target, onResult}) => {
         await sendToServer(audioBlob, target);
       }
 
-      if(cameraRef.current) {
-        cameraRef.current.stopRecording();
-      }
 
     };
 
+    cameraRef.current.startRecording();
     mediaRecorder.start();
     setIsRecording(true);
 
     // 5초 후 자동 정지
-    setTimeout(() => stopRecording(), 5000);
+    setTimeout(() => {stopRecording();
+       cameraRef.current.stopRecording();
+      }, 5000);
   };
 
   const stopRecording = () => {
@@ -63,6 +63,10 @@ const Audio = ({ target, onResult}) => {
     ) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
+
+      if(cameraRef.current) {
+        cameraRef.current.stopRecording();
+      }
     }
   };
 
