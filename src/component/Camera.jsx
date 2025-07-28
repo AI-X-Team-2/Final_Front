@@ -40,10 +40,13 @@ const Camera = forwardRef(({ onRecorded }, ref) => {
       const videoBlob = new Blob(recordedChunksRef.current, {
         type: "video/webm",
       });
+       console.log(videoBlob)
       const videoUrl = URL.createObjectURL(videoBlob);
-      setRecordedVideoURL(videoUrl); // 화면에 보여줄 URL
+      setRecordedVideoURL(videoBlob)
+
       if (onRecorded) {
         onRecorded(videoUrl);
+       
       }
     };
 
@@ -66,12 +69,13 @@ const Camera = forwardRef(({ onRecorded }, ref) => {
 
   return (
     <div className="flex flex-col gap-4">
+     
       <video
         ref={videoRef}
         autoPlay
         muted
         playsInline
-        className="hidden"
+        className={recordedVideoURL ? "hidden" : ""}
       />
 
      

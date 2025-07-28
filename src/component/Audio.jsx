@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import Camera from "./Camera";
 
-const Audio = ({ target, onResult}) => {
+const Audio = ({ target, onResult, onRecorded}) => {
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
@@ -114,7 +114,7 @@ const Audio = ({ target, onResult}) => {
       >
         {isRecording ? "녹음 중..." : "녹음 시작"}
       </button>
-      <Camera ref={cameraRef} />
+      <Camera ref={cameraRef} onRecorded={onRecorded}  />
 
      
 
