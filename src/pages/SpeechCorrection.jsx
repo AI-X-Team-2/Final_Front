@@ -2,7 +2,7 @@ import Audio from "../component/Audio";
 import Words from "../component/Words";
 
 
-const ConversationAid = () => {
+const SpeechCorrection = () => {
  
   return (
     <div className="flex flex-col justify-center items-center h-screen">
@@ -11,4 +11,4 @@ const ConversationAid = () => {
   );
 };
 
-export default ConversationAid;
+export default SpeechCorrection;

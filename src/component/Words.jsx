@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Audio from "./Audio";
-import Camera from "./Camera";
+
 
 // 비디오 파일 import
 import apple from "../assets/word-audio/apple.mp4";
@@ -15,6 +15,7 @@ import radio from "../assets/word-audio/radio.mp4";
 import school from "../assets/word-audio/school.mp4";
 
 const Words = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [currentWord, setCurrentWord] = useState(null);
   const [result, setResult] = useState(null);
   const [videoURL, setVideoURL] = useState(null);
@@ -37,25 +38,29 @@ const Words = () => {
     console.log("Words 컴포넌트에서 받은 결과:", resultData);
   };
 
-  const getRandomWord = () => {
-    const randomIndex = Math.floor(Math.random() * wordData.length);
-    return wordData[randomIndex];
+
+   useEffect(() => {
+    setCurrentWord(wordData[currentIndex]);
+  }, [currentIndex]);
+
+
+
+  const goToNextWord = () => {
+    if (currentIndex < wordData.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      setResult(null);     
+      setVideoURL(null);    
+    }
   };
 
-  const getWord = () => {
-    const newWord = getRandomWord();
-    setCurrentWord(newWord);
-    setResult(null);
-    setVideoURL(null);
-  };
 
   return (
     <div className="mb-10 flex flex-col items-center gap-4 p-4">
       <button
-        onClick={getWord}
+        onClick={goToNextWord}
         className="w-60 h-12 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors text-lg font-semibold"
       >
-        랜덤 단어 뽑기
+        다음 단어
       </button>
 
       {currentWord && (
