@@ -2,7 +2,7 @@ import Audio from "../component/Audio";
 import Words from "../component/Words";
 
 
-const SpeechCorrection = () => {
+const DailyLifeVoca = () => {
  
   return (
     <div className="flex flex-col justify-center items-center h-screen">
@@ -11,4 +11,4 @@ const SpeechCorrection = () => {
   );
 };
 
-export default SpeechCorrection;
+export default DailyLifeVoca;
