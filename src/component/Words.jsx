@@ -2,36 +2,17 @@ import React, { useEffect, useState } from "react";
 import Audio from "./Audio";
 
 
-// 비디오 파일 import
-import apple from "../assets/word-audio/apple.mp4";
-import banana from "../assets/word-audio/banana.mp4";
-import car from "../assets/word-audio/car.mp4";
-import hippo from "../assets/word-audio/hippo.mp4";
-import milk from "../assets/word-audio/milk.mp4";
-import pizza from "../assets/word-audio/pizza.mp4";
-import potato from "../assets/word-audio/potato.mp4";
-import rabbit from "../assets/word-audio/rabbit.mp4";
-import radio from "../assets/word-audio/radio.mp4";
-import school from "../assets/word-audio/school.mp4";
 
-const Words = () => {
+
+import Button from "./Button";
+
+const Words = ({ data }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentWord, setCurrentWord] = useState(null);
   const [result, setResult] = useState(null);
   const [videoURL, setVideoURL] = useState(null);
 
-  const wordData = [
-    { word: "사과", videoPath: apple },
-    { word: "바나나", videoPath: banana },
-    { word: "자동차", videoPath: car },
-    { word: "하마", videoPath: hippo },
-    { word: "우유", videoPath: milk },
-    { word: "피자", videoPath: pizza },
-    { word: "감자", videoPath: potato },
-    { word: "토끼", videoPath: rabbit },
-    { word: "라디오", videoPath: radio },
-    { word: "학교", videoPath: school },
-  ];
+
 
   const handleResult = (resultData) => {
     setResult(resultData);
@@ -39,29 +20,32 @@ const Words = () => {
   };
 
 
-   useEffect(() => {
-    setCurrentWord(wordData[currentIndex]);
+  useEffect(() => {
+    setCurrentWord(data[currentIndex]);
   }, [currentIndex]);
 
 
 
   const goToNextWord = () => {
-    if (currentIndex < wordData.length - 1) {
+    if (currentIndex < data.length - 1) {
       setCurrentIndex(currentIndex + 1);
-      setResult(null);     
-      setVideoURL(null);    
+      setResult(null);
+      setVideoURL(null);
     }
   };
 
 
   return (
     <div className="mb-10 flex flex-col items-center gap-4 p-4">
-      <button
-        onClick={goToNextWord}
-        className="w-60 h-12 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors text-lg font-semibold"
-      >
-        다음 단어
-      </button>
+
+    
+        <Button onClick={goToNextWord} disabled={!result}>다음 단어</Button>
+      
+
+      
+
+
+
 
       {currentWord && (
         <div className="text-center bg-yellow-300 w-48 h-24 flex items-center justify-center rounded-lg shadow">
@@ -75,7 +59,7 @@ const Words = () => {
           onResult={handleResult}
           onRecorded={setVideoURL}
         />
-      
+
       </div>
 
       {result && (
@@ -132,7 +116,7 @@ const Words = () => {
               <div className="space-y-4">
                 {result.incorrect_points.map((point, index) => {
                   if (point.diff_detail === "누락된 단어") {
-                   
+
                     return (
                       <div
                         key={index}
@@ -146,7 +130,7 @@ const Words = () => {
                   }
 
                   if (point.diff_detail === "추가된 단어") {
-                    
+
                     return (
                       <div
                         key={index}
