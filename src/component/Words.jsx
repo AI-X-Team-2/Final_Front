@@ -6,13 +6,13 @@ import Audio from "./Audio";
 
 import Button from "./Button";
 
-const Words = ({data}) => {
+const Words = ({ data }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentWord, setCurrentWord] = useState(null);
   const [result, setResult] = useState(null);
   const [videoURL, setVideoURL] = useState(null);
 
- 
+
 
   const handleResult = (resultData) => {
     setResult(resultData);
@@ -20,7 +20,7 @@ const Words = ({data}) => {
   };
 
 
-   useEffect(() => {
+  useEffect(() => {
     setCurrentWord(data[currentIndex]);
   }, [currentIndex]);
 
@@ -29,8 +29,8 @@ const Words = ({data}) => {
   const goToNextWord = () => {
     if (currentIndex < data.length - 1) {
       setCurrentIndex(currentIndex + 1);
-      setResult(null);     
-      setVideoURL(null);    
+      setResult(null);
+      setVideoURL(null);
     }
   };
 
@@ -38,9 +38,14 @@ const Words = ({data}) => {
   return (
     <div className="mb-10 flex flex-col items-center gap-4 p-4">
 
+    
+        <Button onClick={goToNextWord} disabled={!result}>다음 단어</Button>
+      
 
-      <Button  onClick={goToNextWord}>다음 단어</Button>
-     
+      
+
+
+
 
       {currentWord && (
         <div className="text-center bg-yellow-300 w-48 h-24 flex items-center justify-center rounded-lg shadow">
@@ -54,7 +59,7 @@ const Words = ({data}) => {
           onResult={handleResult}
           onRecorded={setVideoURL}
         />
-      
+
       </div>
 
       {result && (
@@ -111,7 +116,7 @@ const Words = ({data}) => {
               <div className="space-y-4">
                 {result.incorrect_points.map((point, index) => {
                   if (point.diff_detail === "누락된 단어") {
-                   
+
                     return (
                       <div
                         key={index}
@@ -125,7 +130,7 @@ const Words = ({data}) => {
                   }
 
                   if (point.diff_detail === "추가된 단어") {
-                    
+
                     return (
                       <div
                         key={index}

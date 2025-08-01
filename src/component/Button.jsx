@@ -1,10 +1,13 @@
 import React from 'react'
-const Button = ({ children, onClick, className = "", ...props }) => {
+const Button = ({ children, onClick, className = "", disabled, ...props }) => {
+  const baseStyle = "w-60 h-12  rounded-lg shadow-md  text-lg font-semibold ";
+  const disabledStyle = "bg-gray-400 ";
+  const activeStyle = "bg-blue-600 text-white hover:bg-blue-700 transition-colors"
   return (
     <button
       onClick={onClick}
-      className={`w-60 h-12 bg-blue-600 text-white rounded-lg shadow-md
-         hover:bg-blue-700 transition-colors text-lg font-semibold ${className}`}
+      disabled={disabled}
+      className={`${baseStyle} ${disabled ? disabledStyle : activeStyle} ${className}`}
       {...props}
     >
       {children}

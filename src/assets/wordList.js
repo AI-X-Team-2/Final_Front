@@ -12,7 +12,7 @@ import school from "./word-audio/school.mp4";
 
 import step1_1_1 from "./STEP 1-5 video/STEP1/step1_1-1.mp4";
 import step1_1_2 from "./STEP 1-5 video/STEP1/step1_1-2.mp4";
-import step1_1_3 from "./STEP 1-5 video/STEP1/step1_1-3.mp4";
+import step1_1_3 from "./STEP 1-5 video/STEP1/step1_1-3.mov";
 import step1_1_4 from "./STEP 1-5 video/STEP1/step1_1-4.mp4";
 import step1_1_5 from "./STEP 1-5 video/STEP1/step1_1-5.mp4";
 import step1_2_1 from "./STEP 1-5 video/STEP1/step1_2-1.mp4";
@@ -22,153 +22,145 @@ import step1_2_4 from "./STEP 1-5 video/STEP1/step1_2-4.mp4";
 import step1_2_5 from "./STEP 1-5 video/STEP1/step1_2-5.mp4";
 import step1_3_1 from "./STEP 1-5 video/STEP1/step1_3-1.mp4";
 import step1_3_2 from "./STEP 1-5 video/STEP1/step1_3-2.mp4";
-import step1_3_3 from "./STEP 1-5 video/STEP1/step1_3-3.mp4";
+import step1_3_3 from "./STEP 1-5 video/STEP1/step1_3-3.mov";
 import step1_3_4 from "./STEP 1-5 video/STEP1/step1_3-4.mp4";
 import step1_3_5 from "./STEP 1-5 video/STEP1/step1_3-5.mp4";
-import step2_1_1 from "./STEP 1-5 video/STEP2/step2_1-1.mp4";
-import step2_1_2 from "./STEP 1-5 video/STEP2/step2_1-2.mp4";
-import step2_1_3 from "./STEP 1-5 video/STEP2/step2_1-3.mp4";
-import step2_1_4 from "./STEP 1-5 video/STEP2/step2_1-4.mp4";
-import step2_1_5 from "./STEP 1-5 video/STEP2/step2_1-5.mp4";
-import step2_1_6 from "./STEP 1-5 video/STEP2/step2_1-6.mp4";
-import step2_1_7 from "./STEP 1-5 video/STEP2/step2_1-7.mp4";
-import step2_1_8 from "./STEP 1-5 video/STEP2/step2_1-8.mp4";
-import step2_1_9 from "./STEP 1-5 video/STEP2/step2_1-9.mp4";
-import step2_2_1 from "./STEP 1-5 video/STEP2/step2_2-1.mp4";
-import step2_2_2 from "./STEP 1-5 video/STEP2/step2_2-2.mp4";
-import step2_2_3 from "./STEP 1-5 video/STEP2/step2_2-3.mp4";
-import step2_2_4 from "./STEP 1-5 video/STEP2/step2_2-4.mp4";
-import step2_2_5 from "./STEP 1-5 video/STEP2/step2_2-5.mp4";
-import step2_2_6 from "./STEP 1-5 video/STEP2/step2_2-6.mp4";
-import step2_2_7 from "./STEP 1-5 video/STEP2/step2_2-7.mp4";
-import step2_2_8 from "./STEP 1-5 video/STEP2/step2_2-8.mp4";
-import step2_2_9 from "./STEP 1-5 video/STEP2/step2_2-9.mp4";
-import step2_3_1 from "./STEP 1-5 video/STEP2/step2_3-1.mp4";
-import step2_3_2 from "./STEP 1-5 video/STEP2/step2_3-2.mp4";
-import step2_3_3 from "./STEP 1-5 video/STEP2/step2_3-3.mp4";
-import step2_3_4 from "./STEP 1-5 video/STEP2/step2_3-4.mp4";
-import step2_3_5 from "./STEP 1-5 video/STEP2/step2_3-5.mp4";
-import step2_3_6 from "./STEP 1-5 video/STEP2/step2_3-6.mp4";
-import step2_3_7 from "./STEP 1-5 video/STEP2/step2_3-7.mp4";
-import step2_3_8 from "./STEP 1-5 video/STEP2/step2_3-8.mp4";
-import step2_3_9 from "./STEP 1-5 video/STEP2/step2_3-9.mp4";
-import step2_4_1 from "./STEP 1-5 video/STEP2/step2_4-1.mp4";
-import step2_4_2 from "./STEP 1-5 video/STEP2/step2_4-2.mp4";
-import step2_4_3 from "./STEP 1-5 video/STEP2/step2_4-3.mp4";
-import step2_4_4 from "./STEP 1-5 video/STEP2/step2_4-4.mp4";
-import step2_4_5 from "./STEP 1-5 video/STEP2/step2_4-5.mp4";
-import step2_4_6 from "./STEP 1-5 video/STEP2/step2_4-6.mp4";
-import step2_4_7 from "./STEP 1-5 video/STEP2/step2_4-7.mp4";
-import step2_4_8 from "./STEP 1-5 video/STEP2/step2_4-8.mp4";
-import step2_4_9 from "./STEP 1-5 video/STEP2/step2_4-9.mp4";
-import step3_1_1 from "./STEP 1-5 video/STEP3/step3_1-1.mp4";
-import step3_1_2 from "./STEP 1-5 video/STEP3/step3_1-2.mp4";
-import step3_1_3 from "./STEP 1-5 video/STEP3/step3_1-3.mp4";
-import step3_1_4 from "./STEP 1-5 video/STEP3/step3_1-4.mp4";
-import step3_1_5 from "./STEP 1-5 video/STEP3/step3_1-5.mp4";
-import step3_1_6 from "./STEP 1-5 video/STEP3/step3_1-6.mp4";
-import step3_1_7 from "./STEP 1-5 video/STEP3/step3_1-7.mp4";
-import step3_1_8 from "./STEP 1-5 video/STEP3/step3_1-8.mp4";
-import step3_1_9 from "./STEP 1-5 video/STEP3/step3_1-9.mp4";
-import step3_1_10 from "./STEP 1-5 video/STEP3/step3_1-10.mp4";
-import step3_1_11 from "./STEP 1-5 video/STEP3/step3_1-11.mp4";
-import step3_1_12 from "./STEP 1-5 video/STEP3/step3_1-12.mp4";
-import step3_1_13 from "./STEP 1-5 video/STEP3/step3_1-13.mp4";
-import step3_2_1 from "./STEP 1-5 video/STEP3/step3_2-1.mp4";
-import step3_2_2 from "./STEP 1-5 video/STEP3/step3_2-2.mp4";
-import step3_2_3 from "./STEP 1-5 video/STEP3/step3_2-3.mp4";
-import step3_2_4 from "./STEP 1-5 video/STEP3/step3_2-4.mp4";
-import step3_2_5 from "./STEP 1-5 video/STEP3/step3_2-5.mp4";
-import step3_2_6 from "./STEP 1-5 video/STEP3/step3_2-6.mp4";
-import step3_2_7 from "./STEP 1-5 video/STEP3/step3_2-7.mp4";
-import step3_2_8 from "./STEP 1-5 video/STEP3/step3_2-8.mp4";
-import step3_2_9 from "./STEP 1-5 video/STEP3/step3_2-9.mp4";
-import step3_2_10 from "./STEP 1-5 video/STEP3/step3_2-10.mp4";
-import step3_2_11 from "./STEP 1-5 video/STEP3/step3_2-11.mp4";
-import step3_2_12 from "./STEP 1-5 video/STEP3/step3_2-12.mp4";
-import step3_2_13 from "./STEP 1-5 video/STEP3/step3_2-13.mp4";
-import step3_3_1 from "./STEP 1-5 video/STEP3/step3_3-1.mp4";
-import step3_3_2 from "./STEP 1-5 video/STEP3/step3_3-2.mp4";
-import step3_3_3 from "./STEP 1-5 video/STEP3/step3_3-3.mp4";
-import step3_3_4 from "./STEP 1-5 video/STEP3/step3_3-4.mp4";
-import step3_3_5 from "./STEP 1-5 video/STEP3/step3_3-5.mp4";
-import step3_3_6 from "./STEP 1-5 video/STEP3/step3_3-6.mp4";
-import step3_3_7 from "./STEP 1-5 video/STEP3/step3_3-7.mp4";
-import step3_3_8 from "./STEP 1-5 video/STEP3/step3_3-8.mp4";
-import step3_3_9 from "./STEP 1-5 video/STEP3/step3_3-9.mp4";
-import step3_3_10 from "./STEP 1-5 video/STEP3/step3_3-10.mp4";
-import step3_3_11 from "./STEP 1-5 video/STEP3/step3_3-11.mp4";
-import step3_3_12 from "./STEP 1-5 video/STEP3/step3_3-12.mp4";
-import step3_3_13 from "./STEP 1-5 video/STEP3/step3_3-13.mp4";
-import step4_1_1 from "./STEP 1-5 video/STEP4/step4_1-1.mp4";
-import step4_1_2 from "./STEP 1-5 video/STEP4/step4_1-2.mp4";
-import step4_1_3 from "./STEP 1-5 video/STEP4/step4_1-3.mp4";
-import step4_1_4 from "./STEP 1-5 video/STEP4/step4_1-4.mp4";
-import step4_1_5 from "./STEP 1-5 video/STEP4/step4_1-5.mp4";
-import step4_1_6 from "./STEP 1-5 video/STEP4/step4_1-6.mp4";
-import step4_1_7 from "./STEP 1-5 video/STEP4/step4_1-7.mp4";
-import step4_1_8 from "./STEP 1-5 video/STEP4/step4_1-8.mp4";
-import step4_1_9 from "./STEP 1-5 video/STEP4/step4_1-9.mp4";
-import step4_1_10 from "./STEP 1-5 video/STEP4/step4_1-10.mp4";
-import step4_1_11 from "./STEP 1-5 video/STEP4/step4_1-11.mp4";
-import step4_1_12 from "./STEP 1-5 video/STEP4/step4_1-12.mp4";
-import step4_2_1 from "./STEP 1-5 video/STEP4/step4_2-1.mp4";
-import step4_2_2 from "./STEP 1-5 video/STEP4/step4_2-2.mp4";
-import step4_2_3 from "./STEP 1-5 video/STEP4/step4_2-3.mp4";
-import step4_2_4 from "./STEP 1-5 video/STEP4/step4_2-4.mp4";
-import step4_2_5 from "./STEP 1-5 video/STEP4/step4_2-5.mp4";
-import step4_2_6 from "./STEP 1-5 video/STEP4/step4_2-6.mp4";
-import step4_2_7 from "./STEP 1-5 video/STEP4/step4_2-7.mp4";
-import step4_2_8 from "./STEP 1-5 video/STEP4/step4_2-8.mp4";
-import step4_2_9 from "./STEP 1-5 video/STEP4/step4_2-9.mp4";
-import step4_2_10 from "./STEP 1-5 video/STEP4/step4_2-10.mp4";
-import step4_2_11 from "./STEP 1-5 video/STEP4/step4_2-11.mp4";
-import step4_2_12 from "./STEP 1-5 video/STEP4/step4_2-12.mp4";
-import step4_3_1 from "./STEP 1-5 video/STEP4/step4_3-1.mp4";
-import step4_3_2 from "./STEP 1-5 video/STEP4/step4_3-2.mp4";
-import step4_3_3 from "./STEP 1-5 video/STEP4/step4_3-3.mp4";
-import step4_3_4 from "./STEP 1-5 video/STEP4/step4_3-4.mp4";
-import step4_3_5 from "./STEP 1-5 video/STEP4/step4_3-5.mp4";
-import step4_3_6 from "./STEP 1-5 video/STEP4/step4_3-6.mp4";
-import step4_3_7 from "./STEP 1-5 video/STEP4/step4_3-7.mp4";
-import step4_3_8 from "./STEP 1-5 video/STEP4/step4_3-8.mp4";
-import step4_3_9 from "./STEP 1-5 video/STEP4/step4_3-9.mp4";
-import step4_3_10 from "./STEP 1-5 video/STEP4/step4_3-10.mp4";
-import step4_3_11 from "./STEP 1-5 video/STEP4/step4_3-11.mp4";
-import step4_3_12 from "./STEP 1-5 video/STEP4/step4_3-12.mp4";
-import step5_1_1 from "./STEP 1-5 video/STEP5/step5_1-1.mp4";
-import step5_1_2 from "./STEP 1-5 video/STEP5/step5_1-2.mp4";
-import step5_1_3 from "./STEP 1-5 video/STEP5/step5_1-3.mp4";
-import step5_1_4 from "./STEP 1-5 video/STEP5/step5_1-4.mp4";
-import step5_1_5 from "./STEP 1-5 video/STEP5/step5_1-5.mp4";
-import step5_1_6 from "./STEP 1-5 video/STEP5/step5_1-6.mp4";
-import step5_1_7 from "./STEP 1-5 video/STEP5/step5_1-7.mp4";
-import step5_1_8 from "./STEP 1-5 video/STEP5/step5_1-8.mp4";
-import step5_1_9 from "./STEP 1-5 video/STEP5/step5_1-9.mp4";
-import step5_2_1 from "./STEP 1-5 video/STEP5/step5_2-1.mp4";
-import step5_2_2 from "./STEP 1-5 video/STEP5/step5_2-2.mp4";
-import step5_2_3 from "./STEP 1-5 video/STEP5/step5_2-3.mp4";
-import step5_2_4 from "./STEP 1-5 video/STEP5/step5_2-4.mp4";
-import step5_2_5 from "./STEP 1-5 video/STEP5/step5_2-5.mp4";
-import step5_2_6 from "./STEP 1-5 video/STEP5/step5_2-6.mp4";
-import step5_2_7 from "./STEP 1-5 video/STEP5/step5_2-7.mp4";
-import step5_2_8 from "./STEP 1-5 video/STEP5/step5_2-8.mp4";
-import step5_2_9 from "./STEP 1-5 video/STEP5/step5_2-9.mp4";
-import step5_2_10 from "./STEP 1-5 video/STEP5/step5_2-10.mp4";
-import step5_2_11 from "./STEP 1-5 video/STEP5/step5_2-11.mp4";
-import step5_2_12 from "./STEP 1-5 video/STEP5/step5_2-12.mp4";
+import step2_1_1 from "./STEP 1-5 video/STEP2/step2_1-1.mov";
+import step2_1_2 from "./STEP 1-5 video/STEP2/step2_1-2.mov";
+import step2_1_3 from "./STEP 1-5 video/STEP2/step2_1-3.mov";
+import step2_1_4 from "./STEP 1-5 video/STEP2/step2_1-4.mov";
+import step2_1_5 from "./STEP 1-5 video/STEP2/step2_1-5.mov";
+import step2_1_6 from "./STEP 1-5 video/STEP2/step2_1-6.mov";
+import step2_1_7 from "./STEP 1-5 video/STEP2/step2_1-7.mov";
+import step2_1_8 from "./STEP 1-5 video/STEP2/step2_1-8.mov";
+import step2_1_9 from "./STEP 1-5 video/STEP2/step2_1-9.mov";
+import step2_2_1 from "./STEP 1-5 video/STEP2/step2_2-1.mov";
+import step2_2_2 from "./STEP 1-5 video/STEP2/step2_2-2.mov";
+import step2_2_3 from "./STEP 1-5 video/STEP2/step2_2-3.mov";
+import step2_2_4 from "./STEP 1-5 video/STEP2/step2_2-4.mov";
+import step2_2_5 from "./STEP 1-5 video/STEP2/step2_2-5.mov";
+import step2_2_6 from "./STEP 1-5 video/STEP2/step2_2-6.mov";
+import step2_2_7 from "./STEP 1-5 video/STEP2/step2_2-7.mov";
+import step2_2_8 from "./STEP 1-5 video/STEP2/step2_2-8.mov";
+import step2_2_9 from "./STEP 1-5 video/STEP2/step2_2-9.mov";
+import step2_3_1 from "./STEP 1-5 video/STEP2/step2_3-1.mov";
+import step2_3_2 from "./STEP 1-5 video/STEP2/step2_3-2.mov";
+import step2_3_3 from "./STEP 1-5 video/STEP2/step2_3-3.mov";
+import step2_3_4 from "./STEP 1-5 video/STEP2/step2_3-4.mov";
+import step2_3_5 from "./STEP 1-5 video/STEP2/step2_3-5.mov";
+import step2_3_6 from "./STEP 1-5 video/STEP2/step2_3-6.mov";
+import step2_3_7 from "./STEP 1-5 video/STEP2/step2_3-7.mov";
+import step2_3_8 from "./STEP 1-5 video/STEP2/step2_3-8.mov";
+import step2_3_9 from "./STEP 1-5 video/STEP2/step2_3-9.mov";
+import step2_4_1 from "./STEP 1-5 video/STEP2/step2_4-1.mov";
+import step2_4_2 from "./STEP 1-5 video/STEP2/step2_4-2.mov";
+import step2_4_3 from "./STEP 1-5 video/STEP2/step2_4-3.mov";
+import step2_4_4 from "./STEP 1-5 video/STEP2/step2_4-4.mov";
+import step2_4_5 from "./STEP 1-5 video/STEP2/step2_4-5.mov";
+import step2_4_6 from "./STEP 1-5 video/STEP2/step2_4-6.mov";
+import step2_4_7 from "./STEP 1-5 video/STEP2/step2_4-7.mov";
+import step2_4_8 from "./STEP 1-5 video/STEP2/step2_4-8.mov";
+import step2_4_9 from "./STEP 1-5 video/STEP2/step2_4-9.mov";
+import step3_1_1 from "./STEP 1-5 video/STEP3/step3_1-1.mov";
+import step3_1_2 from "./STEP 1-5 video/STEP3/step3_1-2.mov";
+import step3_1_3 from "./STEP 1-5 video/STEP3/step3_1-3.mov";
+import step3_1_4 from "./STEP 1-5 video/STEP3/step3_1-4.mov";
+import step3_1_5 from "./STEP 1-5 video/STEP3/step3_1-5.mov";
+import step3_1_6 from "./STEP 1-5 video/STEP3/step3_1-6.mov";
+import step3_1_7 from "./STEP 1-5 video/STEP3/step3_1-7.mov";
+import step3_1_8 from "./STEP 1-5 video/STEP3/step3_1-8.mov";
+import step3_1_9 from "./STEP 1-5 video/STEP3/step3_1-9.mov";
+import step3_1_10 from "./STEP 1-5 video/STEP3/step3_1-10.mov";
+import step3_1_11 from "./STEP 1-5 video/STEP3/step3_1-11.mov";
+import step3_1_12 from "./STEP 1-5 video/STEP3/step3_1-12.mov";
+import step3_1_13 from "./STEP 1-5 video/STEP3/step3_1-13.mov";
+import step3_2_1 from "./STEP 1-5 video/STEP3/step3_2-1.mov";
+import step3_2_2 from "./STEP 1-5 video/STEP3/step3_2-2.mov";
+import step3_2_3 from "./STEP 1-5 video/STEP3/step3_2-3.mov";
+import step3_2_4 from "./STEP 1-5 video/STEP3/step3_2-4.mov";
+import step3_2_5 from "./STEP 1-5 video/STEP3/step3_2-5.mov";
+import step3_2_6 from "./STEP 1-5 video/STEP3/step3_2-6.mov";
+import step3_2_7 from "./STEP 1-5 video/STEP3/step3_2-7.mov";
+import step3_2_8 from "./STEP 1-5 video/STEP3/step3_2-8.mov";
+import step3_2_9 from "./STEP 1-5 video/STEP3/step3_2-9.mov";
+import step3_2_10 from "./STEP 1-5 video/STEP3/step3_2-10.mov";
+import step3_2_11 from "./STEP 1-5 video/STEP3/step3_2-11.mov";
+import step3_2_12 from "./STEP 1-5 video/STEP3/step3_2-12.mov";
+import step3_2_13 from "./STEP 1-5 video/STEP3/step3_2-13.mov";
+import step3_3_1 from "./STEP 1-5 video/STEP3/step3_3-1.mov";
+import step3_3_2 from "./STEP 1-5 video/STEP3/step3_3-2.mov";
+import step3_3_3 from "./STEP 1-5 video/STEP3/step3_3-3.mov";
+import step3_3_4 from "./STEP 1-5 video/STEP3/step3_3-4.mov";
+import step3_3_5 from "./STEP 1-5 video/STEP3/step3_3-5.mov";
+import step3_3_6 from "./STEP 1-5 video/STEP3/step3_3-6.mov";
+import step3_3_7 from "./STEP 1-5 video/STEP3/step3_3-7.mov";
+import step3_3_8 from "./STEP 1-5 video/STEP3/step3_3-8.mov";
+import step3_3_9 from "./STEP 1-5 video/STEP3/step3_3-9.mov";
+import step3_3_10 from "./STEP 1-5 video/STEP3/step3_3-10.mov";
+import step3_3_11 from "./STEP 1-5 video/STEP3/step3_3-11.mov";
+import step3_3_12 from "./STEP 1-5 video/STEP3/step3_3-12.mov";
+import step3_3_13 from "./STEP 1-5 video/STEP3/step3_3-13.mov";
+import step4_1_1 from "./STEP 1-5 video/STEP4/step4_1-1.mov";
+import step4_1_2 from "./STEP 1-5 video/STEP4/step4_1-2.mov";
+import step4_1_3 from "./STEP 1-5 video/STEP4/step4_1-3.mov";
+import step4_1_4 from "./STEP 1-5 video/STEP4/step4_1-4.mov";
+import step4_1_5 from "./STEP 1-5 video/STEP4/step4_1-5.mov";
+import step4_1_6 from "./STEP 1-5 video/STEP4/step4_1-6.mov";
+import step4_1_7 from "./STEP 1-5 video/STEP4/step4_1-7.mov";
+import step4_1_8 from "./STEP 1-5 video/STEP4/step4_1-8.mov";
+import step4_1_9 from "./STEP 1-5 video/STEP4/step4_1-9.mov";
+import step4_1_10 from "./STEP 1-5 video/STEP4/step4_1-10.mov";
+import step4_1_11 from "./STEP 1-5 video/STEP4/step4_1-11.mov";
+import step4_1_12 from "./STEP 1-5 video/STEP4/step4_1-12.mov";
+import step4_2_1 from "./STEP 1-5 video/STEP4/step4_2-1.mov";
+import step4_2_2 from "./STEP 1-5 video/STEP4/step4_2-2.mov";
+import step4_2_3 from "./STEP 1-5 video/STEP4/step4_2-3.mov";
+import step4_2_4 from "./STEP 1-5 video/STEP4/step4_2-4.mov";
+import step4_2_5 from "./STEP 1-5 video/STEP4/step4_2-5.mov";
+import step4_2_6 from "./STEP 1-5 video/STEP4/step4_2-6.mov";
+import step4_2_7 from "./STEP 1-5 video/STEP4/step4_2-7.mov";
+import step4_2_8 from "./STEP 1-5 video/STEP4/step4_2-8.mov";
+import step4_2_9 from "./STEP 1-5 video/STEP4/step4_2-9.mov";
+import step4_2_10 from "./STEP 1-5 video/STEP4/step4_2-10.mov";
+import step4_2_11 from "./STEP 1-5 video/STEP4/step4_2-11.mov";
+import step4_2_12 from "./STEP 1-5 video/STEP4/step4_2-12.mov";
+import step4_3_1 from "./STEP 1-5 video/STEP4/step4_3-1.mov";
+import step4_3_2 from "./STEP 1-5 video/STEP4/step4_3-2.mov";
+import step4_3_3 from "./STEP 1-5 video/STEP4/step4_3-3.mov";
+import step4_3_4 from "./STEP 1-5 video/STEP4/step4_3-4.mov";
+import step4_3_5 from "./STEP 1-5 video/STEP4/step4_3-5.mov";
+import step4_3_6 from "./STEP 1-5 video/STEP4/step4_3-6.mov";
+import step4_3_7 from "./STEP 1-5 video/STEP4/step4_3-7.mov";
+import step4_3_8 from "./STEP 1-5 video/STEP4/step4_3-8.mov";
+import step4_3_9 from "./STEP 1-5 video/STEP4/step4_3-9.mov";
+import step4_3_10 from "./STEP 1-5 video/STEP4/step4_3-10.mov";
+import step4_3_11 from "./STEP 1-5 video/STEP4/step4_3-11.mov";
+import step4_3_12 from "./STEP 1-5 video/STEP4/step4_3-12.mov";
+import step5_1_1 from "./STEP 1-5 video/STEP5/step5_1-1.mov";
+import step5_1_2 from "./STEP 1-5 video/STEP5/step5_1-2.mov";
+import step5_1_3 from "./STEP 1-5 video/STEP5/step5_1-3.mov";
+import step5_1_4 from "./STEP 1-5 video/STEP5/step5_1-4.mov";
+import step5_1_5 from "./STEP 1-5 video/STEP5/step5_1-5.mov";
+import step5_1_6 from "./STEP 1-5 video/STEP5/step5_1-6.mov";
+import step5_1_7 from "./STEP 1-5 video/STEP5/step5_1-7.mov";
+import step5_1_8 from "./STEP 1-5 video/STEP5/step5_1-8.mov";
+import step5_1_9 from "./STEP 1-5 video/STEP5/step5_1-9.mov";
+import step5_2_1 from "./STEP 1-5 video/STEP5/step5_2-1.mov";
+import step5_2_2 from "./STEP 1-5 video/STEP5/step5_2-2.mov";
+import step5_2_3 from "./STEP 1-5 video/STEP5/step5_2-3.mov";
+import step5_2_4 from "./STEP 1-5 video/STEP5/step5_2-4.mov";
+import step5_2_5 from "./STEP 1-5 video/STEP5/step5_2-5.mov";
+import step5_2_6 from "./STEP 1-5 video/STEP5/step5_2-6.mov";
+import step5_2_7 from "./STEP 1-5 video/STEP5/step5_2-7.mov";
+import step5_2_8 from "./STEP 1-5 video/STEP5/step5_2-8.mov";
+import step5_2_9 from "./STEP 1-5 video/STEP5/step5_2-9.mov";
+import step5_2_10 from "./STEP 1-5 video/STEP5/step5_2-10.mov";
+import step5_2_11 from "./STEP 1-5 video/STEP5/step5_2-11.mov";
+import step5_2_12 from "./STEP 1-5 video/STEP5/step5_2-12.mov";
 
 import "./STEP 1-5 video/STEP1/step1_1-1.mp4"
-export const wordList = {
- step1Words,
- step2Words,
- step3Words,
- step4Words,
- step5Words,
-  dailyWords,
-};
 
-const step1Words = {
+export const step1Words = {
   step1_1: [
     { word: "바", videoPath: step1_1_1 },
     { word: "뱌", videoPath: step1_1_2 },
@@ -192,7 +184,7 @@ const step1Words = {
   ],
 };
 
-const step2Words = {
+export const step2Words = {
   step2_1: [
     { word: "다", videoPath: step2_1_1 },
     { word: "댜", videoPath: step2_1_2 },
@@ -239,7 +231,7 @@ const step2Words = {
   ],
 };
 
-const step3Words = {
+export const step3Words = {
   step3_1: [
     { word: "자", videoPath: step3_1_1 },
     { word: "쟈", videoPath: step3_1_2 },
@@ -289,7 +281,7 @@ const step3Words = {
 };
 
 
-const step4Words = {
+export const step4Words = {
   step4_1: [
     { word: "그", videoPath: step4_1_1 },
     { word: "긔", videoPath: step4_1_2 },
@@ -334,7 +326,7 @@ const step4Words = {
   ]
 };
 
-const step5Words = {
+export const step5Words = {
   step5_1: [
     { word: "하", videoPath: step5_1_1 },
     { word: "햐", videoPath: step5_1_2 },
@@ -363,7 +355,7 @@ const step5Words = {
 };
 
  
- const dailyWords = [
+export const dailyWords = [
     { word: "사과", videoPath: apple },
     { word: "바나나", videoPath: banana },
     { word: "자동차", videoPath: car },
@@ -375,3 +367,13 @@ const step5Words = {
     { word: "라디오", videoPath: radio },
     { word: "학교", videoPath: school },
   ];
+
+
+  export const wordList = {
+ step1Words,
+ step2Words,
+ step3Words,
+ step4Words,
+ step5Words,
+  dailyWords,
+};
