@@ -1,6 +1,6 @@
-import React from 'react'
-// src/pages/Game.jsx
+
 import React, { useRef, useState, useEffect } from "react";
+import GameButton from "../component/GameButton";
 
 const WORD_LIST = [
   '사과', '바나나', '오렌지', '포도', '딸기',
@@ -216,15 +216,15 @@ const WordGame = () => {
          <div className="absolute bottom-14 left-1/2 -translate-x-1/2 text-sm text-gray-600 z-20">{micStatus}</div>
  
          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-           {!started && <Button onClick={startGame}>시작</Button>}
-           {started && lives <= 0 && <Button onClick={startGame}>재시작</Button>}
+           {!started && <GameButton onClick={startGame}>시작</GameButton>}
+           {started && lives <= 0 && <GameButton onClick={startGame}>재시작</GameButton>}
          </div>
  
          {!started && lives <= 0 && (
            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70 text-white z-30">
              <h2 className="text-2xl mb-2">게임 오버!</h2>
              <p className="mb-4">최종 점수: {score}</p>
-             <Button onClick={startGame}>다시 시작</Button>
+             <GameButton onClick={startGame}>다시 시작</GameButton>
            </div>
          )}
        </div>
