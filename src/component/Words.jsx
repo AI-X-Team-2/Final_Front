@@ -149,20 +149,20 @@ const Words = ({ data }) => {
                       className="border rounded-lg p-4 bg-gray-50"
                     >
                       <h4 className="font-semibold text-lg mb-1 text-red-600">
-                        틀린 발음: "{point.actual}" → "{point.expected}"
+                        틀린 발음: "{point.wrong_text}" → "{point.expected}"
                       </h4>
 
                       {point.diff_detail && (
                         <p className="font-bold text-md text-orange-600 mb-3">
-                          교정 포인트: {point.diff_detail}
+                          교정 포인트: {point.teaching_point}
                         </p>
                       )}
 
                       <div className="flex flex-col md:flex-row items-start gap-4">
-                        {point.img && (
+                        {point.correct_img_url && (
                           <div className="text-center">
                             <img
-                              src={`http://127.0.0.1:8000/static/images/${point.img}`}
+                              src={`http://127.0.0.1:8000/static/images/${point.correct_img_url}`}
                               alt="혀 위치 가이드"
                               className="w-24 h-24 object-contain border rounded p-1 bg-white"
                               onError={(e) => {
@@ -178,13 +178,13 @@ const Words = ({ data }) => {
                         )}
                         <div className="flex-1 space-y-2 text-base">
                           <p>
-                            <strong>입모양:</strong> {point.mouth_shape}
+                            <strong>입모양:</strong> {point.mouth_feedback}
                           </p>
                           <p>
-                            <strong>혀 위치:</strong> {point.tongue_shape}
+                            <strong>혀 위치:</strong> {point.tongue_position_feedback}
                           </p>
                           <p>
-                            <strong>호흡법:</strong> {point.breathing}
+                            <strong>호흡법:</strong> {point.breathing_feedback}
                           </p>
                         </div>
                       </div>
