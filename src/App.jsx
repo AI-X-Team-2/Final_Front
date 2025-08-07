@@ -11,12 +11,22 @@ import Basic from './pages/Basic';
 import BasicStage from './pages/BasicStage';
 import DailyStep from './pages/DailyStep';
 import Main from './pages/Main';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import LoginRegisterLayout from './component/LoginRegisterLayout';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Layout을 라우트에 감싸서 중첩 라우팅 적용 */}
+        <Route element={<LoginRegisterLayout />}>
+         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        </Route>
+       
+
+
+
         <Route element={<Layout />}>
           <Route path="/" element={<Main />} />
 
