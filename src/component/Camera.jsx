@@ -3,14 +3,20 @@ import React, {
   useImperativeHandle,
   useState,
   useRef,
+  useEffect,
 } from "react";
 
-const Camera = forwardRef(({ onRecorded }, ref) => {
+
+const Camera = forwardRef(({ onRecorded, reset }, ref) => {
   const videoRef = useRef(null); // 실시간 웹캠
   const mediaRecorderRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const [recordedVideoURL, setRecordedVideoURL] = useState(null);
   const recordedChunksRef = useRef([]);
+
+    useEffect(() => {
+    setRecordedVideoURL(null);
+  }, [reset]);
 
   // ▶ 카메라 시작
   const startCamera = async () => {
@@ -67,15 +73,17 @@ const Camera = forwardRef(({ onRecorded }, ref) => {
     stopRecording,
   }));
 
+  console.log(recordedVideoURL)
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 items-center">
      
       <video
         ref={videoRef}
         autoPlay
         muted
         playsInline
-        className={recordedVideoURL ? "hidden" : ""}
+        className={`w-96 ${recordedVideoURL ? "hidden" : ""}`}
       />
 
      

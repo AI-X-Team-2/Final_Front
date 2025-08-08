@@ -12,7 +12,7 @@ const MainButton = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`w-full py-2 rounded-xl shadow-md text-white
+      className={`w-[30rem] h-12 py-2 rounded-xl shadow-md text-white
         ${disabled ? 'bg-customLightGray cursor-not-allowed' : 'bg-custom_blue'}
         ${className}`}
     >
