@@ -20,10 +20,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<LoginRegisterLayout />}>
-         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
+          <Route path="/basic/step/:step/:stage" element={<BasicStage />} />
+
         </Route>
-       
+
 
 
 
@@ -33,9 +36,8 @@ function App() {
           <Route path="/game" element={<WordGame />} />
           <Route path="/basic" element={<Basic />} />
           <Route path="/basic/step/:step" element={<BasicStep1 />} />
-          <Route path="/basic/step/:step/:stage" element={<BasicStage />} />
           <Route path="/daily" element={<DailyStep />} />
-          <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
+
         </Route>
       </Routes>
     </BrowserRouter>

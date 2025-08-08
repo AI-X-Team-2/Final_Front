@@ -1,28 +1,38 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Camera from "./Camera";
+import MainButton from "./MainButton";
 
-const Audio = ({ target, onResult, onRecorded}) => {
+const Audio = ({ target, onResult, onRecorded, disabled, reset , onRecordingChange, camerareset}) => {
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
   const [audioURL, setAudioURL] = useState(null);
   const cameraRef = useRef(null);
-  
+
+
+  useEffect(() => {
+    if (reset) {
+      setAudioURL(null);
+    }
+  }, [reset]);
+
 
   const startRecording = async () => {
-    
-     let cameraStream = null;
+  if (onRecordingChange) onRecordingChange(true);
+    let cameraStream = null;
 
-  if (cameraRef.current) {
-    cameraStream = await cameraRef.current.startCamera();  
-    if (cameraStream) {
-      cameraRef.current.startRecording();  
-    } else {
-      console.warn("📷 카메라 stream을 받아오지 못했습니다.");
-      return;
+
+
+    if (cameraRef.current) {
+      cameraStream = await cameraRef.current.startCamera();
+      if (cameraStream) {
+        cameraRef.current.startRecording();
+      } else {
+        console.warn("📷 카메라 stream을 받아오지 못했습니다.");
+        return;
+      }
     }
-  }
 
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const mediaRecorder = new MediaRecorder(stream);
@@ -44,7 +54,7 @@ const Audio = ({ target, onResult, onRecorded}) => {
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudioURL(audioUrl);
 
-        if (!audioBlob || !target) {
+      if (!audioBlob || !target) {
         console.warn("❗ audioBlob 또는 target 없음");
       } else {
         await sendToServer(audioBlob, target);
@@ -52,15 +62,16 @@ const Audio = ({ target, onResult, onRecorded}) => {
 
 
     };
-  
-  
+
+
     mediaRecorder.start();
     setIsRecording(true);
 
     // 5초 후 자동 정지
-    setTimeout(() => {stopRecording();
-       
-      }, 5000);
+    setTimeout(() => {
+      stopRecording();
+
+    }, 5000);
   };
 
   const stopRecording = () => {
@@ -70,8 +81,9 @@ const Audio = ({ target, onResult, onRecorded}) => {
     ) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
+        if (onRecordingChange) onRecordingChange(false);
 
-      if(cameraRef.current) {
+      if (cameraRef.current) {
         cameraRef.current.stopRecording();
       }
     }
@@ -95,11 +107,11 @@ const Audio = ({ target, onResult, onRecorded}) => {
       console.log("요청 성공");
 
       console.log("응답받은 데이터", response.data);
-    
-      if(onResult){
+
+      if (onResult) {
         onResult(response.data)
       }
-      
+
     } catch (error) {
       console.error("전송 실패:", error);
     }
@@ -107,18 +119,16 @@ const Audio = ({ target, onResult, onRecorded}) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <button
-        onClick={startRecording}
-        disabled={isRecording}
-        className="w-40 h-10 bg-blue-500 text-white text-lg font-bold rounded"
-      >
-        {isRecording ? "녹음 중..." : "녹음 시작"}
-      </button>
-      <Camera ref={cameraRef} onRecorded={onRecorded}  />
 
-     
+      <MainButton onClick={startRecording}
+        disabled={disabled || isRecording || !!audioURL}
+        className="w-40 h-10 text-lg font-bold rounded" label={isRecording ? "녹음 중..." : "녹음 시작"} />
 
-      
+      <Camera ref={cameraRef} onRecorded={onRecorded}  reset={camerareset} />
+
+
+
+
     </div>
   );
 };
