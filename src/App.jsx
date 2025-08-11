@@ -16,6 +16,9 @@ import Register from './pages/Register';
 import LoginRegisterLayout from './component/LoginRegisterLayout';
 import Practice from './component/Practice';
 
+// ✅ 추가: 랭킹 페이지
+import Ranking from './pages/Ranking';
+
 function App() {
   return (
     <BrowserRouter>
@@ -40,6 +43,8 @@ function App() {
           <Route path="/daily" element={<DailyStep />} />
           <Route path="/practice" element={<Practice />} />
 
+          {/* ✅ 추가: 랭킹 페이지 라우트 */}
+          <Route path="/ranking" element={<Ranking />} />
 
         </Route>
       </Routes>

@@ -10,7 +10,7 @@ import { Link , useLocation } from 'react-router-dom'
 
 const navItems = [
   { name: '단어', icon: HomeIcon, path: '/' },
-  { name: '게임', icon: StarIcon, path: '/game' },
+  { name: '게임', icon: StarIcon, path: '/ranking' },
   { name: '연습', icon: PencilIcon, path: '/practice' },
   { name: '설정', icon: Cog6ToothIcon, path: '/settings' }
 ]
