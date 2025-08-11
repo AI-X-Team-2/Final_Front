@@ -62,8 +62,7 @@ const Words = ({ data }) => {
       <div className="flex flex-col md:flex-row gap-4 items-start">
         <Audio
           target={currentWord ? currentWord.word : ""}
-          onResult={handleResult}
-          onRecorded={setVideoURL}
+        onResult={handleResult}      
           disabled={audioDisabled}
           reset={currentIndex}
           onRecordingChange={handleRecordingChange}
