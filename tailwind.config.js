@@ -14,7 +14,8 @@ export default {
         customMidGray: '#5E7499',
         customLightGray: '#667788',
         custom_blue: '#51AEF1',
-        customBarGray: '#273746'
+        customBarGray: '#273746',
+        customFeedBack: '#3D4F61'
 
       },
 

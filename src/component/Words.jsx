@@ -15,7 +15,7 @@ const Words = ({ data }) => {
   const [videoURL, setVideoURL] = useState(null);
   const [audioDisabled, setAudioDisabled] = useState(false);
   const [isWaitingResult, setIsWaitingResult] = useState(false);
-    const [isRecording, setIsRecording] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
 
   const handleRecordingChange = (recording) => {
     setIsRecording(recording);
@@ -27,7 +27,7 @@ const Words = ({ data }) => {
   const handleResult = (resultData) => {
     setResult(resultData);
     setAudioDisabled(true);
-     setIsWaitingResult(false);
+    setIsWaitingResult(false);
     console.log("Words 컴포넌트에서 받은 결과:", resultData);
   };
 
@@ -66,12 +66,12 @@ const Words = ({ data }) => {
           onRecorded={setVideoURL}
           disabled={audioDisabled}
           reset={currentIndex}
-             onRecordingChange={handleRecordingChange}
-              camerareset={currentIndex}
+          onRecordingChange={handleRecordingChange}
+          camerareset={currentIndex}
         />
 
       </div>
-       {!isRecording && isWaitingResult && !result && <LodadingSpinner />}
+      {!isRecording && isWaitingResult && !result && <LodadingSpinner />}
 
 
       {result && (
@@ -81,7 +81,7 @@ const Words = ({ data }) => {
             <p className="text-lg">
               <span className="font-semibold text-white text-xl">내 발음:</span>{" "}
               <span className="font-bold text-white text-xl">
-                {result.transcription}
+                {result.my_text}
               </span>
             </p>
           </div>
@@ -121,21 +121,23 @@ const Words = ({ data }) => {
           </div>
 
 
-          {/*incorrect_points는 백엔드에서 사용자의 틀린 부분에 대한 정보가 담겨있는 리스트(배열)임*/}
-          <div className="mt-6">
-            <h3 className="text-xl font-bold mb-3  text-white">
-              상세 피드백
-            </h3>
-            {result.incorrect_points && result.incorrect_points.length > 0 ? (
-              <div className="space-y-4 mb-36">
-                {result.incorrect_points.map((point, index) => {
-                  if (point.diff_detail === "누락된 단어") {
 
+          <div className="mt-6">
+            {result.score == 0 ? (
+              <p className="mt-2 p-4 bg-customFeedBack text-white rounded-lg text-center font-semibold mb-36">
+                올바른 발음이 아닙니다
+              </p>
+            ) : result.incorrect_points && result.incorrect_points.length > 0 ? (
+              <div className="space-y-4 mb-36 ">
+                <h3 className="text-xl font-bold mb-3 text-white">
+                  상세 피드백
+                </h3>
+
+                <div className="overflow-y-auto h-64 flex flex-col gap-20">
+                     {result.incorrect_points.map((point, index) => {
+                  if (point.diff_detail === "누락된 단어") {
                     return (
-                      <div
-                        key={index}
-                        className="border rounded-lg p-4 bg-gray-50"
-                      >
+                      <div key={index} className="border rounded-lg p-4 bg-gray-50">
                         <h4 className="font-semibold text-lg text-red-600">
                           누락된 단어: "{point.expected}"
                         </h4>
@@ -144,12 +146,8 @@ const Words = ({ data }) => {
                   }
 
                   if (point.teaching_point === "추가된 단어") {
-
                     return (
-                      <div
-                        key={index}
-                        className="border rounded-lg p-4 bg-gray-50"
-                      >
+                      <div key={index} className="border rounded-lg p-4 bg-gray-50">
                         <h4 className="font-semibold text-lg text-red-600">
                           추가된 단어: "{point.actual}"
                         </h4>
@@ -158,17 +156,14 @@ const Words = ({ data }) => {
                   }
 
                   return (
-                    <div
-                      key={index}
-                      className="border rounded-lg p-4 bg-gray-50"
-                    >
-                      <h4 className="font-semibold text-lg mb-1 text-red-600">
-                        틀린 발음: "{point.wrong_text}" → "{point.expected}"
+                    <div key={index} className="rounded-lg p-4 bg-customFeedBack">
+                      <h4 className="font-semibold text-lg mb-1 text-white">
+                        틀린 발음: "{point.actual}" → "{point.expected}"
                       </h4>
 
-                      {point.diff_detail && (
-                        <p className="font-bold text-md text-orange-600 mb-3">
-                          교정 포인트: {point.diff_detail}
+                      {point.teaching_point && (
+                        <p className="font-bold text-md text-white mb-3">
+                          교정 포인트: {point.teaching_point}
                         </p>
                       )}
 
@@ -205,15 +200,24 @@ const Words = ({ data }) => {
                     </div>
                   );
                 })}
+                </div>
+
+                
+             
               </div>
             ) : (
-              <p className="mt-2 p-4 bg-gray-50 text-black rounded-lg text-center font-semibold mb-36">
+              <p className="mt-2 p-4 bg-customFeedBack text-black rounded-lg text-center font-semibold mb-36">
                 완벽한 발음입니다! 아주 잘하셨어요!
               </p>
             )}
+
+
+
+
+
           </div>
         </div>
-      ) 
+      )
       }
       <MainButton onClick={goToNextWord} disabled={!result} label={"다음 단어"} className="fixed bottom-6 left-1/2 -translate-x-1/2 " />
 
