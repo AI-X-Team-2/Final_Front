@@ -12,7 +12,7 @@ const Words = ({ data }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentWord, setCurrentWord] = useState(null);
   const [result, setResult] = useState(null);
-  const [videoURL, setVideoURL] = useState(null);
+  const [serverVideoURL, setServerVideoURL] = useState(null);
   const [audioDisabled, setAudioDisabled] = useState(false);
   const [isWaitingResult, setIsWaitingResult] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -68,6 +68,10 @@ const Words = ({ data }) => {
           reset={currentIndex}
           onRecordingChange={handleRecordingChange}
           camerareset={currentIndex}
+           onUploadComplete={(data) => {
+         
+          setServerVideoURL(data.videoUrl);
+        }}
         />
 
       </div>
@@ -108,11 +112,11 @@ const Words = ({ data }) => {
             )}
 
             {/* 사용자 발음 영상 (조건부 렌더링) */}
-            {videoURL && (
+            {serverVideoURL && (
               <div className="flex flex-col items-center w-full md:w-1/2">
                 <p className="font-semibold mb-2 text-center text-white">당신의 발음 영상</p>
                 <video
-                  src={videoURL}
+                  src={serverVideoURL}
                   controls
                   className="w-full rounded shadow"
                 />
