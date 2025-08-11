@@ -7,7 +7,7 @@ import React, {
 } from "react";
 
 
-const Camera = forwardRef(({ onRecorded, reset }, ref) => {
+const Camera = forwardRef(({ onRecorded, reset,  onUploadComplete }, ref) => {
   const videoRef = useRef(null); // 실시간 웹캠
   const mediaRecorderRef = useRef(null);
   const [recording, setRecording] = useState(false);
@@ -30,6 +30,27 @@ const Camera = forwardRef(({ onRecorded, reset }, ref) => {
     return stream;
   };
 
+    // 서버로 영상 업로드 함수
+  const uploadVideoToServer = async (videoBlob) => {
+    try {
+      const formData = new FormData();
+      formData.append("video_file", videoBlob, "recording.webm");
+
+      // axios 사용 예시 (import axios from 'axios' 필요)
+      const response = await axios.post("http://127.0.0.1:8000/upload_video", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      console.log("영상 업로드 성공", response.data);
+         if (onUploadComplete) {
+        onUploadComplete(response.data); // 예: { videoUrl: "서버영상경로" }
+      }
+    } catch (error) {
+      console.error("영상 업로드 실패", error);
+    }
+  };
+
+
   // 🔴 녹화 시작
   const startRecording = () => {
     recordedChunksRef.current = [];
@@ -42,7 +63,7 @@ const Camera = forwardRef(({ onRecorded, reset }, ref) => {
       }
     };
 
-    mediaRecorder.onstop = () => {
+    mediaRecorder.onstop =  async() => {
       const videoBlob = new Blob(recordedChunksRef.current, {
         type: "video/webm",
       });
@@ -54,6 +75,9 @@ const Camera = forwardRef(({ onRecorded, reset }, ref) => {
         onRecorded(videoUrl);
        
       }
+
+      await uploadVideoToServer(videoBlob);
+
     };
 
     mediaRecorderRef.current = mediaRecorder;

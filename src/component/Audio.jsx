@@ -3,7 +3,7 @@ import axios from "axios";
 import Camera from "./Camera";
 import MainButton from "./MainButton";
 
-const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChange, camerareset }) => {
+const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChange, camerareset, onUploadComplete }) => {
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
@@ -127,6 +127,12 @@ const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChang
     }
   };
 
+  
+  const handleUploadComplete = (serverResponse) => {
+    if (onUploadComplete) onUploadComplete(serverResponse);
+  };
+
+
   return (
     <div className="flex flex-col gap-3">
       <MainButton
@@ -135,7 +141,7 @@ const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChang
         className="w-40 h-10 text-lg font-bold rounded"
         label={isRecording ? "녹음 중단" : "녹음 시작"}
       />
-      <Camera ref={cameraRef} onRecorded={onRecorded} reset={camerareset} />
+      <Camera ref={cameraRef} onRecorded={onRecorded} reset={camerareset} onUploadComplete={handleUploadComplete}/>
 
 
 
