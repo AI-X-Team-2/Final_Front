@@ -14,6 +14,7 @@ import Main from './pages/Main';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import LoginRegisterLayout from './component/LoginRegisterLayout';
+import Practice from './component/Practice';
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
           <Route path="/basic" element={<Basic />} />
           <Route path="/basic/step/:step" element={<BasicStep1 />} />
           <Route path="/daily" element={<DailyStep />} />
+          <Route path="/practice" element={<Practice />} />
+
 
         </Route>
       </Routes>
