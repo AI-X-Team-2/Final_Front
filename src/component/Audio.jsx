@@ -3,13 +3,21 @@ import axios from "axios";
 import Camera from "./Camera";
 import MainButton from "./MainButton";
 
-const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChange, camerareset, onUploadComplete }) => {
+const Audio = ({
+  target,
+  onResult,
+  onRecorded,
+  disabled,
+  reset,
+  onRecordingChange,
+  camerareset,
+  onMouthVideoReady,
+}) => {
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
   const [audioURL, setAudioURL] = useState(null);
   const cameraRef = useRef(null);
-
 
   useEffect(() => {
     if (reset) {
@@ -17,30 +25,21 @@ const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChang
     }
   }, [reset]);
 
-  
- // 마운트 시 또는 target 바뀔 때 카메라 미리 켜기
-  useEffect(() => {
-    async function initCamera() {
-      if (cameraRef.current) {
-        try {
-          await cameraRef.current.startCamera();
-        } catch (e) {
-          console.warn("카메라 초기화 실패", e);
-        }
-      }
-    }
-    initCamera();
-  }, [target]);
-
   const startRecording = async () => {
-   if (onRecordingChange) onRecordingChange(true);
+    if (onRecordingChange) onRecordingChange(true);
+    let cameraStream = null;
 
     if (cameraRef.current) {
-      // 카메라가 이미 켜져 있으니 녹화만 시작
-      cameraRef.current.startRecording();
-    } else {
-      console.warn("카메라 레퍼런스 없음");
+      cameraStream = await cameraRef.current.startCamera();
+      if (cameraStream) {
+        cameraRef.current.startRecording();
+        // cameraRef.current.stopStream(); // 이 줄을 삭제했습니다.
+      } else {
+        console.warn("📷 카메라 stream을 받아오지 못했습니다.");
+        return;
+      }
     }
+
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const mediaRecorder = new MediaRecorder(stream);
 
@@ -57,7 +56,6 @@ const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChang
       const audioBlob = new Blob(audioChunksRef.current, {
         type: "audio/webm",
       });
-
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudioURL(audioUrl);
 
@@ -66,10 +64,7 @@ const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChang
       } else {
         await sendToServer(audioBlob, target);
       }
-
-
     };
-
 
     mediaRecorder.start();
     setIsRecording(true);
@@ -86,10 +81,10 @@ const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChang
 
       if (cameraRef.current) {
         cameraRef.current.stopRecording();
+        cameraRef.current.stopStream(); 
       }
     }
   };
-
 
   const toggleRecording = () => {
     if (isRecording) {
@@ -115,37 +110,31 @@ const Audio = ({ target, onResult, onRecorded, disabled, reset, onRecordingChang
         }
       );
       console.log("요청 성공");
-
       console.log("응답받은 데이터", response.data);
 
       if (onResult) {
-        onResult(response.data)
+        onResult(response.data);
       }
-
     } catch (error) {
       console.error("전송 실패:", error);
     }
   };
 
-  
-  const handleUploadComplete = (serverResponse) => {
-    if (onUploadComplete) onUploadComplete(serverResponse);
-  };
-
-
   return (
     <div className="flex flex-col gap-3">
       <MainButton
         onClick={toggleRecording}
-        disabled={disabled || (!!audioURL && !isRecording)}
+        disabled={disabled || !!audioURL}
         className="w-40 h-10 text-lg font-bold rounded"
-        label={isRecording ? "녹음 중단" : "녹음 시작"}
+        label={isRecording ? "녹음 중지" : "녹음 시작"}
       />
-      <Camera ref={cameraRef} onRecorded={onRecorded} reset={camerareset} onUploadComplete={handleUploadComplete}/>
-
-
-
-
+      
+      <Camera
+        ref={cameraRef}
+        onRecorded={onRecorded}
+        reset={camerareset}
+        onUploadComplete={onMouthVideoReady}
+      />
     </div>
   );
 };
