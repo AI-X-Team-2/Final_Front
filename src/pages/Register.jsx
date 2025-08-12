@@ -111,7 +111,7 @@ const Register = () => {
       </form>
 
       <div className="text-center mt-4">
-        <button onClick={() => navigate('/login')} className="text-sm text-white underline">
+        <button onClick={() => navigate('/')} className="text-sm text-white underline">
           로그인
         </button>
       </div>
