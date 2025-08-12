@@ -15,24 +15,36 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import LoginRegisterLayout from './component/LoginRegisterLayout';
 import Practice from './component/Practice';
+import LearningLayout from './component/LearningLayout';
+import Setting from './pages/Setting';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<LoginRegisterLayout />}>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
-          <Route path="/basic/step/:step/:stage" element={<BasicStage />} />
 
+
+        </Route>
+
+        <Route element={<LearningLayout />}> 
+         <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
+          <Route path="/basic/step/:step/:stage" element={<BasicStage />} />
         </Route>
 
 
 
 
+
+
+
+
         <Route element={<Layout />}>
-          <Route path="/" element={<Main />} />
+          <Route path="/main" element={<Main />} />
+                    <Route path="/settings" element={<Setting />} />
+
 
           <Route path="/game" element={<WordGame />} />
           <Route path="/basic" element={<Basic />} />

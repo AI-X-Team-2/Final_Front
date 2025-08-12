@@ -4,10 +4,10 @@ import { useMutation } from '@tanstack/react-query';
 import { login } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
 import MainButton from '../component/MainButton';
-
+import { useAuthStore } from '../store/useAuthSotre'; 
 const Login = () => {
   const navigate = useNavigate();
-
+ const setToken = useAuthStore((state) => state.setToken);
   const {
     register,
     handleSubmit,
@@ -18,11 +18,12 @@ const Login = () => {
     mutationFn: login,
     onSuccess: (data) => {
       alert('로그인 성공');
-      // localStorage.setItem('token', data.token);
-      // navigate('/home');
+      setToken(data.token); 
+      navigate('/main');
     },
     onError: (err) => {
       alert('로그인 실패: ' + (err.response?.data?.message || '서버 오류'));
+      navigate('/');
     },
   });
 
