@@ -35,7 +35,7 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center flex-col text-white">
       <h2 className="text-center text-xl font-bold mb-6">회원가입</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 flex flex-col items-center">
 
         {/* 아이디 */}
         <div>

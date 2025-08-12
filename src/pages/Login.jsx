@@ -34,7 +34,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center flex-col">
       <h2 className="text-center text-xl font-bold mb-6 text-white">로그인</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 flex flex-col items-center justify-center">
         {/* 아이디 */}
         <div className="flex flex-col">
           <label className="text-sm mb-1 text-white">아이디</label>
