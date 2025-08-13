@@ -21,7 +21,7 @@ const Register = () => {
     mutationFn: signup,
     onSuccess: () => {
       alert('회원가입 성공!');
-      navigate('/login');
+      navigate('/');
     },
     onError: (err) => {
       alert('회원가입 실패: ' + err.response?.data?.message || '서버 오류');

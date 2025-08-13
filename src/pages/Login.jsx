@@ -22,7 +22,12 @@ const Login = () => {
       // navigate('/home');
     },
     onError: (err) => {
-      alert('로그인 실패: ' + (err.response?.data?.message || '서버 오류'));
+      if (err.response?.status === 401) {
+        alert(err.response?.data?.message || err.response?.data?.detail || '아이디 또는 비밀번호가 잘못되었습니다.');
+      } else {
+        alert('로그인 실패: ' + (err.response?.data?.message || '서버 오류'));
+      }
+      navigate('/');
     },
   });
 
