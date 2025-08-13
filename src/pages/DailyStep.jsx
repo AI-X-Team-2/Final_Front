@@ -36,7 +36,7 @@ const DailyStep = ({ opened }) => {
                     <div className="flex flex-col rounded-lg p-6 shadow-lg w-[30rem] bg-custom_blue">
                         <div className="flex justify-end">
                             <XMarkIcon
-                                className="w-5 h-5 text-black cursor-pointer"
+                                className="w-5 h-5 text-white cursor-pointer"
                                 onClick={() => setShowPopup(false)}
                             />
 

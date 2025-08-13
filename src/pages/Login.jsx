@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { login } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
 import MainButton from '../component/MainButton';
 import { useAuthStore } from '../store/useAuthSotre'; 
+import Modal from 'react-modal';
+
+
+
 const Login = () => {
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: '', message: '', isSuccess: false });
+
   const navigate = useNavigate();
  const setToken = useAuthStore((state) => state.setToken);
   const {
@@ -14,15 +21,24 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      alert('로그인 성공');
-      setToken(data.token); 
-      navigate('/main');
+     
+      setToken(data.token);
+      setModalContent({ title: '로그인 성공', message: '환영합니다!', isSuccess: true });
+      setModalIsOpen(true); 
+     
     },
     onError: (err) => {
-      alert('로그인 실패: ' + (err.response?.data?.message || '서버 오류'));
+      setModalContent({
+        title: '로그인 실패',
+        message: err?.response?.data?.message || '아이디 또는 비밀번호가 일치하지 않습니다.',
+        isSuccess: false,
+      });
+      setModalIsOpen(true);
+      
+      console.log(err.response?.data?.message)
       navigate('/');
     },
   });
@@ -31,6 +47,13 @@ const Login = () => {
     mutate(data);
   };
 
+  
+  const closeModal = () => {
+    setModalIsOpen(false);
+    if (modalContent.isSuccess) {
+      navigate('/main');
+    }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center flex-col">
       <h2 className="text-center text-xl font-bold mb-6 text-white">로그인</h2>
@@ -79,6 +102,26 @@ const Login = () => {
           회원가입
         </button>
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        className="bg-custom-blue-gradient rounded-lg shadow-lg p-6 max-w-sm mx-auto mt-40 outline-none"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      >
+        <h2
+          className={`text-lg font-bold mb-4 
+          text-white`}
+        >
+          {modalContent.title}
+        </h2>
+        <p className="mb-6 text-white">{modalContent.message}</p>
+        <button
+          onClick={closeModal}
+          className="w-full py-2  rounded bg-white text-custom_blue"
+        >
+          확인
+        </button>
+      </Modal>
     </div>
   );
 };

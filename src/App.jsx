@@ -17,6 +17,10 @@ import LoginRegisterLayout from './component/LoginRegisterLayout';
 import Practice from './component/Practice';
 import LearningLayout from './component/LearningLayout';
 import Setting from './pages/Setting';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
+
 
 function App() {
   return (
