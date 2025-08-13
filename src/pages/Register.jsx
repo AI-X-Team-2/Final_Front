@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { signup } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
 import MainButton from '../component/MainButton';
+import Modal from 'react-modal';
+
 
 const Register = () => {
   const navigate = useNavigate();
+
+   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    title: '',
+    message: '',
+    isSuccess: false,
+  });
 
   const {
     register,
@@ -20,13 +29,32 @@ const Register = () => {
   const { mutate } = useMutation({
     mutationFn: signup,
     onSuccess: () => {
-      alert('회원가입 성공!');
-      navigate('/login');
+       setModalContent({
+        title: '회원가입 성공',
+        message: '환영합니다! 이제 로그인해 주세요.',
+        isSuccess: true,
+      });
+       setModalIsOpen(true);        
+     
     },
     onError: (err) => {
-      alert('회원가입 실패: ' + err.response?.data?.message || '서버 오류');
+      setModalContent({
+        title: '회원가입 실패',
+        message: '회원가입에 실패했습니다',
+        isSuccess: false,
+      });
+      setModalIsOpen(true);
+      console.log('회원가입 실패: ' + err.response?.data?.message || '서버 오류');
     },
   });
+
+  
+  const closeModal = () => {
+    setModalIsOpen(false);
+    if (modalContent.isSuccess) {
+      navigate('/login');
+    }
+  };
 
   const onSubmit = (data) => {
     mutate(data);
@@ -115,6 +143,28 @@ const Register = () => {
           로그인
         </button>
       </div>
+
+        {/* 모달 */}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        className="bg-custom-blue-gradient rounded-lg shadow-lg p-6 max-w-sm mx-auto mt-40 outline-none"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      >
+      <h2
+          className={`text-lg font-bold mb-4 
+          text-white`}
+        >
+          {modalContent.title}
+        </h2>
+        <p className="mb-6 text-white">{modalContent.message}</p>
+        <button
+          onClick={closeModal}
+          className="w-full py-2  rounded bg-white text-custom_blue"
+        >
+          확인
+        </button>
+      </Modal>
     </div>
   );
 };

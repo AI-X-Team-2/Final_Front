@@ -54,7 +54,7 @@ const Words = ({ data }) => {
   };
 
   return (
-    <div className="mb-3 flex flex-col items-center gap-4">
+    <div className="mb-10 flex flex-col items-center gap-4 p-4">
       {currentWord && (
         <div className="text-center bg-white w-64 h-24 flex items-center justify-center rounded-xl mt-10">
           <p className="text-3xl font-bold text-gray-800">
@@ -143,8 +143,8 @@ const Words = ({ data }) => {
 
 
             {result.score === "0" ? (
-              <p className="mt-2 p-4 bg-red-100 text-red-800 rounded-lg text-center font-semibold mb-36">
-                일치하지 않는 단어입니다. 다시 시도해 보세요.
+              <p className="mt-2 p-4 bg-customFeedBack text-white rounded-lg text-center font-semibold mb-36">
+                일치하지 않는 단어입니다. 
               </p>
             ) : result.incorrect_points?.length > 0 ? (
               <>
@@ -173,15 +173,15 @@ const Words = ({ data }) => {
                       .map((point, index) => (
                         <div
                           key={index}
-                          className="w-full snap-start rounded-xl p-4 bg-customGray shadow-md flex-shrink-0"
+                          className="w-full snap-start rounded-xl p-4 bg-customFeedBack shadow-md flex-shrink-0"
                           style={{ minWidth: "80%" }}
                         >
-                          <h4 className="font-semibold text-lg mb-2 text-red-600">
+                          <h4 className="font-semibold text-lg mb-2 text-white">
                             틀린 발음: "{point.actual}" → "{point.expected}"
                           </h4>
 
                           {point.teaching_point && (
-                            <p className="font-bold text-md text-orange-300 mb-3">
+                            <p className="font-bold text-md text-white mb-3">
                               교정 포인트: {point.teaching_point}
                             </p>
                           )}
@@ -250,10 +250,10 @@ const Words = ({ data }) => {
                         .map((point, idx) => (
                           <div
                             key={idx}
-                            className="mb-3 p-3 rounded-xl bg-customGray text-white"
+                            className="mb-3 p-3 bg-customFeedBack text-white"
                           >
                             <p>
-                              <span className="font-semibold text-red-400">누락된 단어:</span>{" "}
+                              <span className="font-semibold text-white">누락된 단어:</span>{" "}
                               "{point.expected}"
                             </p>
                           </div>
@@ -272,10 +272,10 @@ const Words = ({ data }) => {
                         .map((point, idx) => (
                           <div
                             key={idx}
-                            className="rounded-xl mb-3 p-3 bg-customGray text-white"
+                            className="rounded-xl mb-3 p-3 bg-customFeedBack text-white"
                           >
                             <p>
-                              <span className="font-semibold text-yellow-400">추가된 단어:</span>{" "}
+                              <span className="font-semibold text-white">추가된 단어:</span>{" "}
                               "{point.actual}"
                             </p>
                           </div>
@@ -299,7 +299,7 @@ const Words = ({ data }) => {
         onClick={goToNextWord}
         disabled={!result}
         label={"다음 단어"}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 "
+        className="fixed bottom-6 "
       />
     </div>
   );

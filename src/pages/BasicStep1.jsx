@@ -112,7 +112,7 @@ const BasicStep1 = () => {
 
                         <div className="flex justify-end">
                             <XMarkIcon
-                                className="w-5 h-5 text-black cursor-pointer"
+                                className="w-5 h-5 text-white cursor-pointer"
                                 onClick={() => setShowPopup(false)}
                             />
                         </div>

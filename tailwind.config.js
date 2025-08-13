@@ -7,15 +7,17 @@ export default {
         sans: ['"Noto Sans KR"'],
       },
       backgroundImage: {
-        'custom-blue-gradient': 'linear-gradient(to right, #008DE1 0%, #51AEF1 54%, #95CAFF 100%)'
+        'custom-blue-gradient': 'linear-gradient(to right, #008DE1 0%, #51AEF1 54%, #95CAFF 100%)',
+        'custom-blue2-gradient': 'linear-gradient(to right, #5E7499 0%, #ADB8CB 100%)'
+
       },
       colors: {
         customGray: '#2F3F4F',
         customMidGray: '#5E7499',
         customLightGray: '#667788',
-        custom_blue: '#51AEF1',
+        custom_blue: '#137ECA',
         customBarGray: '#273746',
-        customFeedBack: '#5E7499'
+        customFeedBack: '#3B4C5D'
 
       },
 
