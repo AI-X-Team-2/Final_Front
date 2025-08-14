@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { fetchMyProgress } from '../api/progressService';
-
+import { useAuthStore } from './useAuthSotre';
 export const useProgressStore = create(
   persist(
     (set, get) => ({
@@ -69,7 +69,7 @@ export const useProgressStore = create(
         }));
         try {
           localStorage.removeItem(storageKey);
-        } catch {}
+        } catch { }
       },
 
       // 서버 하이드레이션
@@ -78,7 +78,7 @@ export const useProgressStore = create(
         if (_hydratedFromServer || loading) return;
         try {
           set({ loading: true, error: null });
-          const token = localStorage.getItem('token') || undefined;
+          const token = useAuthStore.getState().token;
           const data = await fetchMyProgress(token);
           set({ progress: data, _hydratedFromServer: true, loading: false });
         } catch (err) {

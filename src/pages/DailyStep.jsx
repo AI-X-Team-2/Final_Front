@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import StageButton from '../component/StageButton'
-
+import { useProgressStore } from '../store/useProgressStore';
 import { useNavigate } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/solid';
-const DailyStep = ({ opened }) => {
+
+const DailyStep = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedStage, setSelectedStage] = useState(null);
     const navigate = useNavigate();
+  const opened = useProgressStore((s) => s?.progress?.daily?.opened ?? []);
 
     const handleClick = (stageNum) => {
         if (!opened.includes(stageNum)) return; // 잠긴 스테이지 클릭 무시 또는 팝업 띄워도 됨
@@ -20,12 +22,13 @@ const DailyStep = ({ opened }) => {
     };
 
 
+
     return (
         <>
             <div className='flex flex-col justify-center items-center gap-10 mt-20'>
                 {[1, 2].map((step) => (
                     <div key={step} className={`flex w-full cursor-pointer ${step % 2 === 1 ? 'justify-start pl-60' : 'justify-end pr-60'}`} onClick={() => handleClick(step)}>
-                        <StageButton step={step} status={opened?.includes(step) ? "opened" : "locked"} />
+                        <StageButton step={step} status={opened.includes(step) ? "opened" : "locked"} />
 
                     </div>
                 ))}
