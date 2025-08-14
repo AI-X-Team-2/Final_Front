@@ -81,7 +81,7 @@ const Audio = ({
 
       if (cameraRef.current) {
         cameraRef.current.stopRecording();
-        cameraRef.current.stopStream(); 
+        cameraRef.current.stopStream();
       }
     }
   };
@@ -121,14 +121,14 @@ const Audio = ({
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 justify-center" >
       <MainButton
         onClick={toggleRecording}
         disabled={disabled || !!audioURL}
-        className="w-40 h-10 text-lg font-bold rounded"
+        className="w-full max-w-[20rem] text-lg font-bold rounded mx-auto"
         label={isRecording ? "녹음 중지" : "녹음 시작"}
       />
-      
+
       <Camera
         ref={cameraRef}
         onRecorded={onRecorded}

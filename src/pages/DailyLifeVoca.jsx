@@ -1,6 +1,7 @@
 import Audio from "../component/Audio";
 import Words from "../component/Words";
 import { dailyWords } from "../assets/wordList";
+import { dailyWords2 } from "../assets/wordList";
 import { useParams } from "react-router-dom";
 
 const DailyLifeVoca = () => {
@@ -12,7 +13,7 @@ const DailyLifeVoca = () => {
         return dailyWords;
      
       default:
-        return []; 
+        return dailyWords2; 
     }
   };
 

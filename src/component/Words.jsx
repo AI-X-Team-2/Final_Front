@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo, useLayoutEffect } from "react";
 import Audio from "./Audio";
 import MainButton from "./MainButton";
 import LodadingSpinner from "./LodadingSpinner";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import TabButton from "./TabButton";
-
-const Words = ({ data }) => {
+import SmoothVideo from "./SmoothVideo";
+const Words = ({ data, step, stage, onStageComplete }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentWord, setCurrentWord] = useState(null);
   const [result, setResult] = useState(null);
@@ -14,7 +14,56 @@ const Words = ({ data }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [mouthVideoURL, setMouthVideoURL] = useState(null);
   const feedbackScrollRef = useRef(null)
+  const tabScrollRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const reportedRef = useRef(false);
 
+  useEffect(() => {
+    if (!data?.length) return;
+
+    const isLast = currentIndex === data.length - 1;
+    const resultReady = !!result && !isRecording && !isWaitingResult;
+
+    if (isLast && resultReady && !reportedRef.current) {
+      reportedRef.current = true; // 중복 방지
+      onStageComplete({
+        step,
+        stage,
+        totalCount: data.length,
+      });
+    }
+  }, [data, currentIndex, result, isRecording, isWaitingResult, step, stage, onStageComplete]);
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - tabScrollRef.current.offsetLeft);
+    setScrollLeft(tabScrollRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - tabScrollRef.current.offsetLeft;
+    const walk = (x - startX) * 1; // 속도 조절
+    tabScrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+  const feedbackRef = useRef(null);
+  const [tabWidth, setTabWidth] = useState("80%");
+
+  useLayoutEffect(() => {
+    if (feedbackRef.current) {
+      setTabWidth(`${feedbackRef.current.offsetWidth}px`);
+    }
+  }, []);
 
   const TABS = {
     CORRECT_VIDEO: "올바른 영상",
@@ -96,7 +145,7 @@ const Words = ({ data }) => {
   };
 
   return (
-    <div className="mb-10 flex flex-col items-center gap-4 p-4">
+    <div className="mb-10 flex flex-col items-center gap-2 p-4">
       {currentWord && (
         <div className="text-center bg-white w-64 h-24 flex items-center justify-center rounded-xl mt-10">
           <p className="text-3xl font-bold text-gray-800">
@@ -123,7 +172,7 @@ const Words = ({ data }) => {
       {!isRecording && isWaitingResult && <LodadingSpinner />}
 
       {result && (
-        <div className="w-full max-w-2xl mt-4 p-5 ">
+        <div className="w-full max-w-2xl p-5 ">
           {result.my_text &&
             <div>
               <p className="text-lg">
@@ -151,7 +200,7 @@ const Words = ({ data }) => {
 
           <div className="flex flex-col items-center gap-8 mt-4">
 
-         
+
             {result.score === "0" ? (
               <p className="mt-2 p-4 bg-customFeedBack text-white rounded-lg text-center font-semibold mb-36">
                 일치하지 않는 단어입니다.
@@ -159,18 +208,38 @@ const Words = ({ data }) => {
             ) : (
               <>
                 {/* 탭 헤더 */}
-                <div role="tablist" className="flex flex-wrap items-center gap-2 bg-white/5 p-2 rounded-2xl">
+                <div
+                  ref={tabScrollRef}
+                  onMouseDown={handleMouseDown}
+                  onMouseLeave={handleMouseLeave}
+                  onMouseUp={handleMouseUp}
+                  onMouseMove={handleMouseMove}
+                  className="
+    flex flex-nowrap items-center gap-2 
+    bg-white/5 p-2 rounded-2xl 
+    overflow-x-auto whitespace-nowrap select-none
+    scrollbar-hide
+  "
+                  style={{
+                    width: tabWidth,
+                    maxWidth: "100%",
+                    cursor: isDragging ? "grabbing" : "grab",
+                  }}
+                >
+
                   <TabButton
                     label={TABS.CORRECT_VIDEO}
                     active={activeTab === TABS.CORRECT_VIDEO}
                     onClick={() => setActiveTab(TABS.CORRECT_VIDEO)}
                     disabled={!hasCorrectVideo}
+                    className="flex-shrink-0 whitespace-nowrap"
                   />
                   <TabButton
                     label={TABS.USER_VIDEO}
                     active={activeTab === TABS.USER_VIDEO}
                     onClick={() => setActiveTab(TABS.USER_VIDEO)}
                     disabled={!hasUserVideo}
+                    className="flex-shrink-0 whitespace-nowrap"
                   />
                   <TabButton
                     label={TABS.FEEDBACK}
@@ -178,6 +247,7 @@ const Words = ({ data }) => {
                     onClick={() => setActiveTab(TABS.FEEDBACK)}
                     disabled={!hasFeedback}
                     badge={filteredFeedback.length}
+                    className="flex-shrink-0 whitespace-nowrap"
                   />
                   <TabButton
                     label={TABS.MISSING}
@@ -185,6 +255,7 @@ const Words = ({ data }) => {
                     onClick={() => setActiveTab(TABS.MISSING)}
                     disabled={!hasMissing}
                     badge={missingPoints.length}
+                    className="flex-shrink-0 whitespace-nowrap"
                   />
                   <TabButton
                     label={TABS.EXTRA}
@@ -192,32 +263,35 @@ const Words = ({ data }) => {
                     onClick={() => setActiveTab(TABS.EXTRA)}
                     disabled={!hasExtra}
                     badge={extraPoints.length}
+                    className="flex-shrink-0 whitespace-nowrap"
                   />
                 </div>
 
                 {/* 탭 콘텐츠 */}
                 <div className="mt-6">
+
                   {/* 올바른 발음 영상 */}
                   {activeTab === TABS.CORRECT_VIDEO && hasCorrectVideo && (
-                    <div className="flex flex-col items-center w-full md:w-2/3 mx-auto">
+                    <div style={{ width: tabWidth, margin: "0 auto" }} >
                       <p className="font-semibold mb-2 text-center text-white">올바른 발음 영상</p>
-                      <video src={currentWord.videoPath} controls className="w-full rounded shadow" />
+                      <SmoothVideo src={currentWord.videoPath} />
                     </div>
                   )}
 
-                  {/* 사용자(추출) 영상 */}
-                  {activeTab === TABS.USER_VIDEO && hasUserVideo && (
-                    <div className="flex flex-col items-center w-full md:w-2/3 mx-auto">
+                  {/* 추출된 입모양 영상 */}
+                  {activeTab === TABS.USER_VIDEO && (
+                    <div style={{ width: tabWidth, margin: "0 auto" }}>
                       <p className="font-semibold mb-2 text-center text-white">추출된 입모양 영상</p>
-                      <video src={mouthVideoURL} controls className="w-full rounded shadow" />
+                      <SmoothVideo src={mouthVideoURL} />
                     </div>
                   )}
+
 
                   {/* 상세 피드백 (캐러셀) */}
                   {activeTab === TABS.FEEDBACK && hasFeedback && (
                     <>
                       <h3 className="text-xl font-bold mb-3 text-white">상세 피드백</h3>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 ">
                         <button
                           onClick={() => scrollByCard(-1)}
                           className="bg-gray-800 bg-opacity-90 text-white p-2 rounded-full shadow"
@@ -232,6 +306,7 @@ const Words = ({ data }) => {
                         >
                           {filteredFeedback.map((point, index) => (
                             <div
+                              ref={feedbackRef}
                               key={index}
                               data-card="true"
                               className="w-full snap-start rounded-xl p-4 bg-customFeedBack shadow-md flex-shrink-0"
@@ -302,35 +377,44 @@ const Words = ({ data }) => {
 
                   {/* 누락된 단어 */}
                   {activeTab === TABS.MISSING && hasMissing && (
-                    <div>
+                    <div
+                      style={{ width: tabWidth, maxWidth: "100%" }} // 피드백 카드와 동일 폭
+                    >
                       <h4 className="text-lg font-bold text-white mb-2">누락된 단어</h4>
-                      <div className="rounded-lg">
+                      <ul className="space-y-3">
                         {missingPoints.map((point, idx) => (
-                          <div key={idx} className="mb-3 p-3 bg-customFeedBack text-white rounded-xl">
-                            <p>
-                              <span className="font-semibold">누락된 단어:</span> "{point.expected}"
-                            </p>
-                          </div>
+                          <li
+                            key={idx}
+                            className="w-full px-4 py-3 rounded-xl bg-customFeedBack text-white shadow-sm"
+                          >
+                            <span className="font-semibold break-keep">누락된 단어:</span>
+                            <span className="ml-2 break-keep">"{point.expected}"</span>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   )}
 
                   {/* 추가된 단어 */}
                   {activeTab === TABS.EXTRA && hasExtra && (
-                    <div className="mb-2">
-                      <h4 className="text-lg font-bold text-white mb-2">추가된 단어</h4>
-                      <div className="rounded-lg">
+                    <div
+                      style={{ width: tabWidth, maxWidth: "100%" }} // 피드백 카드와 동일 폭
+                    >
+                      <h4 className="text-lg font-bold text-white mb-3">추가된 단어</h4>
+                      <ul className="space-y-3">
                         {extraPoints.map((point, idx) => (
-                          <div key={idx} className="mb-3 p-3 bg-customFeedBack text-white rounded-xl">
-                            <p>
-                              <span className="font-semibold">추가된 단어:</span> "{point.actual}"
-                            </p>
-                          </div>
+                          <li
+                            key={idx}
+                            className="w-full px-4 py-3 rounded-xl bg-white/10 text-white shadow-sm"
+                          >
+                            <span className="font-semibold break-keep">추가된 단어:</span>
+                            <span className="ml-2 break-keep">"{point.actual}"</span>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   )}
+
                 </div>
               </>
             )}
@@ -346,7 +430,7 @@ const Words = ({ data }) => {
         onClick={goToNextWord}
         disabled={!result}
         label={"다음 단어"}
-        className="fixed bottom-6 "
+        className="fixed bottom-6 w-full max-w-[20rem] "
       />
     </div>
   );

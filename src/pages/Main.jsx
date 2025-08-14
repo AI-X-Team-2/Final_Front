@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DailyLifeVoca from './DailyLifeVoca'
 import FooterBar from '../component/FooterBar'
 import Basic from './Basic'
 import DailyStep from './DailyStep'
-import useProgressStore from '../store/useProgressStore'
 import Info from '../component/Info'
+import { useProgressStore } from '../store/useProgressStore'
+
 
 const Main = () => {
+    const { hydrate, loading, error, progress } = useProgressStore();
+
   const [selectedStep, setSelectedStep] = useState(null)
 
   const [selectedLabel, setSelectedLabel] = useState('');
@@ -25,9 +28,13 @@ const Main = () => {
       detail: '생활 속 단어 학습',
     },
   }
-  const progress = useProgressStore((state) => state.progress);
-  console.log(progress);
+// 로그인 후 최초 렌더링 시 한 번만 서버에서 불러와 스토어에 저장
+  useEffect(() => {
+    hydrate(); // 내부에서 자체적으로 중복 호출 방지(_hydratedFromServer)
+  }, [hydrate]);
 
+  if (loading) return <div>불러오는 중...</div>;
+  if (error) return <div>에러: {error}</div>;
 
   return (
     <div className='relative w-full flex flex-col  h-screen '>
@@ -40,7 +47,7 @@ const Main = () => {
 
         </div>
 
-        <Basic opened={progress.basic.opened} onStepSelect={handleStepSelect} />
+        <Basic onStepSelect={handleStepSelect} />
 
         <div className="flex items-center ">
           <div className="flex-grow border-t border-customLightGray"></div>
@@ -58,7 +65,7 @@ const Main = () => {
 
          <div className='flex flex-col flex-1 pb-28'> 
 
-      <DailyStep opened={progress.daily.opened} />
+      <DailyStep />
     </div>
 
 

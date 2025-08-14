@@ -247,7 +247,7 @@ export const step3Words = {
     { word: "조", videoPath: step3_1_12 },
     { word: "죠", videoPath: step3_1_13 },
   ],
-  
+
   step3_2: [
     { word: "짜", videoPath: step3_2_1 },
     { word: "쨔", videoPath: step3_2_2 },
@@ -348,32 +348,49 @@ export const step5Words = {
     { word: "화", videoPath: step5_2_7 },
     { word: "후", videoPath: step5_2_8 },
     { word: "휴", videoPath: step5_2_9 },
-    { word: "휘", videoPath: step5_2_10},
-    { word: "훠", videoPath: step5_2_11},
-    { word: "훼", videoPath: step5_2_12},
+    { word: "휘", videoPath: step5_2_10 },
+    { word: "훠", videoPath: step5_2_11 },
+    { word: "훼", videoPath: step5_2_12 },
   ]
 };
 
- 
+
 export const dailyWords = [
-    { word: "사과", videoPath: apple },
-    { word: "바나나", videoPath: banana },
-    { word: "자동차", videoPath: car },
-    { word: "하마", videoPath: hippo },
-    { word: "우유", videoPath: milk },
-    { word: "피자", videoPath: pizza },
-    { word: "감자", videoPath: potato },
-    { word: "토끼", videoPath: rabbit },
-    { word: "라디오", videoPath: radio },
-    { word: "학교", videoPath: school },
-  ];
+  { word: "바다" },
+  { word: "사다" },
+  { word: "나비" },
+  { word: "대문" },
+  { word: "라면" },
+  { word: "도서" },
+  { word: "배다" },
+  { word: "바나나" },
+  { word: "사다리" },
+  { word: "다리미" },
 
 
-  export const wordList = {
- step1Words,
- step2Words,
- step3Words,
- step4Words,
- step5Words,
+];
+export const dailyWords2 = [
+  { word: "자전" },
+  { word: "자연" },
+  { word: "자격" },
+  { word: "자유" },
+  { word: "조각" },
+  { word: "과자" },
+  { word: "고기" },
+  { word: "자전거" },
+  { word: "고양이" },
+  { word: "자격증" },
+
+
+];
+
+
+export const wordList = {
+  step1Words,
+  step2Words,
+  step3Words,
+  step4Words,
+  step5Words,
   dailyWords,
+  dailyWords2
 };

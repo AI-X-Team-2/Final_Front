@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import StageButton from "../component/StageButton";
 import { useParams, useNavigate } from "react-router-dom";
-import useProgressStore from '../store/useProgressStore';
+import { useProgressStore } from '../store/useProgressStore'
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import Info from '../component/Info';
+import { shallow } from 'zustand/shallow';
 const BasicStep1 = () => {
     const { step } = useParams();
     const [stages, setStages] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [selectedStage, setSelectedStage] = useState(null);
-
-    const progress = useProgressStore((state) => state.progress);
+    const stepNum = Number(step);
     const navigate = useNavigate();
     const stepLabels = [
         "양순음 + 쉬운 모음",
@@ -19,6 +19,12 @@ const BasicStep1 = () => {
         "연구개음 + 복합모음",
         "후음 + 복합모음",
     ];
+
+    const openedStages = useProgressStore(
+        (s) => s.progress.basic[stepNum]?.opened ?? [],
+        shallow
+    );
+
 
     const stageDetails = {
         1: {
@@ -56,11 +62,11 @@ const BasicStep1 = () => {
 
     const getStages = (step) => {
         switch (step) {
-            case "1": return ["1", "2", "3"];
-            case "2": return ["1", "2", "3", "4"];
-            case "3": return ["1", "2", "3"];
-            case "4": return ["1", "2", "3"];
-            case "5": return ["1", "2"];
+            case "1": return [1, 2, 3];
+            case "2": return [1, 2, 3, 4];
+            case "3": return [1, 2, 3];
+            case "4": return [1, 2, 3];
+            case "5": return [1, 2];
             default: return [];
         }
     };
@@ -83,11 +89,9 @@ const BasicStep1 = () => {
             </div>
 
             {stages.map((stage) => {
-                const stepNum = Number(step);
-                const stageNum = Number(stage);
-                const isOpened = progress.basic[stepNum]?.opened?.includes(stageNum);
-                const alignmentClass = stageNum % 2 === 1 ? 'justify-start pl-60' : 'justify-end pr-60';
-                const fullLabel = stageDetails[stepNum]?.[stageNum] || "";
+                const isOpened = openedStages.includes(stage)
+                const alignmentClass = stage % 2 === 1 ? 'justify-start pl-60' : 'justify-end pr-60';
+                const fullLabel = stageDetails[stepNum]?.[stage] || "";
                 const consonant = fullLabel.split(" ")[0];
 
                 return (
@@ -95,7 +99,7 @@ const BasicStep1 = () => {
                         <StageButton
                             step={`${step}-${stage}`}
                             status={isOpened ? "opened" : "locked"}
-                            onClick={() => isOpened && handleClick(stageNum)}
+                            onClick={() => isOpened && handleClick(stage)}
                             isStage={consonant}
                         />
                     </div>
@@ -116,7 +120,7 @@ const BasicStep1 = () => {
                                 onClick={() => setShowPopup(false)}
                             />
                         </div>
-                        <p className="mb-4 font-extrabold text-lg text-white text-shadow-lg">{stageDetails[step]?.[selectedStage]}</p>
+                        <p className="mb-4 font-extrabold text-lg text-white text-shadow-lg">{stageDetails[stepNum]?.[selectedStage]}</p>
 
                         <p className="mb-4 font-semibold text-base text-white">진행률</p>
                         <div className="flex justify-end gap-3">

@@ -1,8 +1,12 @@
 
 import StageButton from "../component/StageButton";
+import { useProgressStore } from '../store/useProgressStore'
 
 
-const Basic = ({ opened, onStepSelect }) => {
+
+const Basic = ({ onStepSelect }) => {
+ 
+  const opened = useProgressStore((s) => s.progress?.basic?.opened ?? []);
 
   const stepLabels = [
     "양순음 + 쉬운 모음",
