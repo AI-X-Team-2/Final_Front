@@ -61,12 +61,20 @@ export default function Ranking() {
                 </div>
             </div>
 
-            {/* ⭐ 하단 고정 버튼: 컨테이너(50rem) 기준 가로 중앙 */}
-            <div className="absolute bottom-[84px] left-0 right-0 px-6 pointer-events-none">
-                <div className="pointer-events-auto">
-                    <MainButton label="게임 시작" onClick={goGame} className="w-full" />
+
+            {/* 하단 고정 버튼: 가로 꽉 + 둥근 모서리 */}
+            <div className="absolute bottom-[84px] inset-x-0 pointer-events-none">
+                {/* 둥근 래퍼로 버튼을 클리핑 */}
+                <div className="pointer-events-auto rounded-xl overflow-hidden">
+                    <MainButton
+                        label="게임 시작"
+                        onClick={goGame}
+                        className="w-full !mx-0 !rounded-none"
+                    />
                 </div>
             </div>
+
+
 
 
         </div>
