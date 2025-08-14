@@ -7,3 +7,24 @@
   height: 40rem;
   background-color: rgb(255, 255, 255);
 }
+
+
+.layout-container {
+  max-width: 28rem;
+}
+
+@media (min-width: 640px) {
+  .layout-container {
+    max-width: 40rem;
+  }
+}
+@media (min-width: 1024px) {
+  .layout-container {
+    max-width: 56rem;
+  }
+}
+@media (min-width: 1280px) {
+  .layout-container {
+    max-width: 64rem;
+  }
+}

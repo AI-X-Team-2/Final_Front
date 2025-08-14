@@ -1,61 +1,97 @@
+// stores/progressStore.js
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { fetchMyProgress } from '../api/progressService';
 
-const useProgressStore = create((set) => ({
-  progress: {
-    basic: {
-      opened: [1, 2],
-      1: { opened: [1, 2] }, 
-      2: { opened: [1] },   
-    },
-    daily: {
-      opened: [1, 2], 
-    },
-  },
-
-  // Basic 단계 열기
-  openBasicStep: (step) =>
-    set((state) => ({
+export const useProgressStore = create(
+  persist(
+    (set, get) => ({
+      // ---- 상태 ----
       progress: {
-        ...state.progress,
         basic: {
-          ...state.progress.basic,
-          opened: [...new Set([...state.progress.basic.opened, step])],
+          opened: [], // 열린 Basic 스텝들
+          // 예: "1": { opened: [1, 2] } => Step1의 Stage1, Stage2 오픈
         },
-      },
-    })),
-
-  // Daily 단계 및 서브단계 열기
-  openDailySubStep: (step, subStep) =>
-    set((state) => {
-      const daily = state.progress.daily;
-      const prevSubOpened = daily[step]?.opened || [];
-
-      return {
-        progress: {
-          ...state.progress,
-          daily: {
-            ...daily,
-            [step]: {
-              opened: [...new Set([...prevSubOpened, subStep])],
-            },
-            opened: [...new Set([...daily.opened, parseInt(step)])],
-          },
-        },
-      };
-    }),
-
-  // 전체 초기화
-  resetProgress: () =>
-    set(() => ({
-      progress: {
         daily: {
-          opened: [],
-        },
-        basic: {
-          opened: [],
+          opened: [], // 열린 Daily 스텝들
         },
       },
-    })),
-}));
+      loading: false,
+      error: null,
+      _hydratedFromServer: false,
 
-export default useProgressStore;
+      // ---- 액션 ----
+      setProgress: (p) => set({ progress: p }),
+
+      // Basic: 특정 스텝의 특정 Stage 오픈
+      openBasicStage: (step, stage) =>
+        set((state) => {
+          const basic = state.progress.basic;
+          const prevStages = basic[step]?.opened || [];
+          return {
+            progress: {
+              ...state.progress,
+              basic: {
+                ...basic,
+                [step]: { opened: [...new Set([...prevStages, stage])] },
+                opened: [...new Set([...basic.opened, Number(step)])],
+              },
+            },
+          };
+        }),
+
+      // Daily: 스텝만 오픈
+      openDailyStep: (step) =>
+        set((state) => ({
+          progress: {
+            ...state.progress,
+            daily: {
+              ...state.progress.daily,
+              opened: [...new Set([...state.progress.daily.opened, Number(step)])],
+            },
+          },
+        })),
+
+      // 메모리만 초기화 (persist는 유지)
+      resetProgress: () =>
+        set(() => ({
+          progress: { basic: { opened: [] }, daily: { opened: [] } },
+        })),
+
+      // 완전 초기화 (로그아웃 시)
+      hardReset: () => {
+        const storageKey = 'progress-store-v2';
+        set(() => ({
+          progress: { basic: { opened: [] }, daily: { opened: [] } },
+          loading: false,
+          error: null,
+          _hydratedFromServer: false,
+        }));
+        try {
+          localStorage.removeItem(storageKey);
+        } catch {}
+      },
+
+      // 서버 하이드레이션
+      hydrate: async () => {
+        const { _hydratedFromServer, loading } = get();
+        if (_hydratedFromServer || loading) return;
+        try {
+          set({ loading: true, error: null });
+          const token = localStorage.getItem('token') || undefined;
+          const data = await fetchMyProgress(token);
+          set({ progress: data, _hydratedFromServer: true, loading: false });
+        } catch (err) {
+          set({ error: err?.message || '진도 불러오기 실패', loading: false });
+        }
+      },
+    }),
+    {
+      // persist 옵션
+      name: 'progress-store-v2',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ progress: state.progress }),
+      version: 2,
+    }
+  )
+);

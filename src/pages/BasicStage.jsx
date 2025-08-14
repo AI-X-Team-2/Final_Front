@@ -31,7 +31,31 @@ const BasicStage = () => {
     console.log(data)
   }
 
-  return <Words data={data} />;
+  const onStageComplete = async ({ step, stage, totalCount }) => {
+    try {
+      const token = localStorage.getItem("token"); // JWT를 로컬에 저장해놨다면
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || ""}/api/learning/progress`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        // 쿠키 기반 인증이라면 아래 옵션 필요하고 Authorization 헤더는 없어도 됨
+        credentials: "include",
+        body: JSON.stringify({
+          step: Number(step),
+          stage: Number(stage),
+          completed: true,
+          totalCount,       // 전체 단어 수 (옵션)
+          completedAt: new Date().toISOString(),
+        }),
+      });
+    } catch (err) {
+      console.error("학습 진행도 업데이트 실패:", err);
+    }
+  };
+return <Words data={data} step={step} stage={stage} onStageComplete={onStageComplete} />;
+ 
 }
 
 export default BasicStage
