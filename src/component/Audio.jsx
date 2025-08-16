@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Camera from "./Camera";
 import MainButton from "./MainButton";
+import { useSessionStore } from "../store/useSessionStore";
 
 const Audio = ({
   target,
@@ -13,6 +14,8 @@ const Audio = ({
   camerareset,
   onMouthVideoReady,
 }) => {
+  
+  const session_id = useSessionStore((s) => s.session_id);
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
@@ -95,9 +98,18 @@ const Audio = ({
   };
 
   const sendToServer = async (audioBlob) => {
+
+     if (!session_id) {
+    console.warn("세션 아이디 없음");
+    return;
+  }
+
+
     const formData = new FormData();
     formData.append("audio_file", audioBlob, "recording.webm");
     formData.append("target_sentence", target);
+    formData.append("session_id", session_id);
+
 
     try {
       const response = await axios.post(

@@ -3,8 +3,10 @@ import StageButton from '../component/StageButton'
 import { useProgressStore } from '../store/useProgressStore';
 import { useNavigate } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import { useLearningStore } from '../store/userLearningStore';
 
 const DailyStep = () => {
+    const setCurrentWordIndex = useLearningStore((s) => s.setCurrentWordIndex);
     const [showPopup, setShowPopup] = useState(false);
     const [selectedStage, setSelectedStage] = useState(null);
     const navigate = useNavigate();
@@ -18,7 +20,9 @@ const DailyStep = () => {
     };
 
     const handleConfirm = () => {
+        setCurrentWordIndex(0); 
         setShowPopup(false);
+        
         navigate(`/daily/step/${selectedStage}`);
     };
 
