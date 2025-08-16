@@ -11,7 +11,7 @@ const DailyStep = () => {
   const opened = useProgressStore((s) => s?.progress?.daily?.opened ?? []);
 
     const handleClick = (stageNum) => {
-        if (!opened.includes(stageNum)) return; // 잠긴 스테이지 클릭 무시 또는 팝업 띄워도 됨
+        if (!opened.includes(stageNum)) return;
         setSelectedStage(stageNum);
         setShowPopup(true);
     };
