@@ -5,8 +5,18 @@ import LodadingSpinner from "./LodadingSpinner";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import TabButton from "./TabButton";
 import SmoothVideo from "./SmoothVideo";
+import { useLearningStore } from "../store/learningStore";
+import { useNavigate } from "react-router-dom";
+import { completeSession } from "../api/sessions";
+import { useSessionStore } from "../store/useSessionStore";
+
+
 const Words = ({ data, step, stage, onStageComplete }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
+  const setCurrentWordIndex = useLearningStore((s) => s.setCurrentWordIndex);
+  const currentWordIndex = useLearningStore((s) => s.currentWordIndex);
+  const sessionId = useSessionStore((s) => s.session_id);
+ 
   const [currentWord, setCurrentWord] = useState(null);
   const [result, setResult] = useState(null);
   const [audioDisabled, setAudioDisabled] = useState(false);
@@ -23,7 +33,7 @@ const Words = ({ data, step, stage, onStageComplete }) => {
   useEffect(() => {
     if (!data?.length) return;
 
-    const isLast = currentIndex === data.length - 1;
+    const isLast = currentWordIndex === data.length - 1;
     const resultReady = !!result && !isRecording && !isWaitingResult;
 
     if (isLast && resultReady && !reportedRef.current) {
@@ -34,7 +44,7 @@ const Words = ({ data, step, stage, onStageComplete }) => {
         totalCount: data.length,
       });
     }
-  }, [data, currentIndex, result, isRecording, isWaitingResult, step, stage, onStageComplete]);
+  }, [data, currentWordIndex, result, isRecording, isWaitingResult, step, stage, onStageComplete]);
   const handleMouseDown = (e) => {
     setIsDragging(true);
     setStartX(e.pageX - tabScrollRef.current.offsetLeft);
@@ -118,17 +128,18 @@ const Words = ({ data, step, stage, onStageComplete }) => {
   };
 
   useEffect(() => {
-    if (data[currentIndex]) {
+    if (data[currentWordIndex]) {
       console.log("단어 바뀜, 버튼 활성화");
-      setCurrentWord(data[currentIndex]);
+      setCurrentWord(data[currentWordIndex]);
       setAudioDisabled(false);
       setActiveTab(TABS.CORRECT_VIDEO);
     }
-  }, [currentIndex, data]);
+  }, [currentWordIndex, data]);
 
   const goToNextWord = () => {
-    if (currentIndex < data.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+    if (currentWordIndex < data.length - 1) {
+      
+      setCurrentWordIndex(currentWordIndex + 1);
       setResult(null);
       setMouthVideoURL(null);
     }
@@ -143,6 +154,21 @@ const Words = ({ data, step, stage, onStageComplete }) => {
       behavior: "smooth",
     });
   };
+
+  const handleComplete = async () => {
+    try {
+      // ✅ 현재 index는 0부터 시작이므로 +1
+      const finishedWords = currentWordIndex + 1;
+
+      await completeSession(sessionId, finishedWords);
+      navigate("/main");
+    } catch (err) {
+      console.error(err); 
+      alert("세션 완료 중 오류가 발생했습니다.");
+    }
+  };
+
+   const isLastWord = currentWordIndex === data.length - 1;
 
   return (
     <div className="mb-10 flex flex-col items-center gap-2 p-4">
@@ -427,11 +453,12 @@ const Words = ({ data, step, stage, onStageComplete }) => {
         </div>
       )}
       <MainButton
-        onClick={goToNextWord}
+        onClick={isLastWord ? handleComplete : goToNextWord}
         disabled={!result}
-        label={"다음 단어"}
+        label={isLastWord ? "학습 완료" : "다음 단어"}
         className="fixed bottom-6 w-full max-w-[20rem] "
       />
+
     </div>
   );
 };
