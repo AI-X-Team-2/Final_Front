@@ -3,95 +3,79 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { fetchMyProgress } from '../api/progressService';
 import { useAuthStore } from './useAuthSotre';
+
+const toNumberArray = (v) =>
+  Array.isArray(v) ? v.map((x) => Number(x)).filter((n) => Number.isFinite(n)) : [];
+
+const uniq = (arr) => Array.from(new Set(arr));
+
+const normalizeLevels = (v) => uniq(toNumberArray(v)).sort((a, b) => a - b);
+
 export const useProgressStore = create(
   persist(
     (set, get) => ({
       // ---- 상태 ----
-      progress: {
-        basic: {
-          opened: [], // 열린 Basic 스텝들
-          // 예: "1": { opened: [1, 2] } => Step1의 Stage1, Stage2 오픈
-        },
-        daily: {
-          opened: [], // 열린 Daily 스텝들
-        },
-      },
+      max_level: [],              // ← 숫자 배열
       loading: false,
       error: null,
       _hydratedFromServer: false,
 
       // ---- 액션 ----
-      setProgress: (p) => set({ progress: p }),
-
-      // Basic: 특정 스텝의 특정 Stage 오픈
-      openBasicStage: (step, stage) =>
-        set((state) => {
-          const basic = state.progress.basic;
-          const prevStages = basic[step]?.opened || [];
-          return {
-            progress: {
-              ...state.progress,
-              basic: {
-                ...basic,
-                [step]: { opened: [...new Set([...prevStages, stage])] },
-                opened: [...new Set([...basic.opened, Number(step)])],
-              },
-            },
-          };
-        }),
-
-      // Daily: 스텝만 오픈
-      openDailyStep: (step) =>
-        set((state) => ({
-          progress: {
-            ...state.progress,
-            daily: {
-              ...state.progress.daily,
-              opened: [...new Set([...state.progress.daily.opened, Number(step)])],
-            },
-          },
+      setMaxLevel: (levels) =>
+        set(() => ({
+          max_level: normalizeLevels(levels),
         })),
 
-      // 메모리만 초기화 (persist는 유지)
       resetProgress: () =>
         set(() => ({
-          progress: { basic: { opened: [] }, daily: { opened: [] } },
+          max_level: [],
         })),
 
-      // 완전 초기화 (로그아웃 시)
       hardReset: () => {
-        const storageKey = 'progress-store-v2';
+        const storageKey = "progress-store-v5";
         set(() => ({
-          progress: { basic: { opened: [] }, daily: { opened: [] } },
+          max_level: [],
           loading: false,
           error: null,
           _hydratedFromServer: false,
         }));
         try {
           localStorage.removeItem(storageKey);
-        } catch { }
+        } catch {}
       },
 
       // 서버 하이드레이션
       hydrate: async () => {
         const { _hydratedFromServer, loading } = get();
         if (_hydratedFromServer || loading) return;
+
         try {
           set({ loading: true, error: null });
-          const token = useAuthStore.getState().token;
-          const data = await fetchMyProgress(token);
-          set({ progress: data, _hydratedFromServer: true, loading: false });
+
+          const token = useAuthStore.getState().token;   // 로그인 토큰
+          const data = await fetchMyProgress(token);     // 서버 호출
+
+          // 서버 응답: { max_level: [1,2,...] } 가정
+          const levels = normalizeLevels(data?.max_level);
+
+          set({
+            max_level: levels,
+            _hydratedFromServer: true,
+            loading: false,
+          });
         } catch (err) {
-          set({ error: err?.message || '진도 불러오기 실패', loading: false });
+          set({
+            error: err?.message || "진도 불러오기 실패",
+            loading: false,
+          });
         }
       },
     }),
     {
-      // persist 옵션
-      name: 'progress-store-v2',
+      name: "progress-store-v5",                         // 로컬스토리지 키 (버전 갱신)
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ progress: state.progress }),
-      version: 2,
+      partialize: (state) => ({ max_level: state.max_level }), // max_level만 저장
+      version: 5,
     }
   )
 );

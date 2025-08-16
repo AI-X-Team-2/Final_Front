@@ -8,10 +8,11 @@ const DailyStep = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedStage, setSelectedStage] = useState(null);
     const navigate = useNavigate();
-  const opened = useProgressStore((s) => s?.progress?.daily?.opened ?? []);
+    const maxLevel = useProgressStore((s) => s.max_level);
 
     const handleClick = (stageNum) => {
-        if (!opened.includes(stageNum)) return;
+        console.log(`Clicked on stage ${stageNum}`);
+        if (!maxLevel.includes(stageNum)) return;
         setSelectedStage(stageNum);
         setShowPopup(true);
     };
@@ -28,7 +29,7 @@ const DailyStep = () => {
             <div className='flex flex-col justify-center items-center gap-10 mt-20'>
                 {[1, 2].map((step) => (
                     <div key={step} className={`flex w-full cursor-pointer ${step % 2 === 1 ? 'justify-start pl-60' : 'justify-end pr-60'}`} onClick={() => handleClick(step)}>
-                        <StageButton step={step} status={opened.includes(step) ? "opened" : "locked"} />
+                        <StageButton step={step} status={maxLevel.includes(step) ? "opened" : "locked"} />
 
                     </div>
                 ))}

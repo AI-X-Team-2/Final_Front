@@ -25,7 +25,7 @@ const Login = () => {
     mutationFn: login,
     onSuccess: (data) => {
      
-      setToken(data.access.token);
+      setToken(data.access_token);
       setModalContent({ title: '로그인 성공', message: '환영합니다!', isSuccess: true });
       setModalIsOpen(true); 
      
