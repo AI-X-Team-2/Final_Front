@@ -4,11 +4,9 @@ import Layout from './component/Layout'; // 'Rayout'은 오타이므로 제거
 
 import WordGame from './pages/WordGame';
 
-import BasicStep1 from './pages/BasicStep1';
 
 import DailyLifeVoca from './pages/DailyLifeVoca';
-import Basic from './pages/Basic';
-import BasicStage from './pages/BasicStage';
+;
 import DailyStep from './pages/DailyStep';
 import Main from './pages/Main';
 import Login from './pages/Login';
@@ -35,7 +33,7 @@ function App() {
 
         <Route element={<LearningLayout />}> 
          <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
-          <Route path="/basic/step/:step/:stage" element={<BasicStage />} />
+   
         </Route>
 
 
@@ -51,8 +49,7 @@ function App() {
 
 
           <Route path="/game" element={<WordGame />} />
-          <Route path="/basic" element={<Basic />} />
-          <Route path="/basic/step/:step" element={<BasicStep1 />} />
+   
           <Route path="/daily" element={<DailyStep />} />
           <Route path="/practice" element={<Practice />} />
 
