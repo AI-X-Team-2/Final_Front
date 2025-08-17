@@ -3,7 +3,7 @@ import StageButton from '../component/StageButton'
 import { useProgressStore } from '../store/useProgressStore';
 import { useNavigate } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/solid';
-import { useLearningStore } from '../store/userLearningStore';
+import { useLearningStore } from '../store/useLearningStore';
 
 const DailyStep = () => {
     const setCurrentWordIndex = useLearningStore((s) => s.setCurrentWordIndex);

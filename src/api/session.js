@@ -1,6 +1,6 @@
 // api/sessions.js
 import axios from "axios";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "../store/useAuthSotre";
 
 const API_BASE = "http://127.0.0.1:8000"; // 환경 변수로 빼는 걸 권장합니다
 

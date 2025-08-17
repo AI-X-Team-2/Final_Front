@@ -1,27 +1,25 @@
 import axios from "axios";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "../store/useAuthSotre";
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "/",
+  baseURL: "http://localhost:8000",  // ✅ 직접 localhost 지정
   timeout: 15000,
 });
 
-// 토큰 자동 첨부
-api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState()?.token;
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
-// --- 학습 API ---
-
-
 // --- 학습 API ---
 export const startLearning = async ({ mode = "daily", level, total_words }) => {
-  const { data } = await api.post("/start-learning", {
-    mode,
-    level,
-    total_words,   // ✅ 총 단어 개수 추가
-  });
+  const token = useAuthStore.getState()?.token; // ✅ 직접 가져오기
+  console.log("토큰:", token);
+
+  const { data } = await api.post(
+    "/api/results/practice-sessions",
+    { mode, level, total_words },
+    {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    }
+  );
+
   return data; // { session_id: "2c5a" }
 };
