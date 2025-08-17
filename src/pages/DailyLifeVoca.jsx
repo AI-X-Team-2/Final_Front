@@ -28,7 +28,7 @@ const DailyLifeVoca = () => {
   const data = getDataByStep();
 
   
-const { mutate: startLearningMutate, isPending } = useMutation({
+const { mutate: startLearningMutate} = useMutation({
     mutationFn: startLearning,
     retry: false,
     onSuccess: (res) => {

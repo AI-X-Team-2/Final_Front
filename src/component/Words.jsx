@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useMemo, useLayoutEffect } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useLayoutEffect,
+} from "react";
 import Audio from "./Audio";
 import MainButton from "./MainButton";
 import LodadingSpinner from "./LodadingSpinner";
@@ -7,28 +13,32 @@ import TabButton from "./TabButton";
 import SmoothVideo from "./SmoothVideo";
 import { useLearningStore } from "../store/useLearningStore";
 import { useNavigate } from "react-router-dom";
-import { completeSession } from "../api/session";
+import { completeSession, cancelSession } from "../api/session";
 import { useSessionStore } from "../store/useSessionStore";
-
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 const Words = ({ data, step, stage, onStageComplete }) => {
   const navigate = useNavigate();
   const setCurrentWordIndex = useLearningStore((s) => s.setCurrentWordIndex);
   const currentWordIndex = useLearningStore((s) => s.currentWordIndex);
   const sessionId = useSessionStore((s) => s.session_id);
- 
+
   const [currentWord, setCurrentWord] = useState(null);
   const [result, setResult] = useState(null);
   const [audioDisabled, setAudioDisabled] = useState(false);
   const [isWaitingResult, setIsWaitingResult] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mouthVideoURL, setMouthVideoURL] = useState(null);
-  const feedbackScrollRef = useRef(null)
+  const feedbackScrollRef = useRef(null);
   const tabScrollRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const reportedRef = useRef(false);
+
+  const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const [showResultPopup, setShowResultPopup] = useState(false);
+  const [resultInfo, setResultInfo] = useState(null);
 
   useEffect(() => {
     if (!data?.length) return;
@@ -44,7 +54,16 @@ const Words = ({ data, step, stage, onStageComplete }) => {
         totalCount: data.length,
       });
     }
-  }, [data, currentWordIndex, result, isRecording, isWaitingResult, step, stage, onStageComplete]);
+  }, [
+    data,
+    currentWordIndex,
+    result,
+    isRecording,
+    isWaitingResult,
+    step,
+    stage,
+    onStageComplete,
+  ]);
   const handleMouseDown = (e) => {
     setIsDragging(true);
     setStartX(e.pageX - tabScrollRef.current.offsetLeft);
@@ -86,17 +105,25 @@ const Words = ({ data, step, stage, onStageComplete }) => {
 
   // 피드백 분류 및 존재 여부
   const filteredFeedback = useMemo(
-    () => result?.incorrect_points?.filter(
-      (p) => p.diff_detail !== "누락된 단어" && p.diff_detail !== "추가된 단어"
-    ) || [],
+    () =>
+      result?.incorrect_points?.filter(
+        (p) =>
+          p.diff_detail !== "누락된 단어" && p.diff_detail !== "추가된 단어"
+      ) || [],
     [result]
   );
   const missingPoints = useMemo(
-    () => result?.incorrect_points?.filter((p) => p.diff_detail === "누락된 단어") || [],
+    () =>
+      result?.incorrect_points?.filter(
+        (p) => p.diff_detail === "누락된 단어"
+      ) || [],
     [result]
   );
   const extraPoints = useMemo(
-    () => result?.incorrect_points?.filter((p) => p.diff_detail === "추가된 단어") || [],
+    () =>
+      result?.incorrect_points?.filter(
+        (p) => p.diff_detail === "추가된 단어"
+      ) || [],
     [result]
   );
   const hasCorrectVideo = !!(currentWord && currentWord.videoPath);
@@ -118,7 +145,12 @@ const Words = ({ data, step, stage, onStageComplete }) => {
     setIsWaitingResult(false);
     console.log("Words 컴포넌트에서 받은 결과:", resultData);
 
-    if (resultData?.incorrect_points?.some(p => p.diff_detail !== "누락된 단어" && p.diff_detail !== "추가된 단어")) {
+    if (
+      resultData?.incorrect_points?.some(
+        (p) =>
+          p.diff_detail !== "누락된 단어" && p.diff_detail !== "추가된 단어"
+      )
+    ) {
       setActiveTab(TABS.FEEDBACK);
     } else if (mouthVideoURL) {
       setActiveTab(TABS.USER_VIDEO);
@@ -138,7 +170,6 @@ const Words = ({ data, step, stage, onStageComplete }) => {
 
   const goToNextWord = () => {
     if (currentWordIndex < data.length - 1) {
-      
       setCurrentWordIndex(currentWordIndex + 1);
       setResult(null);
       setMouthVideoURL(null);
@@ -157,36 +188,54 @@ const Words = ({ data, step, stage, onStageComplete }) => {
 
   const handleComplete = async () => {
     try {
-      // ✅ 현재 index는 0부터 시작이므로 +1
-      const finishedWords = currentWordIndex + 1;
-
-      await completeSession(sessionId, finishedWords);
-      navigate("/main");
+      const res = await completeSession(sessionId);
+      useSessionStore.getState().clearSession();
+      useLearningStore.getState().resetLearning();
+      setResultInfo(res);
+      setShowResultPopup(true);
     } catch (err) {
-      console.error(err); 
+      console.error(err);
       alert("세션 완료 중 오류가 발생했습니다.");
     }
   };
 
-   const isLastWord = currentWordIndex === data.length - 1;
+  const isLastWord = currentWordIndex === data.length - 1;
+
+  const openCancelPopup = () => setShowCancelPopup(true);
+
+  // 🔹 팝업 “확인” → 실제 중도 포기 API 호출
+  const confirmCancel = async () => {
+    try {
+      const finishedWords = currentWordIndex + 1;
+      await cancelSession(sessionId, finishedWords);
+      setShowCancelPopup(false);
+      navigate("/main");
+    } catch (err) {
+      console.error("중도 포기 실패:", err);
+      alert("중도 포기 중 오류가 발생했습니다.");
+    }
+  };
 
   return (
     <div className="mb-10 flex flex-col items-center gap-2 p-4">
+      <button
+        onClick={openCancelPopup}
+        className="absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-white shadow"
+        aria-label="중도 포기"
+      >
+        <XMarkIcon className="w-6 h-6 text-gray-700" />
+      </button>
+
       {currentWord && (
         <div className="text-center bg-white w-64 h-24 flex items-center justify-center rounded-xl mt-10">
-          <p className="text-3xl font-bold text-gray-800">
-            {currentWord.word}
-          </p>
+          <p className="text-3xl font-bold text-gray-800">{currentWord.word}</p>
         </div>
       )}
 
       <div className="flex flex-col md:flex-row  items-start">
         <Audio
           target={currentWord ? currentWord.word : ""}
-
           onResult={handleResult}
-
-
           disabled={audioDisabled}
           reset={currentWordIndex}
           onRecordingChange={handleRecordingChange}
@@ -199,17 +248,18 @@ const Words = ({ data, step, stage, onStageComplete }) => {
 
       {result && (
         <div className="w-full max-w-2xl p-5 ">
-          {result.my_text &&
+          {result.my_text && (
             <div>
               <p className="text-lg">
-                <span className="font-semibold text-white text-xl">내 발음:</span>{" "}
+                <span className="font-semibold text-white text-xl">
+                  내 발음:
+                </span>{" "}
                 <span className="font-bold text-white text-xl">
                   {result.my_text}
                 </span>
               </p>
             </div>
-
-          }
+          )}
 
           <div className="grid grid-cols-2 gap-x-8 mb-4">
             <p className="text-lg">
@@ -222,11 +272,7 @@ const Words = ({ data, step, stage, onStageComplete }) => {
             </p>
           </div>
 
-
-
           <div className="flex flex-col items-center gap-8 mt-4">
-
-
             {result.score === "0" ? (
               <p className="mt-2 p-4 bg-customFeedBack text-white rounded-lg text-center font-semibold mb-36">
                 일치하지 않는 단어입니다.
@@ -252,7 +298,6 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                     cursor: isDragging ? "grabbing" : "grab",
                   }}
                 >
-
                   <TabButton
                     label={TABS.CORRECT_VIDEO}
                     active={activeTab === TABS.CORRECT_VIDEO}
@@ -295,11 +340,12 @@ const Words = ({ data, step, stage, onStageComplete }) => {
 
                 {/* 탭 콘텐츠 */}
                 <div className="mt-6">
-
                   {/* 올바른 발음 영상 */}
                   {activeTab === TABS.CORRECT_VIDEO && hasCorrectVideo && (
-                    <div style={{ width: tabWidth, margin: "0 auto" }} >
-                      <p className="font-semibold mb-2 text-center text-white">올바른 발음 영상</p>
+                    <div style={{ width: tabWidth, margin: "0 auto" }}>
+                      <p className="font-semibold mb-2 text-center text-white">
+                        올바른 발음 영상
+                      </p>
                       <SmoothVideo src={currentWord.videoPath} />
                     </div>
                   )}
@@ -307,16 +353,19 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                   {/* 추출된 입모양 영상 */}
                   {activeTab === TABS.USER_VIDEO && (
                     <div style={{ width: tabWidth, margin: "0 auto" }}>
-                      <p className="font-semibold mb-2 text-center text-white">추출된 입모양 영상</p>
+                      <p className="font-semibold mb-2 text-center text-white">
+                        추출된 입모양 영상
+                      </p>
                       <SmoothVideo src={mouthVideoURL} />
                     </div>
                   )}
 
-
                   {/* 상세 피드백 (캐러셀) */}
                   {activeTab === TABS.FEEDBACK && hasFeedback && (
                     <>
-                      <h3 className="text-xl font-bold mb-3 text-white">상세 피드백</h3>
+                      <h3 className="text-xl font-bold mb-3 text-white">
+                        상세 피드백
+                      </h3>
                       <div className="flex items-center gap-2 ">
                         <button
                           onClick={() => scrollByCard(-1)}
@@ -356,7 +405,9 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                                       alt="자음 가이드"
                                       className="w-28 h-28 object-contain border rounded p-1 bg-customFeedBack"
                                     />
-                                    <span className="text-xs font-semibold mt-1 block">자음(초성)</span>
+                                    <span className="text-xs font-semibold mt-1 block">
+                                      자음(초성)
+                                    </span>
                                   </div>
                                 )}
                                 {point.image_guides?.jungsung_img && (
@@ -366,7 +417,9 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                                       alt="모음 가이드"
                                       className="w-28 h-28 object-contain border rounded p-1 bg-customFeedBack"
                                     />
-                                    <span className="text-xs font-semibold mt-1 block">모음(중성)</span>
+                                    <span className="text-xs font-semibold mt-1 block">
+                                      모음(중성)
+                                    </span>
                                   </div>
                                 )}
                                 {point.image_guides?.default_img && (
@@ -376,15 +429,26 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                                       alt="발음 가이드"
                                       className="w-28 h-28 object-contain border rounded p-1 bg-customFeedBack"
                                     />
-                                    <span className="text-xs font-semibold mt-1 block">올바른 입모양</span>
+                                    <span className="text-xs font-semibold mt-1 block">
+                                      올바른 입모양
+                                    </span>
                                   </div>
                                 )}
                               </div>
 
                               <div className="space-y-1 text-sm text-white">
-                                <p><strong>입모양:</strong> {point.mouth_feedback}</p>
-                                <p><strong>혀 위치:</strong> {point.tongue_position_feedback}</p>
-                                <p><strong>호흡법:</strong> {point.breathing_feedback}</p>
+                                <p>
+                                  <strong>입모양:</strong>{" "}
+                                  {point.mouth_feedback}
+                                </p>
+                                <p>
+                                  <strong>혀 위치:</strong>{" "}
+                                  {point.tongue_position_feedback}
+                                </p>
+                                <p>
+                                  <strong>호흡법:</strong>{" "}
+                                  {point.breathing_feedback}
+                                </p>
                               </div>
                             </div>
                           ))}
@@ -406,15 +470,21 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                     <div
                       style={{ width: tabWidth, maxWidth: "100%" }} // 피드백 카드와 동일 폭
                     >
-                      <h4 className="text-lg font-bold text-white mb-2">누락된 단어</h4>
+                      <h4 className="text-lg font-bold text-white mb-2">
+                        누락된 단어
+                      </h4>
                       <ul className="space-y-3">
                         {missingPoints.map((point, idx) => (
                           <li
                             key={idx}
                             className="w-full px-4 py-3 rounded-xl bg-customFeedBack text-white shadow-sm"
                           >
-                            <span className="font-semibold break-keep">누락된 단어:</span>
-                            <span className="ml-2 break-keep">"{point.expected}"</span>
+                            <span className="font-semibold break-keep">
+                              누락된 단어:
+                            </span>
+                            <span className="ml-2 break-keep">
+                              "{point.expected}"
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -426,29 +496,29 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                     <div
                       style={{ width: tabWidth, maxWidth: "100%" }} // 피드백 카드와 동일 폭
                     >
-                      <h4 className="text-lg font-bold text-white mb-3">추가된 단어</h4>
+                      <h4 className="text-lg font-bold text-white mb-3">
+                        추가된 단어
+                      </h4>
                       <ul className="space-y-3">
                         {extraPoints.map((point, idx) => (
                           <li
                             key={idx}
                             className="w-full px-4 py-3 rounded-xl bg-white/10 text-white shadow-sm"
                           >
-                            <span className="font-semibold break-keep">추가된 단어:</span>
-                            <span className="ml-2 break-keep">"{point.actual}"</span>
+                            <span className="font-semibold break-keep">
+                              추가된 단어:
+                            </span>
+                            <span className="ml-2 break-keep">
+                              "{point.actual}"
+                            </span>
                           </li>
                         ))}
                       </ul>
                     </div>
                   )}
-
                 </div>
               </>
             )}
-
-
-
-
-
           </div>
         </div>
       )}
@@ -459,6 +529,66 @@ const Words = ({ data, step, stage, onStageComplete }) => {
         className="fixed bottom-6 w-full max-w-[20rem] "
       />
 
+      {showResultPopup && resultInfo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="flex flex-col rounded-lg p-6 shadow-lg w-[30rem] bg-custom_blue relative">
+            <p className="font-extrabold text-lg text-white text-shadow-lg mb-2 text-center">
+              {resultInfo.isPassed
+                ? "다음 단계가 열렸습니다!"
+                : "다시 시도해볼까요?"}
+            </p>
+
+            <p className="mb-6 font-semibold text-base text-white/90 text-center">
+              맞은 개수: {resultInfo.correctCount} / {resultInfo.wordCount}
+            </p>
+
+            <button
+              className="px-4 py-2 rounded-md bg-white text-custom_blue w-full font-bold"
+              onClick={() => {
+                setShowResultPopup(false);
+                navigate("/main");
+              }}
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showCancelPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="flex flex-col rounded-lg p-6 shadow-lg w-[30rem] bg-custom_blue relative">
+            <div className="flex justify-end">
+              <XMarkIcon
+                className="w-5 h-5 text-white cursor-pointer"
+                onClick={() => setShowCancelPopup(false)}
+              />
+            </div>
+
+            <p className="font-extrabold text-lg text-white text-shadow-lg mb-2">
+              정말 종료하시겠습니까?
+            </p>
+            <p className="mb-6 font-semibold text-base text-white/90">
+              진행 중인 학습은 중단되며, 현재까지의 진행 상황이 저장됩니다.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                className="px-4 py-2 rounded-md bg-white text-custom_blue w-full font-bold"
+                onClick={confirmCancel}
+              >
+                확인
+              </button>
+              <button
+                className="px-4 py-2 rounded-md bg-white/20 text-white w-full font-bold border border-white/50"
+                onClick={() => setShowCancelPopup(false)}
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

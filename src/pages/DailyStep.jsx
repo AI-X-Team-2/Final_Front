@@ -6,6 +6,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import { useLearningStore } from '../store/useLearningStore';
 
 const DailyStep = () => {
+
     const setCurrentWordIndex = useLearningStore((s) => s.setCurrentWordIndex);
     const [showPopup, setShowPopup] = useState(false);
     const [selectedStage, setSelectedStage] = useState(null);
