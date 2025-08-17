@@ -5,9 +5,9 @@ import LodadingSpinner from "./LodadingSpinner";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import TabButton from "./TabButton";
 import SmoothVideo from "./SmoothVideo";
-import { useLearningStore } from "../store/learningStore";
+import { useLearningStore } from "../store/useLearningStore";
 import { useNavigate } from "react-router-dom";
-import { completeSession } from "../api/sessions";
+import { completeSession } from "../api/session";
 import { useSessionStore } from "../store/useSessionStore";
 
 
@@ -188,9 +188,9 @@ const Words = ({ data, step, stage, onStageComplete }) => {
 
 
           disabled={audioDisabled}
-          reset={currentIndex}
+          reset={currentWordIndex}
           onRecordingChange={handleRecordingChange}
-          camerareset={currentIndex}
+          camerareset={currentWordIndex}
           onMouthVideoReady={setMouthVideoURL}
         />
       </div>
