@@ -25,10 +25,10 @@ const DailyLifeVoca = () => {
     }
   };
 
-  const data = getDataByStep();
+  const data = getDataByStep(); // 첫 10개 단어만 사용
 
-  
-const { mutate: startLearningMutate} = useMutation({
+
+  const { mutate: startLearningMutate } = useMutation({
     mutationFn: startLearning,
     retry: false,
     onSuccess: (res) => {
@@ -36,15 +36,17 @@ const { mutate: startLearningMutate} = useMutation({
     },
     onError: (err) => {
       console.error("start-learning 실패", err);
-    
+
     },
   });
 
-  useEffect(() => {
-   
-    startLearningMutate({ mode: "daily", level, total_words: data.length });
+  const sessionId = useSessionStore((s) => s.session_id);
 
-  }, [level, data]); 
+  useEffect(() => {
+    if (!sessionId) { // 기존 세션이 없을 때만 새로 생성
+      startLearningMutate({ mode: "daily", level, total_words: data.length });
+    }
+  }, [level, data, sessionId]);
 
   return (
     <div className="flex flex-col justify-center items-center h-screen">

@@ -41,21 +41,24 @@ export const useProgressStore = create(
         }));
         try {
           localStorage.removeItem(storageKey);
-        } catch {}
+        } catch { }
       },
 
       // 서버 하이드레이션
-      hydrate: async () => {
+      hydrate: async (force = false) => {
         const { _hydratedFromServer, loading } = get();
-        if (_hydratedFromServer || loading) return;
+        if ((_hydratedFromServer && !force) || loading) return;
 
         try {
           set({ loading: true, error: null });
 
-          const token = useAuthStore.getState().token;   // 로그인 토큰
-          const data = await fetchMyProgress(token);     // 서버 호출
+          // 전역 AuthStore에서 token 가져오기
+          const token = useAuthStore.getState().token;
 
-          // 서버 응답: { max_level: [1,2,...] } 가정
+          // 서버에서 진도 데이터 요청
+          const data = await fetchMyProgress(token);
+
+          // max_level 값 정규화
           const levels = normalizeLevels(data?.max_level);
 
           set({
