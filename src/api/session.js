@@ -37,28 +37,3 @@ export const completeSession = async (sessionId) => {
   }
 };
 
-export const cancelSession = async (sessionId, finished_words) => {
-  try {
-    const token = useAuthStore.getState().token;
-    if (!token) throw new Error("인증 토큰이 없습니다.");
-
-    const res = await axios.patch(
-      `${API_BASE}/sessions/${sessionId}/cancel`,
-      {
-        status: "canceled",
-        finished_words,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return res.data; // { session_id, finished_words, status: "canceled" }
-  } catch (err) {
-    console.error("세션 취소 요청 실패:", err);
-    throw err;
-  }
-};
