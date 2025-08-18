@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Camera from "./Camera";
 import MainButton from "./MainButton";
-import { useSessionStore } from "../store/useSessionStore";
 
 const Audio = ({
   target,
@@ -14,7 +13,9 @@ const Audio = ({
   camerareset,
   onMouthVideoReady,
 }) => {
+
   const sessionId = useSessionStore((s) => s.session_id);
+
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
@@ -100,6 +101,7 @@ const Audio = ({
     const formData = new FormData();
     formData.append("audio_file", audioBlob, "recording.webm");
     formData.append("target_sentence", target);
+
 
     // ✅ 세션 아이디 같이 전송 (백엔드 필드명과 일치시켜야 함)
     if (sessionId) {
