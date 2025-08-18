@@ -1,61 +1,81 @@
+// stores/progressStore.js
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { fetchMyProgress } from '../api/progressService';
+import { useAuthStore } from './useAuthSotre';
 
-const useProgressStore = create((set) => ({
-  progress: {
-    basic: {
-      opened: [1, 2],
-      1: { opened: [1, 2] }, 
-      2: { opened: [1] },   
-    },
-    daily: {
-      opened: [1, 2], 
-    },
-  },
+const toNumberArray = (v) =>
+  Array.isArray(v) ? v.map((x) => Number(x)).filter((n) => Number.isFinite(n)) : [];
 
-  // Basic 단계 열기
-  openBasicStep: (step) =>
-    set((state) => ({
-      progress: {
-        ...state.progress,
-        basic: {
-          ...state.progress.basic,
-          opened: [...new Set([...state.progress.basic.opened, step])],
-        },
+const uniq = (arr) => Array.from(new Set(arr));
+
+const normalizeLevels = (v) => uniq(toNumberArray(v)).sort((a, b) => a - b);
+
+export const useProgressStore = create(
+  persist(
+    (set, get) => ({
+      // ---- 상태 ----
+      max_level: [],              // ← 숫자 배열
+      loading: false,
+      error: null,
+      _hydratedFromServer: false,
+
+      // ---- 액션 ----
+      setMaxLevel: (levels) =>
+        set(() => ({
+          max_level: normalizeLevels(levels),
+        })),
+
+      resetProgress: () =>
+        set(() => ({
+          max_level: [],
+        })),
+
+      hardReset: () => {
+        const storageKey = "progress-store-v5";
+        set(() => ({
+          max_level: [],
+          loading: false,
+          error: null,
+          _hydratedFromServer: false,
+        }));
+        try {
+          localStorage.removeItem(storageKey);
+        } catch {}
       },
-    })),
 
-  // Daily 단계 및 서브단계 열기
-  openDailySubStep: (step, subStep) =>
-    set((state) => {
-      const daily = state.progress.daily;
-      const prevSubOpened = daily[step]?.opened || [];
+      // 서버 하이드레이션
+      hydrate: async () => {
+        const { _hydratedFromServer, loading } = get();
+        if (_hydratedFromServer || loading) return;
 
-      return {
-        progress: {
-          ...state.progress,
-          daily: {
-            ...daily,
-            [step]: {
-              opened: [...new Set([...prevSubOpened, subStep])],
-            },
-            opened: [...new Set([...daily.opened, parseInt(step)])],
-          },
-        },
-      };
+        try {
+          set({ loading: true, error: null });
+
+          const token = useAuthStore.getState().token;   // 로그인 토큰
+          const data = await fetchMyProgress(token);     // 서버 호출
+
+          // 서버 응답: { max_level: [1,2,...] } 가정
+          const levels = normalizeLevels(data?.max_level);
+
+          set({
+            max_level: levels,
+            _hydratedFromServer: true,
+            loading: false,
+          });
+        } catch (err) {
+          set({
+            error: err?.message || "진도 불러오기 실패",
+            loading: false,
+          });
+        }
+      },
     }),
-
-  // 전체 초기화
-  resetProgress: () =>
-    set(() => ({
-      progress: {
-        daily: {
-          opened: [],
-        },
-        basic: {
-          opened: [],
-        },
-      },
-    })),
-}));
-
-export default useProgressStore;
+    {
+      name: "progress-store-v5",                         // 로컬스토리지 키 (버전 갱신)
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ max_level: state.max_level }), // max_level만 저장
+      version: 5,
+    }
+  )
+);

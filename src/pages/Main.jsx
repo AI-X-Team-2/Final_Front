@@ -1,33 +1,28 @@
-import React, { useState } from 'react'
-import DailyLifeVoca from './DailyLifeVoca'
-import FooterBar from '../component/FooterBar'
-import Basic from './Basic'
+import React, { useEffect } from 'react'
+
 import DailyStep from './DailyStep'
-import useProgressStore from '../store/useProgressStore'
 import Info from '../component/Info'
+import { useProgressStore } from '../store/useProgressStore'
+
 
 const Main = () => {
-  const [selectedStep, setSelectedStep] = useState(null)
+    const { hydrate, loading, error } = useProgressStore();
 
-  const [selectedLabel, setSelectedLabel] = useState('');
 
-  const handleStepSelect = (step, label) => {
-    setSelectedStep(step);
-    setSelectedLabel(label);
-  };
   const infoContent = {
-    basic: {
-      category: 'Baic',
-      detail: '기본 발화 학습',
-    },
+   
     daily: {
       category: 'Daily',
       detail: '생활 속 단어 학습',
     },
   }
-  const progress = useProgressStore((state) => state.progress);
-  console.log(progress);
 
+  useEffect(() => {
+    hydrate(); 
+  }, [hydrate]);
+
+  if (loading) return <div>불러오는 중...</div>;
+  if (error) return <div>에러: {error}</div>;
 
   return (
     <div className='relative w-full flex flex-col  h-screen '>
@@ -35,18 +30,6 @@ const Main = () => {
 
 
       <div className='flex flex-col flex-1 ] '>
-        <div className="flex justify-center items-center mt-5">
-          <Info category={infoContent.basic.category} step={selectedStep} detail={selectedLabel || infoContent.basic.detail} isButton={true}/>
-
-        </div>
-
-        <Basic opened={progress.basic.opened} onStepSelect={handleStepSelect} />
-
-        <div className="flex items-center ">
-          <div className="flex-grow border-t border-customLightGray"></div>
-          
-          <div className="flex-grow border-t border-customLightGray"></div>
-        </div>
 
 
 
@@ -58,7 +41,7 @@ const Main = () => {
 
          <div className='flex flex-col flex-1 pb-28'> 
 
-      <DailyStep opened={progress.daily.opened} />
+      <DailyStep />
     </div>
 
 

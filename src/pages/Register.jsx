@@ -52,7 +52,7 @@ const Register = () => {
   const closeModal = () => {
     setModalIsOpen(false);
     if (modalContent.isSuccess) {
-      navigate('/login');
+      navigate('/');
     }
   };
 
