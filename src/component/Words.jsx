@@ -29,11 +29,13 @@ const Words = ({ data }) => {
   const [isWaitingResult, setIsWaitingResult] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mouthVideoURL, setMouthVideoURL] = useState(null);
+  const [userAudioURL, setUserAudioURL] = useState(null);  //추가
   const feedbackScrollRef = useRef(null);
   const tabScrollRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+ 
 
 
   const [showResultPopup, setShowResultPopup] = useState(false);
@@ -148,6 +150,7 @@ const Words = ({ data }) => {
       setCurrentWordIndex(currentWordIndex + 1);
       setResult(null);
       setMouthVideoURL(null);
+      setUserAudioURL(null);  //추가
     }
   };
 
@@ -193,6 +196,7 @@ const Words = ({ data }) => {
           onRecordingChange={handleRecordingChange}
           camerareset={currentWordIndex}
           onMouthVideoReady={setMouthVideoURL}
+          onAudioRecorded={setUserAudioURL}
         />
       </div>
 
@@ -301,13 +305,17 @@ const Words = ({ data }) => {
                     </div>
                   )}
 
-                  {activeTab === TABS.USER_VIDEO && (
-                    <div style={{ width: tabWidth, margin: "0 auto" }}>
+              {activeTab === TABS.USER_VIDEO && (
+                <div style={{ width: tabWidth, margin: "0 auto" }}>
+                  {mouthVideoURL && ( // 비디오와 오디오를 그룹으로 묶어 렌더링 
+                    <>
                       <p className="font-semibold mb-2 text-center text-white">
                         추출된 입모양 영상
                       </p>
                       <SmoothVideo src={mouthVideoURL} />
-                    </div>
+                    </>
+                  )}     
+                </div> 
                   )}
 
                   {activeTab === TABS.FEEDBACK && hasFeedback && (

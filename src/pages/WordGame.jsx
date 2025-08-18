@@ -294,7 +294,24 @@ export default function WordGame() {
   useEffect(() => {
     return () => { if (rafId.current) cancelAnimationFrame(rafId.current); };
   }, []);
+  useEffect(() => {
+    if (mediaRecorderRef.current && started) {
+      const recorder = mediaRecorderRef.current;
+      const micInterval = setInterval(() => {
+        if (recorder.state === "recording") {
+          recorder.stop();
+        } else if (recorder.state === "inactive") {
+          setMicStatus("말하세요!");
+          recorder.start();
+        }
+      },3000); // 3초 간격으로 녹음 시작/중지 반복
 
+      return () => clearInterval(micInterval);
+    } else if (mediaRecorderRef.current && !started && mediaRecorderRef.current.state === "recording") {
+      mediaRecorderRef.current.stop();
+      setMicStatus("게임 시작 대기 중.");
+    }
+  }, [started]);
   // =====(기존) 마이크 로직은 그대로 유지=====
   useEffect(() => {
     const initMic = async () => {
@@ -312,11 +329,11 @@ export default function WordGame() {
           fd.append("audio", blob, "audio.webm");
 
           try {
-            const res = await fetch("http://localhost:5000/transcribe_audio", { method: "POST", body: fd });
+            const res = await fetch("http://localhost:8000/transcribe_audio", { method: "POST", body: fd });
             if (res.ok) {
               const data = await res.json();
               if (startedRef.current) {
-                const spoken = (data.transcription || "").trim();
+                const spoken = (data.my_text || "").trim();
                 const idx = currentWords.current.findIndex(w => w.text === spoken);
                 if (idx !== -1) {
                   const m = currentWords.current[idx];
