@@ -480,9 +480,8 @@ const Words = ({ data }) => {
                 ? "다음 단계가 열렸습니다!"
                 : "다시 시도해볼까요?"}
             </p>
-
             <p className="mb-6 font-semibold text-base text-white/90 text-center">
-              맞은 개수: {resultInfo.correctCount} / {resultInfo.wordCount}
+              맞은 개수: {resultInfo.correctCount} / {resultInfo.total_words}
             </p>
 
             <button

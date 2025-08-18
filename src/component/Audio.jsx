@@ -13,6 +13,9 @@ const Audio = ({
   camerareset,
   onMouthVideoReady,
 }) => {
+
+  const sessionId = useSessionStore((s) => s.session_id);
+
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
@@ -98,6 +101,14 @@ const Audio = ({
     const formData = new FormData();
     formData.append("audio_file", audioBlob, "recording.webm");
     formData.append("target_sentence", target);
+
+
+    // ✅ 세션 아이디 같이 전송 (백엔드 필드명과 일치시켜야 함)
+    if (sessionId) {
+      formData.append("session_id", sessionId);
+    } else {
+      console.warn("세션 ID가 없습니다. 새로고침 시 세션 복구 로직을 확인하세요.");
+    }
 
     try {
       const response = await axios.post(

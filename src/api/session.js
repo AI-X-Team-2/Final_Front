@@ -11,7 +11,7 @@ export const completeSession = async (sessionId) => {
     if (!token) throw new Error("인증 토큰이 없습니다.");
 
     const res = await axios.patch(
-      `${API_BASE}/sessions/${sessionId}/complete`,
+      `${API_BASE}/api/sessions/${sessionId}/complete`,
       {},
       {
         headers: {
@@ -26,8 +26,9 @@ export const completeSession = async (sessionId) => {
 
     // 다음 단계로 넘어갈 수 있다면 진행도 최신화
     if (data?.isPassed) {
+      console.log(data.isPassed ? "\n\n\n세션 완료\n\n\n" : "\n\n\n세션 실패\n\n\n");
       const hydrate = useProgressStore.getState().hydrate;
-      await hydrate();   // 서버에서 최신 progress 가져오기
+      await hydrate(true);   // 서버에서 최신 progress 가져오기
     }
 
     return data;
