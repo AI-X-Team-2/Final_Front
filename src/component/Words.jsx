@@ -13,11 +13,11 @@ import TabButton from "./TabButton";
 import SmoothVideo from "./SmoothVideo";
 import { useLearningStore } from "../store/useLearningStore";
 import { useNavigate } from "react-router-dom";
-import { completeSession, cancelSession } from "../api/session";
+import { completeSession } from "../api/session";
 import { useSessionStore } from "../store/useSessionStore";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 
-const Words = ({ data, step, stage, onStageComplete }) => {
+
+const Words = ({ data }) => {
   const navigate = useNavigate();
   const setCurrentWordIndex = useLearningStore((s) => s.setCurrentWordIndex);
   const currentWordIndex = useLearningStore((s) => s.currentWordIndex);
@@ -34,36 +34,13 @@ const Words = ({ data, step, stage, onStageComplete }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const reportedRef = useRef(false);
 
-  const [showCancelPopup, setShowCancelPopup] = useState(false);
+
   const [showResultPopup, setShowResultPopup] = useState(false);
   const [resultInfo, setResultInfo] = useState(null);
 
-  useEffect(() => {
-    if (!data?.length) return;
+  
 
-    const isLast = currentWordIndex === data.length - 1;
-    const resultReady = !!result && !isRecording && !isWaitingResult;
-
-    if (isLast && resultReady && !reportedRef.current) {
-      reportedRef.current = true; // 중복 방지
-      onStageComplete({
-        step,
-        stage,
-        totalCount: data.length,
-      });
-    }
-  }, [
-    data,
-    currentWordIndex,
-    result,
-    isRecording,
-    isWaitingResult,
-    step,
-    stage,
-    onStageComplete,
-  ]);
   const handleMouseDown = (e) => {
     setIsDragging(true);
     setStartX(e.pageX - tabScrollRef.current.offsetLeft);
@@ -85,6 +62,7 @@ const Words = ({ data, step, stage, onStageComplete }) => {
     const walk = (x - startX) * 1; // 속도 조절
     tabScrollRef.current.scrollLeft = scrollLeft - walk;
   };
+
   const feedbackRef = useRef(null);
   const [tabWidth, setTabWidth] = useState("80%");
 
@@ -103,7 +81,6 @@ const Words = ({ data, step, stage, onStageComplete }) => {
   };
   const [activeTab, setActiveTab] = useState(TABS.CORRECT_VIDEO);
 
-  // 피드백 분류 및 존재 여부
   const filteredFeedback = useMemo(
     () =>
       result?.incorrect_points?.filter(
@@ -143,7 +120,6 @@ const Words = ({ data, step, stage, onStageComplete }) => {
     setResult(resultData);
     setAudioDisabled(true);
     setIsWaitingResult(false);
-    console.log("Words 컴포넌트에서 받은 결과:", resultData);
 
     if (
       resultData?.incorrect_points?.some(
@@ -161,7 +137,6 @@ const Words = ({ data, step, stage, onStageComplete }) => {
 
   useEffect(() => {
     if (data[currentWordIndex]) {
-      console.log("단어 바뀜, 버튼 활성화");
       setCurrentWord(data[currentWordIndex]);
       setAudioDisabled(false);
       setActiveTab(TABS.CORRECT_VIDEO);
@@ -201,31 +176,8 @@ const Words = ({ data, step, stage, onStageComplete }) => {
 
   const isLastWord = currentWordIndex === data.length - 1;
 
-  const openCancelPopup = () => setShowCancelPopup(true);
-
-  // 🔹 팝업 “확인” → 실제 중도 포기 API 호출
-  const confirmCancel = async () => {
-    try {
-      const finishedWords = currentWordIndex + 1;
-      await cancelSession(sessionId, finishedWords);
-      setShowCancelPopup(false);
-      navigate("/main");
-    } catch (err) {
-      console.error("중도 포기 실패:", err);
-      alert("중도 포기 중 오류가 발생했습니다.");
-    }
-  };
-
   return (
     <div className="mb-10 flex flex-col items-center gap-2 p-4">
-      <button
-        onClick={openCancelPopup}
-        className="absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-white shadow"
-        aria-label="중도 포기"
-      >
-        <XMarkIcon className="w-6 h-6 text-gray-700" />
-      </button>
-
       {currentWord && (
         <div className="text-center bg-white w-64 h-24 flex items-center justify-center rounded-xl mt-10">
           <p className="text-3xl font-bold text-gray-800">{currentWord.word}</p>
@@ -287,11 +239,11 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                   onMouseUp={handleMouseUp}
                   onMouseMove={handleMouseMove}
                   className="
-    flex flex-nowrap items-center gap-2 
-    bg-white/5 p-2 rounded-2xl 
-    overflow-x-auto whitespace-nowrap select-none
-    scrollbar-hide
-  "
+                    flex flex-nowrap items-center gap-2 
+                    bg-white/5 p-2 rounded-2xl 
+                    overflow-x-auto whitespace-nowrap select-none
+                    scrollbar-hide
+                  "
                   style={{
                     width: tabWidth,
                     maxWidth: "100%",
@@ -340,7 +292,6 @@ const Words = ({ data, step, stage, onStageComplete }) => {
 
                 {/* 탭 콘텐츠 */}
                 <div className="mt-6">
-                  {/* 올바른 발음 영상 */}
                   {activeTab === TABS.CORRECT_VIDEO && hasCorrectVideo && (
                     <div style={{ width: tabWidth, margin: "0 auto" }}>
                       <p className="font-semibold mb-2 text-center text-white">
@@ -350,7 +301,6 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                     </div>
                   )}
 
-                  {/* 추출된 입모양 영상 */}
                   {activeTab === TABS.USER_VIDEO && (
                     <div style={{ width: tabWidth, margin: "0 auto" }}>
                       <p className="font-semibold mb-2 text-center text-white">
@@ -360,7 +310,6 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                     </div>
                   )}
 
-                  {/* 상세 피드백 (캐러셀) */}
                   {activeTab === TABS.FEEDBACK && hasFeedback && (
                     <>
                       <h3 className="text-xl font-bold mb-3 text-white">
@@ -465,11 +414,8 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                     </>
                   )}
 
-                  {/* 누락된 단어 */}
                   {activeTab === TABS.MISSING && hasMissing && (
-                    <div
-                      style={{ width: tabWidth, maxWidth: "100%" }} // 피드백 카드와 동일 폭
-                    >
+                    <div style={{ width: tabWidth, maxWidth: "100%" }}>
                       <h4 className="text-lg font-bold text-white mb-2">
                         누락된 단어
                       </h4>
@@ -491,11 +437,8 @@ const Words = ({ data, step, stage, onStageComplete }) => {
                     </div>
                   )}
 
-                  {/* 추가된 단어 */}
                   {activeTab === TABS.EXTRA && hasExtra && (
-                    <div
-                      style={{ width: tabWidth, maxWidth: "100%" }} // 피드백 카드와 동일 폭
-                    >
+                    <div style={{ width: tabWidth, maxWidth: "100%" }}>
                       <h4 className="text-lg font-bold text-white mb-3">
                         추가된 단어
                       </h4>
@@ -551,41 +494,6 @@ const Words = ({ data, step, stage, onStageComplete }) => {
             >
               확인
             </button>
-          </div>
-        </div>
-      )}
-
-      {showCancelPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="flex flex-col rounded-lg p-6 shadow-lg w-[30rem] bg-custom_blue relative">
-            <div className="flex justify-end">
-              <XMarkIcon
-                className="w-5 h-5 text-white cursor-pointer"
-                onClick={() => setShowCancelPopup(false)}
-              />
-            </div>
-
-            <p className="font-extrabold text-lg text-white text-shadow-lg mb-2">
-              정말 종료하시겠습니까?
-            </p>
-            <p className="mb-6 font-semibold text-base text-white/90">
-              진행 중인 학습은 중단되며, 현재까지의 진행 상황이 저장됩니다.
-            </p>
-
-            <div className="flex gap-3">
-              <button
-                className="px-4 py-2 rounded-md bg-white text-custom_blue w-full font-bold"
-                onClick={confirmCancel}
-              >
-                확인
-              </button>
-              <button
-                className="px-4 py-2 rounded-md bg-white/20 text-white w-full font-bold border border-white/50"
-                onClick={() => setShowCancelPopup(false)}
-              >
-                취소
-              </button>
-            </div>
           </div>
         </div>
       )}
