@@ -10,7 +10,7 @@ const Layout = () => {
 
       </div>
       
-      <FooterBar className="fixed bottom-0 left-0 w-[50rem]"/>
+      <FooterBar className="absolute bottom-0 left-0 right-0"/>
 
     </div>
   )

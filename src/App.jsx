@@ -19,6 +19,7 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
+import Ranking from './pages/Ranking';
 
 function App() {
   return (
@@ -31,9 +32,11 @@ function App() {
 
         </Route>
 
+
         <Route element={<LearningLayout />}> 
          <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
    
+
         </Route>
 
 
@@ -45,9 +48,9 @@ function App() {
 
         <Route element={<Layout />}>
           <Route path="/main" element={<Main />} />
-                    <Route path="/settings" element={<Setting />} />
+          <Route path="/settings" element={<Setting />} />
 
-
+          <Route path="/ranking" element={<Ranking />} />
           <Route path="/game" element={<WordGame />} />
    
           <Route path="/daily" element={<DailyStep />} />
