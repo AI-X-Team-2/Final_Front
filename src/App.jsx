@@ -6,7 +6,6 @@ import WordGame from './pages/WordGame';
 
 
 import DailyLifeVoca from './pages/DailyLifeVoca';
-;
 import DailyStep from './pages/DailyStep';
 import Main from './pages/Main';
 import Login from './pages/Login';
@@ -20,7 +19,6 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 import Ranking from './pages/Ranking';
-import PracticeStart from './component/PracticeStart';
 
 function App() {
   return (
@@ -57,6 +55,7 @@ function App() {
    
           <Route path="/daily" element={<DailyStep />} />
           <Route path="/practice" element={<Practice />} />
+
 
 
         </Route>

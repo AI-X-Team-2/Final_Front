@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MainButton from './MainButton';
 import Modal from 'react-modal';
 import Words from '../component/Words';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { fetchStudyMistakeNotes } from '../api/practice';
+import { fetchStudyMistakeNotes } from '../api/fetchStudyMistakeNotes';
 import { startLearning } from '../api/learning';
-import { useAuthStore } from '../store/useAuthStore';
+import { useAuthStore } from '../store/useAuthSotre';
 import { useSessionStore } from '../store/useSessionStore';
 
 const Practice = () => {
