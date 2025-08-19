@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Camera from "./Camera";
 import MainButton from "./MainButton";
-
+import { useSessionStore } from "../store/useSessionStore";
 const Audio = ({
   target,
   onResult,
@@ -110,7 +110,7 @@ const Audio = ({
     }
 
 
-    // ✅ 세션 아이디 같이 전송 (백엔드 필드명과 일치시켜야 함)
+  
     if (sessionId) {
       formData.append("session_id", sessionId);
     } else {
