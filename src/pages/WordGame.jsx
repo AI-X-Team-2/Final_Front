@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import MainButton from "../component/MainButton"; // MainButton 컴포넌트 경로 수정 확인
 import gameimage from "../assets/gameimage.png"; // PNG 배경 이미지 경로 수정 확인
-import "../fonts.css";
+import "../index.css";
 
 const WORD_LIST = [
   "사과","바나나","오렌지","포도",

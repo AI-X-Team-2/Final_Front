@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Layout from './component/Layout'; // 'Rayout'은 오타이므로 제거
+import Layout from './component/Layout'; 
 
 import WordGame from './pages/WordGame';
 
+import ChatPractice from './pages/ChatPractice';  //추가
 
 import DailyLifeVoca from './pages/DailyLifeVoca';
-;
 import DailyStep from './pages/DailyStep';
 import Main from './pages/Main';
 import Login from './pages/Login';
@@ -28,35 +28,21 @@ function App() {
         <Route element={<LoginRegisterLayout />}>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-
         </Route>
-
 
         <Route element={<LearningLayout />}> 
-         <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
-   
-
+          <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
         </Route>
-
-
-
-
-
-
-
 
         <Route element={<Layout />}>
           <Route path="/main" element={<Main />} />
           <Route path="/settings" element={<Setting />} />
-
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/game" element={<WordGame />} />
-   
           <Route path="/daily" element={<DailyStep />} />
           <Route path="/practice" element={<Practice />} />
-
-
+          {/* 여기에 ChatAndMic 컴포넌트 라우트를 추가합니다. */}
+          <Route path="/chat-practice" element={<ChatPractice />} /> 
         </Route>
       </Routes>
     </BrowserRouter>
@@ -64,11 +50,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
