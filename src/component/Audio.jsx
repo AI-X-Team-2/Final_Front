@@ -12,6 +12,8 @@ const Audio = ({
   onRecordingChange,
   camerareset,
   onMouthVideoReady,
+  isReview
+
 }) => {
 
   const sessionId = useSessionStore((s) => s.session_id);
@@ -101,6 +103,11 @@ const Audio = ({
     const formData = new FormData();
     formData.append("audio_file", audioBlob, "recording.webm");
     formData.append("target_sentence", target);
+    {isReview &&
+
+    formData.append("isReview", true);
+
+    }
 
 
     // ✅ 세션 아이디 같이 전송 (백엔드 필드명과 일치시켜야 함)

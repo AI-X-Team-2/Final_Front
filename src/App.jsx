@@ -20,6 +20,7 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 import Ranking from './pages/Ranking';
+import PracticeStart from './component/PracticeStart';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
 
         <Route element={<LearningLayout />}> 
          <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
+
    
 
         </Route>
