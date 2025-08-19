@@ -135,7 +135,7 @@ export default function WordGame() {
 
       const ctx = canvas.getContext("2d");
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.font = `${FONT_SIZE}px 'BMJUA', sans-serif`; // (생성 단어 폰트: 굵기 변경 없음)
+      ctx.font = `${FONT_SIZE}px 'NanumSquareRound', sans-serif`; // (생성 단어 폰트: 굵기 변경 없음)
       ctx.textBaseline = "top";
       ctx.imageSmoothingEnabled = true;
       ctxRef.current = ctx;
@@ -154,7 +154,7 @@ export default function WordGame() {
     const cv = document.createElement("canvas");
     const c = cv.getContext("2d");
     // 마이크 안내 텍스트와 유사한 크기로 측정
-    c.font = "17px 'BMJUA', sans-serif";
+    c.font = "17px 'NanumSquareRound', sans-serif";
     const dash = Math.ceil(c.measureText("마").width);
     if (deadlineRef.current) {
       deadlineRef.current.style.setProperty("--dashLenPx", `${dash}px`);

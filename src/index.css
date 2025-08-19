@@ -9,17 +9,13 @@
   justify-content: center;
 }
 
-/* 폰트 정의 */
 @font-face {
-    font-family: 'BMJUA'; /* 이 폰트를 사용할 때 참조할 이름 */
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff'); /* 폰트 파일 경로와 형식 */
-    font-weight: normal; /* 폰트 두께 */
-    font-style: normal; /* 폰트 스타일 */
-    font-display: swap; /* 폰트가 로딩되지 않아도 텍스트가 바로 보이게 하는 옵션 */
+    font-family: 'NanumSquareRound';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
+    font-weight: normal; /* light(300), regular(400) 두께를 지원 */
+    font-style: normal;
 }
 
-/* body에 폰트 및 Tailwind 기본 폰트 속성들을 한 번에 적용 */
 body {
-  @apply font-sans; /* Tailwind의 기본 font-sans 관련 속성들을 적용합니다 (예: line-height 등) */
-  font-family: 'BMJUA', sans-serif; /* 'BMJUA' 폰트를 최우선으로 적용하고, 로드 실패 시 'sans-serif' 사용 */
+    font-family: 'NanumSquareRound', sans-serif;
 }
