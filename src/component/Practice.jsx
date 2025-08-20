@@ -16,21 +16,18 @@ const Practice = () => {
   const setSessionId = useSessionStore((s) => s.setSessionId);
   const sessionId = useSessionStore((s) => s.session_id);
 
-  // 단어 목록 조회
-  const { data: wordList = [] } = useQuery(
-    ["studyMistakeNotes"],
-    () => fetchStudyMistakeNotes(token),
-    {
-      onError: (err) => {
-        console.error("단어 목록 가져오기 실패:", err);
-        setModalContent({
-          title: "오류 발생",
-          message: "단어 목록을 가져오는 중 오류가 발생했습니다.",
-        });
-        setModalIsOpen(true);
-      },
-    }
-  );
+const { data: wordList = [] } = useQuery({
+  queryKey: ["studyMistakeNotes"],
+  queryFn: () => fetchStudyMistakeNotes(token),
+  onError: (err) => {
+    console.error("단어 목록 가져오기 실패:", err);
+    setModalContent({
+      title: "오류 발생",
+      message: "단어 목록을 가져오는 중 오류가 발생했습니다.",
+    });
+    setModalIsOpen(true);
+  },
+});
 
   // 학습 세션 생성
   const { mutate: startLearningMutate, isLoading: isStartingSession } = useMutation({
