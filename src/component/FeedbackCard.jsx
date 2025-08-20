@@ -1,7 +1,6 @@
 import React from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
-// 단어 피드백을 표시하는 컴포넌트
 const WordFeedback = ({ data }) => (
     <div className="space-y-3">
         <div className="grid grid-cols-2 gap-4 text-center">
@@ -17,7 +16,6 @@ const WordFeedback = ({ data }) => (
         {data.incorrect_points && data.incorrect_points.length > 0 && (
             <div>
                 <h4 className="font-bold text-white mt-4 mb-2">상세 피드백</h4>
-                {/* === 상세 피드백 표시 로직 수정 === */}
                 <div className="space-y-3 max-h-48 overflow-y-auto pr-2">
                     {data.incorrect_points.map((point, index) => (
                         <div key={index} className="p-3 bg-black bg-opacity-20 rounded-lg text-left text-sm">
@@ -38,8 +36,6 @@ const WordFeedback = ({ data }) => (
     </div>
 );
 
-
-// 문장 피드백을 표시하는 컴포넌트
 const SentenceFeedback = ({ data }) => (
     <div className="space-y-4 text-left">
         <div>
@@ -57,27 +53,24 @@ const SentenceFeedback = ({ data }) => (
     </div>
 );
 
-// 메인 피드백 카드
 const FeedbackCard = ({ feedbackData, onClose }) => {
     const isSentence = feedbackData.type === 'sentence';
     const data = isSentence ? feedbackData.sentence_feedback : feedbackData;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-            <div className="relative w-full max-w-md p-6 mx-4 bg-custom-blue-gradient rounded-2xl shadow-lg text-white">
-                <button onClick={onClose} className="absolute top-3 right-3 text-white hover:text-gray-300">
-                    <XMarkIcon className="w-6 h-6" />
-                </button>
-                
-                <div className="mb-4 text-center">
-                    <p className="text-sm text-gray-300">입력한 내용</p>
-                    <p className="text-xl font-bold">"{feedbackData.userInput}"</p>
-                </div>
-
-                <hr className="border-white/20 my-3" />
-
-                {isSentence ? <SentenceFeedback data={data} /> : <WordFeedback data={data} />}
+        <div className="relative w-full max-w-md p-6 mx-4 bg-custom-blue-gradient rounded-2xl shadow-lg text-white">
+            <button onClick={onClose} className="absolute top-3 right-3 text-white hover:text-gray-300">
+                <XMarkIcon className="w-6 h-6" />
+            </button>
+            
+            <div className="mb-4 text-center">
+                <p className="text-sm text-gray-300">입력한 내용</p>
+                <p className="text-xl font-bold">"{feedbackData.userInput}"</p>
             </div>
+
+            <hr className="border-white/20 my-3" />
+
+            {isSentence ? <SentenceFeedback data={data} /> : <WordFeedback data={data} />}
         </div>
     );
 };

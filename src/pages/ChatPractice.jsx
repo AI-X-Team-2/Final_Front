@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { MicrophoneIcon, StopCircleIcon } from '@heroicons/react/24/solid';
-import FeedbackCard from '../component/FeedbackCard'; // 피드백 카드를 곧 생성합니다.
+import FeedbackCard from '../component/FeedbackCard';
 import LoadingSpinner from '../component/LodadingSpinner';
 
 const ChatPractice = () => {
@@ -32,7 +32,6 @@ const ChatPractice = () => {
             mediaRecorderRef.current.onstop = async () => {
                 const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
                 await handleAnalysis(audioBlob);
-                // 녹음이 끝나면 스트림을 정지하여 마이크 사용 중 표시를 끕니다.
                 stream.getTracks().forEach(track => track.stop());
             };
 
@@ -57,7 +56,6 @@ const ChatPractice = () => {
         formData.append('audio_file', audioBlob, 'recording.webm');
         formData.append('target_sentence', text);
 
-        // 6글자 이상이거나 띄어쓰기가 포함되면 '문장', 아니면 '단어'로 판단
         const isSentence = text.length >= 6 || text.includes(' ');
         const endpoint = isSentence ? '/analyze_sentence' : '/analyze';
         
@@ -76,10 +74,7 @@ const ChatPractice = () => {
     };
 
     return (
-        <div className="relative flex flex-col items-center justify-center w-full h-screen bg-customGray overflow-hidden">
-            {/* 로딩 스피너 */}
-            {isLoading && <LoadingSpinner />}
-
+        <div className="flex flex-col items-center w-full h-screen bg-customGray overflow-hidden p-4">
             {/* 피드백 카드 */}
             {feedback && !isLoading && (
                 <FeedbackCard 
@@ -87,9 +82,12 @@ const ChatPractice = () => {
                     onClose={() => setFeedback(null)} 
                 />
             )}
+            
+            {/* 로딩 스피너 */}
+            {isLoading && <LoadingSpinner />}
 
             {/* 하단 채팅 입력창 및 녹음 버튼 */}
-            <div className="absolute bottom-0 left-0 right-0 w-full p-4 bg-white shadow-md">
+            <div className="fixed bottom-[90px] left-0 right-0 w-full p-4">
                 <div className="flex items-center w-full max-w-2xl mx-auto">
                     <input
                         type="text"
