@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useAuthStore } from "../store/useAuthSotre";
+import { useAuthStore } from "../store/useAuthStore";
 
 export const api = axios.create({
   baseURL: "http://localhost:8000",  // ✅ 직접 localhost 지정
@@ -7,7 +7,7 @@ export const api = axios.create({
 });
 
 // --- 학습 API ---
-export const startLearning = async ({ mode = "daily", level, total_words }) => {
+export const startLearning = async ({ mode , level, total_words }) => {
   const token = useAuthStore.getState()?.token; // ✅ 직접 가져오기
   console.log("토큰:", token);
 
