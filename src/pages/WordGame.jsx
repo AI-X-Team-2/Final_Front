@@ -2,13 +2,17 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import MainButton from "../component/MainButton"; // MainButton 컴포넌트 경로 수정 확인
+import RegameButton from "../component/RegameButton";
 import gameimage from "../assets/gameimage.png"; // PNG 배경 이미지 경로 수정 확인
+import "../fonts.css";
+
 
 const WORD_LIST = [
-  "사과","바나나","오렌지","포도","딸기",
-  "강아지","고양이","토끼","거북이","햄스터",
+  "사과","바나나","오렌지","포도",
+  "햄버거", "당근", "나무", "감자", "공기", "할머니", "호랑이",
+  "강아지","고양이","당근","거북이","햄스터",
   "학교","공원","도서관","병원","식당",
-  "행복","사랑","희망","평화","기쁨",
+  "모자","사랑","희망","가방","기타",
   "하늘","바다","산","강","책상"
 ];
 
@@ -133,7 +137,7 @@ export default function WordGame() {
 
       const ctx = canvas.getContext("2d");
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.font = `${FONT_SIZE}px 'Noto Sans KR', sans-serif`; // (생성 단어 폰트: 굵기 변경 없음)
+      ctx.font = `${FONT_SIZE}px 'BMJUA', cursive`; // (생성 단어 폰트: 굵기 변경 없음)
       ctx.textBaseline = "top";
       ctx.imageSmoothingEnabled = true;
       ctxRef.current = ctx;
@@ -152,7 +156,7 @@ export default function WordGame() {
     const cv = document.createElement("canvas");
     const c = cv.getContext("2d");
     // 마이크 안내 텍스트와 유사한 크기로 측정
-    c.font = "17px 'Noto Sans KR', sans-serif";
+    c.font = "17px 'BMJUA', cursive";
     const dash = Math.ceil(c.measureText("마").width);
     if (deadlineRef.current) {
       deadlineRef.current.style.setProperty("--dashLenPx", `${dash}px`);
@@ -449,7 +453,7 @@ useEffect(() => {
         {/* 데드라인: 연한 갈색 ‘긴 점선’ (세그먼트 길이 = “마” 폭) */}
         <div
           ref={deadlineRef}
-          className="absolute left-0 right-0 z-10"
+          className="absolute left-0 right-0 z-10 hidden"
           style={{
             bottom: `${DEADLINE_OFFSET}px`,
             height: "2px",
@@ -497,7 +501,7 @@ useEffect(() => {
               </p>
             )}
             {/* 버튼은 2/3 폭, 중앙 */}
-            <MainButton label="다시 시작" onClick={startGame} className="w-1/5 mx-auto" />
+            <RegameButton label="다시 시작" onClick={startGame} className="w-1/5 mx-auto" />
           </div>
         )}
       </div>

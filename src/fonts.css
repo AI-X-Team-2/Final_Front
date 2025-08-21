@@ -1,0 +1,10 @@
+@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff');
+
+/* 폰트 정의 (@font-face는 폰트 로딩 시 필요) */
+@font-face {
+    font-family: 'BMJUA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* 폰트가 로딩되지 않아도 텍스트가 바로 보이게 하는 옵션 */
+}
