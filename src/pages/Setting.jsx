@@ -25,13 +25,9 @@ const Setting = () => {
     if (isError) return <div>유저 정보를 불러오지 못했습니다.</div>;
     return (
         <div className="flex flex-col justify-center items-center h-screen">
-            <div className='text-white items-start'>
-                <h2>사용자 설정</h2>
-                <h3>아이디: {data?.username}</h3>
-                <h3>이메일: {data?.email}</h3>
-
-
-            </div>
+            <h2>사용자 설정</h2>
+            <h3>아이디: {data?.username}</h3>
+            <h3>이메일: {data?.email}</h3>
 
             <div className="mt-6">
                 <MainButton
