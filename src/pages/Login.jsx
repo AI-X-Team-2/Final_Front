@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { login } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
 import MainButton from '../component/MainButton';
-import { useAuthStore } from '../store/useAuthSotre'; 
+import { useAuthStore } from '../store/useAuthStore'; 
 import Modal from 'react-modal';
 
 

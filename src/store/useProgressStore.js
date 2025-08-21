@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { fetchMyProgress } from '../api/progressService';
-import { useAuthStore } from './useAuthSotre';
+import { useAuthStore } from './useAuthStore';
 
 const toNumberArray = (v) =>
   Array.isArray(v) ? v.map((x) => Number(x)).filter((n) => Number.isFinite(n)) : [];

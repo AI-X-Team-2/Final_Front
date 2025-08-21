@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from '@tanstack/react-query';
 import { getUserInfo } from '../api/auth';
-import { useAuthStore } from '../store/useAuthSotre';
+import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import MainButton from '../component/MainButton';
 const Setting = () => {

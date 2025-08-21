@@ -4,7 +4,7 @@ import Layout from './component/Layout'; // 'Rayout'은 오타이므로 제거
 
 import WordGame from './pages/WordGame';
 
-
+import StartPractice from './component/StartPractice';
 import DailyLifeVoca from './pages/DailyLifeVoca';
 import DailyStep from './pages/DailyStep';
 import Main from './pages/Main';
@@ -34,6 +34,7 @@ function App() {
 
         <Route element={<LearningLayout />}> 
          <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
+         <Route path="/review" element={<StartPractice />} />
 
    
 
