@@ -10,7 +10,6 @@ import axios from "axios";
 const Camera = forwardRef(({ onRecorded, reset, onUploadComplete }, ref) => {
     const videoRef = useRef(null);
     const mediaRecorderRef = useRef(null);
-    // const [recording, setRecording] = useState(false); // 이 상태는 Audio.js에서 관리하므로 필요 없음
     const [recordedVideoURL, setRecordedVideoURL] = useState(null);
     const recordedChunksRef = useRef([]);
     const streamRef = useRef(null); // 스트림을 저장할 ref 추가
@@ -86,13 +85,7 @@ const Camera = forwardRef(({ onRecorded, reset, onUploadComplete }, ref) => {
             const videoBlob = new Blob(recordedChunksRef.current, {
                 type: "video/webm",
             });
-            const videoUrl = URL.createObjectURL(videoBlob);
-            // setRecordedVideoURL(videoBlob) // 이 부분은 원본 영상을 보여줄 때 필요하지만 현재는 사용하지 않음
-
-            if (onRecorded) {
-                onRecorded(videoUrl);
-            }
-
+       
             await uploadVideoToServer(videoBlob);
         };
 

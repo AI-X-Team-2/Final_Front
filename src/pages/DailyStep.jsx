@@ -58,15 +58,9 @@ const DailyStep = () => {
                                 ? "심화 단어"
                                 : ""}</p>
 
-
-                        <p className="mb-4 font-semibold text-base text-white">진행률</p>
-
-
-
-
                         <div className="flex justify-end gap-3">
                             <button
-                                className="px-4 py-2 rounded-md bg-white text-custom_blue w-full font-bold"
+                                className="px-4 py-2 rounded-md bg-white text-custom_blue w-full font-bold mt-6"
                                 onClick={handleConfirm}
                             >
                                 학습 시작
