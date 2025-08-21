@@ -39,6 +39,7 @@ const Words = ({ data, isReview }) => {
 
   const [showResultPopup, setShowResultPopup] = useState(false);
   const [resultInfo, setResultInfo] = useState(null);
+ 
 
 
 
@@ -197,7 +198,7 @@ const Words = ({ data, isReview }) => {
           onMouthVideoReady={setMouthVideoURL}
           onAudioRecorded={setUserAudioURL}
           isReview={isReview}
-   
+
         />
       </div>
 
@@ -298,22 +299,28 @@ const Words = ({ data, isReview }) => {
                 {/* 탭 콘텐츠 */}
                 <div className="mt-6">
                   {activeTab === TABS.CORRECT_VIDEO && hasCorrectVideo && (
-                    <div style={{ width: tabWidth, margin: "0 auto" }}>
+                    <div >
                       <p className="font-semibold mb-2 text-center text-white">
                         올바른 발음 영상
                       </p>
-                      <SmoothVideo src={currentWord.videoPath} />
+                      <div className="w-[30rem]">
+                        <SmoothVideo src={currentWord.videoPath} />
+
+                      </div>
                     </div>
                   )}
 
                   {activeTab === TABS.USER_VIDEO && (
-                    <div style={{ width: tabWidth, margin: "0 auto" }}>
+                    <div >
                       {mouthVideoURL && ( // 비디오와 오디오를 그룹으로 묶어 렌더링 
                         <>
                           <p className="font-semibold mb-2 text-center text-white">
                             추출된 입모양 영상
                           </p>
-                          <SmoothVideo src={mouthVideoURL} />
+                          <div className="w-[30rem]">
+                            <SmoothVideo src={mouthVideoURL} />
+                          </div>
+
                         </>
                       )}
                     </div>
@@ -334,15 +341,15 @@ const Words = ({ data, isReview }) => {
                         </button>
 
                         <div
-                          ref={feedbackScrollRef}
-                          className="overflow-x-auto overflow-y-hidden snap-x snap-mandatory flex gap-4 pb-2 scroll-smooth scrollbar-hide flex-1"
+                          
+                          className="w-[20rem] overflow-x-auto overflow-y-hidden snap-x snap-mandatory flex gap-4 pb-2 scroll-smooth scrollbar-hide flex-1"
                         >
                           {filteredFeedback.map((point, index) => (
                             <div
-                              ref={feedbackRef}
+                           
                               key={index}
                               data-card="true"
-                              className="w-full snap-start rounded-xl p-4 bg-customFeedBack shadow-md flex-shrink-0"
+                              className="w-full snap-start rounded-xl p-4 bg-customFeedBack shadow-md flex-shrink-0 "
                               style={{ minWidth: "80%" }}
                             >
                               <h4 className="font-semibold text-lg mb-2 text-white">
