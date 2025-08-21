@@ -2,9 +2,12 @@ import React, { forwardRef, useState, useRef, useEffect, useImperativeHandle } f
 import axios from "axios";
 import Camera from "./Camera";
 import MainButton from "./MainButton";
+import { useSessionStore } from "../store/useSessionStore";
+
 
 // forwardRef를 사용하여 ref를 받을 수 있도록 수정
 const Audio = forwardRef(({
+
   target,
   onResult,
   onRecorded,
@@ -13,7 +16,15 @@ const Audio = forwardRef(({
   onRecordingChange,
   camerareset,
   onMouthVideoReady,
+  isReview
+
 }, ref) => {
+
+
+
+  const sessionId = useSessionStore((s) => s.session_id);
+
+
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioChunksRef = useRef([]);
@@ -105,6 +116,19 @@ const Audio = forwardRef(({
     const formData = new FormData();
     formData.append("audio_file", audioBlob, "recording.webm");
     formData.append("target_sentence", target);
+    {isReview &&
+
+    formData.append("isReview", true);
+
+    }
+
+
+  
+    if (sessionId) {
+      formData.append("session_id", sessionId);
+    } else {
+      console.warn("세션 ID가 없습니다. 새로고침 시 세션 복구 로직을 확인하세요.");
+    }
 
     try {
       const response = await axios.post(

@@ -32,19 +32,21 @@ export default function Ranking() {
     const goGame = () => navigate("/game", { state: { autoStart: true } });
 
     return (
-        <div className="min-h-screen bg-[#27313F] text-white flex flex-col items-center pt-10 pb-28">
-            <div className="w-full max-w-[840px] px-6">
+        <div className="min-h-screen bg-cus text-white flex flex-col items-center pt-10 pb-28">
+            <div className="w-full max-w-[700px] px-6">
                 {/* 타이틀 */}
-                <h1 className="text-[42px] font-extrabold mb-8">포인트 랭킹</h1>
+                <h1 className="text-white text-3xl font-semibold mb-8 self-start">포인트 랭킹</h1>
 
                 {/* 표 카드 */}
-                <div className="rounded-3xl border border-white/15 overflow-hidden shadow-xl">
+                <div className="bg-customFeedBack rounded-2xl overflow-hidden shadow-xl divide-customLightGray">
                     {/* 헤더 */}
-                    <div className="grid grid-cols-12 bg-white/10 py-5 px-8 text-lg font-semibold">
+                    <div className="grid grid-cols-12 bg-white/10 py-5 px-10 text-lg font-semibold">
                         <div className="col-span-2 text-center">순위</div>
                         <div className="col-span-3 text-center">포인트</div>
                         <div className="col-span-7 pl-3">아이디</div>
                     </div>
+                    <hr className="w-full border-t border-customLightGray" />
+                    
 
                     {/* 데이터 */}
                     {rows.map((r, idx) => (
@@ -63,14 +65,15 @@ export default function Ranking() {
 
 
             {/* 하단 고정 버튼: 가로 꽉 + 둥근 모서리 */}
-            <div className="absolute bottom-[84px] inset-x-0 pointer-events-none">
+            <div className="absolute bottom-[100px] inset-x-0 pointer-events-none flex justify-center">
                 {/* 둥근 래퍼로 버튼을 클리핑 */}
-                <div className="pointer-events-auto rounded-xl overflow-hidden">
+                <div className="pointer-events-auto rounded-xl overflow-hidden w-[80%]">
                     <MainButton
                         label="게임 시작"
                         onClick={goGame}
-                        className="w-full !mx-0 !rounded-none"
+                        className={'py-2 rounded-2xl font-semibold text-white bg-blue-400 w-full'}
                     />
+
                 </div>
             </div>
 

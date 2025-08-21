@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import MainButton from "../component/MainButton"; // MainButton 컴포넌트 경로 수정 확인
 import gameimage from "../assets/gameimage.png"; // PNG 배경 이미지 경로 수정 확인
+
 import "../index.css";
 
 const WORD_LIST = [
@@ -11,6 +12,7 @@ const WORD_LIST = [
   "강아지","고양이","당근","거북이","햄스터",
   "학교","공원","도서관","병원","식당",
   "모자","사랑","희망","가방","기타",
+
   "하늘","바다","산","강","책상"
 ];
 
@@ -135,7 +137,9 @@ export default function WordGame() {
 
       const ctx = canvas.getContext("2d");
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
       ctx.font = `${FONT_SIZE}px 'NanumSquareRound', sans-serif`; // (생성 단어 폰트: 굵기 변경 없음)
+
       ctx.textBaseline = "top";
       ctx.imageSmoothingEnabled = true;
       ctxRef.current = ctx;
@@ -154,7 +158,9 @@ export default function WordGame() {
     const cv = document.createElement("canvas");
     const c = cv.getContext("2d");
     // 마이크 안내 텍스트와 유사한 크기로 측정
+
     c.font = "17px 'NanumSquareRound', sans-serif";
+
     const dash = Math.ceil(c.measureText("마").width);
     if (deadlineRef.current) {
       deadlineRef.current.style.setProperty("--dashLenPx", `${dash}px`);

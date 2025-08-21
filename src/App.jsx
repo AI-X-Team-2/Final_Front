@@ -4,7 +4,11 @@ import Layout from './component/Layout';
 
 import WordGame from './pages/WordGame';
 
+
 import ChatPractice from './pages/ChatPractice';  //추가
+
+
+import StartPractice from './component/StartPractice';
 
 import DailyLifeVoca from './pages/DailyLifeVoca';
 import DailyStep from './pages/DailyStep';
@@ -31,7 +35,10 @@ function App() {
         </Route>
 
         <Route element={<LearningLayout />}> 
-          <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
+
+         <Route path="/daily/step/:step" element={<DailyLifeVoca />} />
+         <Route path="/review" element={<StartPractice />} />
+
         </Route>
 
         <Route element={<Layout />}>
@@ -41,8 +48,8 @@ function App() {
           <Route path="/game" element={<WordGame />} />
           <Route path="/daily" element={<DailyStep />} />
           <Route path="/practice" element={<Practice />} />
-          {/* 여기에 ChatAndMic 컴포넌트 라우트를 추가합니다. */}
           <Route path="/chat-practice" element={<ChatPractice />} /> 
+
         </Route>
       </Routes>
     </BrowserRouter>

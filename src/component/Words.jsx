@@ -17,7 +17,7 @@ import { completeSession } from "../api/session";
 import { useSessionStore } from "../store/useSessionStore";
 
 
-const Words = ({ data }) => {
+const Words = ({ data, isReview }) => {
   const navigate = useNavigate();
   const setCurrentWordIndex = useLearningStore((s) => s.setCurrentWordIndex);
   const currentWordIndex = useLearningStore((s) => s.currentWordIndex);
@@ -196,7 +196,11 @@ const Words = ({ data }) => {
           onRecordingChange={handleRecordingChange}
           camerareset={currentWordIndex}
           onMouthVideoReady={setMouthVideoURL}
+
           onAudioRecorded={setUserAudioURL}
+
+          isReview={isReview}
+
         />
       </div>
 
@@ -480,31 +484,32 @@ const Words = ({ data }) => {
         className="fixed bottom-6 w-full max-w-[20rem] "
       />
 
-      {showResultPopup && resultInfo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="flex flex-col rounded-lg p-6 shadow-lg w-[30rem] bg-custom_blue relative">
-            <p className="font-extrabold text-lg text-white text-shadow-lg mb-2 text-center">
-              {resultInfo.isPassed
-                ? "다음 단계가 열렸습니다!"
-                : "다시 시도해볼까요?"}
-            </p>
+     {showResultPopup && resultInfo && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="flex flex-col rounded-lg p-6 shadow-lg w-[30rem] bg-custom_blue relative">
+      <p className="font-extrabold text-lg text-white text-shadow-lg mb-2 text-center">
+        {isReview
+          ? "학습을 모두 완료했습니다."
+          : resultInfo.isPassed
+            ? "다음 단계가 열렸습니다!"
+            : "다시 시도해볼까요?"}
+      </p>
+      <p className="mb-6 font-semibold text-base text-white/90 text-center">
+        맞은 개수: {resultInfo.correctCount} / {resultInfo.total_words}
+      </p>
 
-            <p className="mb-6 font-semibold text-base text-white/90 text-center">
-              맞은 개수: {resultInfo.correctCount} / {resultInfo.wordCount}
-            </p>
-
-            <button
-              className="px-4 py-2 rounded-md bg-white text-custom_blue w-full font-bold"
-              onClick={() => {
-                setShowResultPopup(false);
-                navigate("/main");
-              }}
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      )}
+      <button
+        className="px-4 py-2 rounded-md bg-white text-custom_blue w-full font-bold"
+        onClick={() => {
+          setShowResultPopup(false);
+          navigate("/main");
+        }}
+      >
+        확인
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 };
