@@ -2,7 +2,10 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import MainButton from "../component/MainButton"; // MainButton 컴포넌트 경로 수정 확인
+import RegameButton from "../component/RegameButton";
 import gameimage from "../assets/gameimage.png"; // PNG 배경 이미지 경로 수정 확인
+import "../fonts.css";
+
 
 import "../index.css";
 
@@ -138,7 +141,7 @@ export default function WordGame() {
       const ctx = canvas.getContext("2d");
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      ctx.font = `${FONT_SIZE}px 'NanumSquareRound', sans-serif`; // (생성 단어 폰트: 굵기 변경 없음)
+      ctx.font = `${FONT_SIZE}px 'BMJUA', cursive`; // (생성 단어 폰트: 굵기 변경 없음)
 
       ctx.textBaseline = "top";
       ctx.imageSmoothingEnabled = true;
@@ -159,7 +162,7 @@ export default function WordGame() {
     const c = cv.getContext("2d");
     // 마이크 안내 텍스트와 유사한 크기로 측정
 
-    c.font = "17px 'NanumSquareRound', sans-serif";
+    c.font = "17px 'BMJUA', cursive";
 
     const dash = Math.ceil(c.measureText("마").width);
     if (deadlineRef.current) {
@@ -457,7 +460,7 @@ useEffect(() => {
         {/* 데드라인: 연한 갈색 ‘긴 점선’ (세그먼트 길이 = “마” 폭) */}
         <div
           ref={deadlineRef}
-          className="absolute left-0 right-0 z-10"
+          className="absolute left-0 right-0 z-10 hidden"
           style={{
             bottom: `${DEADLINE_OFFSET}px`,
             height: "2px",
@@ -505,7 +508,7 @@ useEffect(() => {
               </p>
             )}
             {/* 버튼은 2/3 폭, 중앙 */}
-            <MainButton label="다시 시작" onClick={startGame} className="w-1/5 mx-auto" />
+            <RegameButton label="다시 시작" onClick={startGame} className="w-1/5 mx-auto" />
           </div>
         )}
       </div>
