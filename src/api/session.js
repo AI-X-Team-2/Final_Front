@@ -1,6 +1,6 @@
 // api/sessions.js
 import axios from "axios";
-import { useAuthStore } from "../store/useAuthSotre";
+import { useAuthStore } from "../store/useAuthStore";
 import { useProgressStore } from "../store/useProgressStore";
 const API_BASE = "http://127.0.0.1:8000"; 
 
@@ -9,7 +9,7 @@ export const completeSession = async (sessionId) => {
   try {
     const token = useAuthStore.getState().token;
     if (!token) throw new Error("인증 토큰이 없습니다.");
-
+console.log("완료 호출 sessionId:", sessionId);
     const res = await axios.patch(
       `${API_BASE}/api/sessions/${sessionId}/complete`,
       {},

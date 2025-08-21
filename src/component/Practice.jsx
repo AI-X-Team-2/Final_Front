@@ -1,33 +1,47 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import MainButton from './MainButton';
 import Modal from 'react-modal';
 import Words from '../component/Words';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { fetchStudyMistakeNotes } from '../api/fetchStudyMistakeNotes';
+import { fetchStudyReviews } from '../api/fetchStudyReviews';
 import { startLearning } from '../api/learning';
-import { useAuthStore } from '../store/useAuthSotre';
+import { useAuthStore } from '../store/useAuthStore';
 import { useSessionStore } from '../store/useSessionStore';
+import { useNavigate } from 'react-router-dom';
 
 const Practice = () => {
+  const navigate = useNavigate();
   const [selectedWords, setSelectedWords] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState({ title: '', message: '' });
-  const token = useAuthStore((s) => s.token);
-  const setSessionId = useSessionStore((s) => s.setSessionId);
-  const sessionId = useSessionStore((s) => s.session_id);
+const [openIds, setOpenIds] = useState(new Set());
+  const rowToken = useAuthStore((s) => s.token);
+  const token =
+    typeof rowToken === 'string'
+      ? rowToken
+      : rowToken?.access_token || rowToken?.jwt || rowToken?.token || '';
+  console.log('토큰:', token);
 
-const { data: wordList = [] } = useQuery({
-  queryKey: ["studyMistakeNotes"],
-  queryFn: () => fetchStudyMistakeNotes(token),
-  onError: (err) => {
-    console.error("단어 목록 가져오기 실패:", err);
-    setModalContent({
-      title: "오류 발생",
-      message: "단어 목록을 가져오는 중 오류가 발생했습니다.",
-    });
-    setModalIsOpen(true);
-  },
-});
+  const setSessionId = useSessionStore((s) => s.setSessionId);
+
+  // 단어 목록 조회
+  const { data: reviews = [] } = useQuery({
+    queryKey: ['studyReviews', !!token], // 토큰 존재에 따라 캐시 분기
+    // fetchStudyReviews가 (token)만 받는다면 아래 한 줄로 바꾸세요:
+    // queryFn: ({ signal }) => fetchStudyReviews(token, signal),
+    queryFn: () => fetchStudyReviews(token), // 권장: 객체 파라미터
+    enabled: !!token,
+    onError: (err) => {
+      console.error('단어 목록 가져오기 실패:', err);
+      setModalContent({
+        title: '오류 발생',
+        message: '단어 목록을 가져오는 중 오류가 발생했습니다.',
+      });
+      setModalIsOpen(true);
+    },
+  });
+ const wordList = useMemo(() => reviews.map((r) => r.target_word), [reviews]);
+
 
   // 학습 세션 생성
   const { mutate: startLearningMutate, isLoading: isStartingSession } = useMutation({
@@ -48,21 +62,32 @@ const { data: wordList = [] } = useQuery({
 
   // 단어 선택 토글
   const toggleSelect = (word) => {
-    const exists = selectedWords.some(w => w.word === word);
-    if (exists) {
-      setSelectedWords(selectedWords.filter(w => w.word !== word));
-    } else {
-      if (selectedWords.length >= 10) {
-        setModalContent({
-          title: '선택 제한',
-          message: '최대 10개까지만 선택할 수 있어요!',
-        });
-        setModalIsOpen(true);
-      } else {
-        setSelectedWords([...selectedWords, { word }]);
+    setSelectedWords((prev) => {
+      if (prev.includes(word)) {
+        return prev.filter((w) => w !== word);
       }
-    }
+      if (prev.length >= 10) {
+        setModalContent({ title: '선택 제한', message: '최대 10개까지만 선택할 수 있어요!' });
+        setModalIsOpen(true);
+        return prev;
+      }
+      return [...prev, word];
+    });
   };
+
+
+ // 행(리뷰) 펼침/접힘 토글
+  const toggleOpen = (id) => {
+    setOpenIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+
+
 
   const closeModal = () => setModalIsOpen(false);
 
@@ -72,7 +97,13 @@ const { data: wordList = [] } = useQuery({
     startLearningMutate({
       mode: "practice",
       total_words: selectedWords.length,
-      words: selectedWords.map(w => w.word), // 선택 단어 전달
+
+    });
+
+    navigate("/review", {
+      state: {
+        selectedWords: selectedWords.map((w) => ({ word: w }))
+      },
     });
   };
 
@@ -83,9 +114,8 @@ const { data: wordList = [] } = useQuery({
       </h2>
 
       <MainButton
-        className={`w-[80%] py-2 rounded-2xl font-semibold text-white ${
-          selectedWords.length > 0 ? 'bg-blue-400' : 'bg-gray-600 cursor-not-allowed'
-        }`}
+        className={`w-[80%] py-2 rounded-2xl font-semibold text-white ${selectedWords.length > 0 ? 'bg-blue-400' : 'bg-gray-600 cursor-not-allowed'
+          }`}
         disabled={selectedWords.length === 0 || isStartingSession}
         label={isStartingSession ? "세션 생성 중..." : "학습시작"}
         onClick={handleStartLearning}
@@ -99,28 +129,50 @@ const { data: wordList = [] } = useQuery({
       </div>
 
       <div className="bg-customFeedBack rounded-2xl w-[80%] px-4 py-3 mt-4 divide-y divide-customLightGray">
-        {wordList.map((word, index) => {
-          const isSelected = selectedWords.some(w => w.word === word);
+        {reviews.map((item) => {
+          const isSelected = selectedWords.includes(item.target_word);
+          const isOpen = openIds.has(item.review_id);
           return (
-            <div
-              key={index}
-              onClick={() => toggleSelect(word)}
-              className="flex justify-between items-center px-4 py-2 cursor-pointer transition-all duration-150 bg-transparent text-white"
-            >
-              <span className="font-medium text-lg">{word}</span>
-              <input
-                type="checkbox"
-                checked={isSelected}
-                onChange={() => toggleSelect(word)}
-                className="w-5 h-5 bg-white checked:bg-customMidGray accent-custom_blue cursor-pointer"
-              />
+            <div key={item.review_id} className="py-2">
+              {/* 클릭 영역: 행 */}
+              <div
+                onClick={() => toggleOpen(item.review_id)}
+                className={`flex justify-between items-center px-4 py-2 cursor-pointer transition-all duration-150 rounded-md ${
+                  isSelected ? 'bg-sky-200 text-black' : 'bg-transparent text-white'
+                }`}
+              >
+                <span className="font-medium text-lg">{item.target_word}</span>
+
+                {/* 체크박스 (클릭 전파 방지) */}
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={() => toggleSelect(item.target_word)}
+                  className="w-5 h-5 bg-white checked:bg-customMidGray accent-custom_blue cursor-pointer"
+                />
+              </div>
+
+              {/* 접히는 상세 영역 */}
+              {isOpen && (
+                <div className="mx-4 mt-2 mb-3 rounded-md bg-black/20 text-white p-3 text-sm"> 
+                  <div className="grid grid-cols-1 gap-y-1">
+                    <p><span className="font-semibold">target_word:</span> {item.target_word}</p>
+                    <p className='block'><span className="font-semibold ">recognized_word:</span> {item.recognized_word || '없음'}</p>
+                    <p><span className="font-semibold">score:</span> {item.score}</p>
+                    <p className="md:col-span-2">
+                      <span className="font-semibold">feedback_summary:</span>{' '}
+                      {item.feedback_summary || '피드백 없음'}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
       </div>
 
-      {/* 세션 생성 완료 후 Words 렌더링 */}
-      {sessionId && selectedWords.length > 0 && <Words data={selectedWords} isReview={true}/>}
+
 
       <Modal
         isOpen={modalIsOpen}

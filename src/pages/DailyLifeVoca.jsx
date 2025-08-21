@@ -44,7 +44,7 @@ const DailyLifeVoca = () => {
 
   useEffect(() => {
     if (!sessionId) { // 기존 세션이 없을 때만 새로 생성
-      startLearningMutate({ mode: "daily", level, total_words: data.length });
+      startLearningMutate({ mode: "daily", level: [level], total_words: data.length });
     }
   }, [level, data, sessionId]);
 
