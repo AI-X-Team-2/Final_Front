@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   background-color: rgb(208, 208, 208);
   display: flex;
@@ -10,6 +9,13 @@
   justify-content: center;
 }
 
+@font-face {
+    font-family: 'NanumSquareRound';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
+    font-weight: normal; /* light(300), regular(400) 두께를 지원 */
+    font-style: normal;
+}
+
 body {
-  @apply font-sans;
+    font-family: 'NanumSquareRound', sans-serif;
 }

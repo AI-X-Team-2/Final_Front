@@ -1,9 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { forwardRef, useState, useRef, useEffect, useImperativeHandle } from "react";
 import axios from "axios";
 import Camera from "./Camera";
 import MainButton from "./MainButton";
 import { useSessionStore } from "../store/useSessionStore";
-const Audio = ({
+
+
+// forwardRef를 사용하여 ref를 받을 수 있도록 수정
+const Audio = forwardRef(({
+
   target,
   onResult,
   onRecorded,
@@ -14,9 +18,12 @@ const Audio = ({
   onMouthVideoReady,
   isReview
 
-}) => {
+}, ref) => {
+
+
 
   const sessionId = useSessionStore((s) => s.session_id);
+
 
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -38,7 +45,6 @@ const Audio = ({
       cameraStream = await cameraRef.current.startCamera();
       if (cameraStream) {
         cameraRef.current.startRecording();
-        // cameraRef.current.stopStream(); // 이 줄을 삭제했습니다.
       } else {
         console.warn("📷 카메라 stream을 받아오지 못했습니다.");
         return;
@@ -86,7 +92,7 @@ const Audio = ({
 
       if (cameraRef.current) {
         cameraRef.current.stopRecording();
-        cameraRef.current.stopStream(); 
+        cameraRef.current.stopStream();
       }
     }
   };
@@ -98,6 +104,13 @@ const Audio = ({
       startRecording();
     }
   };
+
+  // useImperativeHandle을 사용하여 상위 컴포넌트에서 호출할 함수를 정의
+  useImperativeHandle(ref, () => ({
+    toggleRecording,
+    startRecording,
+    stopRecording,
+  }));
 
   const sendToServer = async (audioBlob) => {
     const formData = new FormData();
@@ -139,7 +152,7 @@ const Audio = ({
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col items-center gap-3">
       <MainButton
         onClick={toggleRecording}
         disabled={disabled || !!audioURL}
@@ -155,6 +168,6 @@ const Audio = ({
       />
     </div>
   );
-};
+});
 
 export default Audio;
