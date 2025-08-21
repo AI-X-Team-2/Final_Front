@@ -156,7 +156,7 @@ const Audio = forwardRef(({
       <MainButton
         onClick={toggleRecording}
         disabled={disabled || !!audioURL}
-        className="w-40 h-10 text-lg font-bold rounded"
+        className="w-40 h-10 text-lg font-bold rounded  max-w-[20rem]"
         label={isRecording ? "녹음 중지" : "녹음 시작"}
       />
       

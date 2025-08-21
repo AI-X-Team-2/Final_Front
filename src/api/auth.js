@@ -24,7 +24,7 @@ export const getUserInfo = async () => {
 
   if (!token) throw new Error('토큰이 없습니다.');
 
-  const res = await API.get('/api/user', {
+  const res = await API.get('/api/progress/me', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
