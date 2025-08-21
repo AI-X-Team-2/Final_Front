@@ -8,5 +8,6 @@ export async function fetchStudyReviews(token) {
       "Content-Type": "application/json",
     },
   });
+  console.log("fetchStudyReviews response:", res.data);
   return res.data
 }
