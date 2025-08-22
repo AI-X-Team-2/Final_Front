@@ -5,14 +5,15 @@ import {
   StarIcon,
   PencilIcon,
   Cog6ToothIcon,
-  ChatBubbleLeftRightIcon // 이 부분을 추가했습니다.
+  ChatBubbleLeftRightIcon // 추가
 } from '@heroicons/react/24/solid'
 import { Link, useLocation } from 'react-router-dom'
 
 const navItems = [
   { name: '단어', icon: HomeIcon,   path: '/main',    activePaths: ['/main'] },
+  // ★ 게임: 랭킹으로 이동, 활성은 /ranking 과 /game 둘 다
   { name: '게임', icon: StarIcon,   path: '/ranking', activePaths: ['/ranking', '/game'] },
-  { name: '채팅연습', icon: ChatBubbleLeftRightIcon, path: '/chat-practice', activePaths: ['/chat-practice'] },  //추가
+  { name: '채팅학습', icon: ChatBubbleLeftRightIcon, path: '/chat-practice', activePaths: ['/chat-practice'] },  //추가
   { name: '연습', icon: PencilIcon, path: '/practice',activePaths: ['/practice'] },
   { name: '설정', icon: Cog6ToothIcon, path: '/settings', activePaths: ['/settings'] }
 ]

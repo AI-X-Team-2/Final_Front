@@ -29,7 +29,6 @@ const Words = ({ data, isReview }) => {
   const [isWaitingResult, setIsWaitingResult] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mouthVideoURL, setMouthVideoURL] = useState(null);
-  const [userAudioURL, setUserAudioURL] = useState(null);  //추가
   const feedbackScrollRef = useRef(null);
   const tabScrollRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -40,7 +39,7 @@ const Words = ({ data, isReview }) => {
   const [showResultPopup, setShowResultPopup] = useState(false);
   const [resultInfo, setResultInfo] = useState(null);
 
-
+  
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
@@ -149,7 +148,6 @@ const Words = ({ data, isReview }) => {
       setCurrentWordIndex(currentWordIndex + 1);
       setResult(null);
       setMouthVideoURL(null);
-      setUserAudioURL(null);  //추가
     }
   };
 
@@ -195,9 +193,7 @@ const Words = ({ data, isReview }) => {
           onRecordingChange={handleRecordingChange}
           camerareset={currentWordIndex}
           onMouthVideoReady={setMouthVideoURL}
-          onAudioRecorded={setUserAudioURL}
           isReview={isReview}
-   
         />
       </div>
 
@@ -308,14 +304,10 @@ const Words = ({ data, isReview }) => {
 
                   {activeTab === TABS.USER_VIDEO && (
                     <div style={{ width: tabWidth, margin: "0 auto" }}>
-                      {mouthVideoURL && ( // 비디오와 오디오를 그룹으로 묶어 렌더링 
-                        <>
-                          <p className="font-semibold mb-2 text-center text-white">
-                            추출된 입모양 영상
-                          </p>
-                          <SmoothVideo src={mouthVideoURL} />
-                        </>
-                      )}
+                      <p className="font-semibold mb-2 text-center text-white">
+                        추출된 입모양 영상
+                      </p>
+                      <SmoothVideo src={mouthVideoURL} />
                     </div>
                   )}
 
@@ -478,35 +470,35 @@ const Words = ({ data, isReview }) => {
         onClick={isLastWord ? handleComplete : goToNextWord}
         disabled={!result}
         label={isLastWord ? "학습 완료" : "다음 단어"}
-        className="fixed bottom-6  max-w-[20rem] "
+        className="fixed bottom-6 w-full max-w-[20rem] "
       />
 
-      {showResultPopup && resultInfo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="flex flex-col rounded-lg p-6 shadow-lg w-[30rem] bg-custom_blue relative">
-            <p className="font-extrabold text-lg text-white text-shadow-lg mb-2 text-center">
-              {isReview
-                ? "학습을 모두 완료했습니다."
-                : resultInfo.isPassed
-                  ? "다음 단계가 열렸습니다!"
-                  : "다시 시도해볼까요?"}
-            </p>
-            <p className="mb-6 font-semibold text-base text-white/90 text-center">
-              맞은 개수: {resultInfo.correctCount} / {resultInfo.total_words}
-            </p>
+     {showResultPopup && resultInfo && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="flex flex-col rounded-lg p-6 shadow-lg w-[30rem] bg-custom_blue relative">
+      <p className="font-extrabold text-lg text-white text-shadow-lg mb-2 text-center">
+        {isReview
+          ? "학습을 모두 완료했습니다."
+          : resultInfo.isPassed
+            ? "다음 단계가 열렸습니다!"
+            : "다시 시도해볼까요?"}
+      </p>
+      <p className="mb-6 font-semibold text-base text-white/90 text-center">
+        맞은 개수: {resultInfo.correctCount} / {resultInfo.total_words}
+      </p>
 
-            <button
-              className="px-4 py-2 rounded-md bg-white text-custom_blue w-full font-bold"
-              onClick={() => {
-                setShowResultPopup(false);
-                navigate("/main");
-              }}
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      )}
+      <button
+        className="px-4 py-2 rounded-md bg-white text-custom_blue w-full font-bold"
+        onClick={() => {
+          setShowResultPopup(false);
+          navigate("/main");
+        }}
+      >
+        확인
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 };

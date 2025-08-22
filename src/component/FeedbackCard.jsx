@@ -16,7 +16,7 @@ const WordFeedback = ({ data }) => (
         {data.incorrect_points && data.incorrect_points.length > 0 && (
             <div>
                 <h4 className="font-bold text-white mt-4 mb-2">상세 피드백</h4>
-                <div className="space-y-3 max-h-48 overflow-y-auto pr-2">
+                <div className="space-y-3 max-h-48 overflow-y-auto pr-2 scrollbar-hide">
                     {data.incorrect_points.map((point, index) => (
                         <div key={index} className="p-3 bg-black bg-opacity-20 rounded-lg text-left text-sm">
                             <p className="font-bold">
@@ -58,14 +58,24 @@ const FeedbackCard = ({ feedbackData, onClose }) => {
     const data = isSentence ? feedbackData.sentence_feedback : feedbackData;
 
     return (
-        <div className="relative w-full max-w-md p-6 mx-4 bg-custom-blue-gradient rounded-2xl shadow-lg text-white">
+        <div className="relative w-full max-w-md p-6 mx-4 bg-customFeedBack rounded-2xl shadow-lg text-white">
             <button onClick={onClose} className="absolute top-3 right-3 text-white hover:text-gray-300">
                 <XMarkIcon className="w-6 h-6" />
             </button>
             
-            <div className="mb-4 text-center">
-                <p className="text-sm text-gray-300">입력한 내용</p>
-                <p className="text-xl font-bold">"{feedbackData.userInput}"</p>
+            {/* ===== 1. 이 부분 수정 ===== */}
+            <div className="mb-4 text-center space-y-2">
+                <div>
+                    <p className="text-sm text-gray-300">입력한 내용</p>
+                    <p className="text-xl font-bold">"{feedbackData.userInput}"</p>
+                </div>
+                {/* 2. 문장일 때만 "사용자 발음" 표시 */}
+                {isSentence && (
+                     <div>
+                        <p className="text-sm text-gray-300">사용자 발음</p>
+                        <p className="text-lg font-bold text-gray-100">"{feedbackData.my_text || '-'}"</p>
+                    </div>
+                )}
             </div>
 
             <hr className="border-white/20 my-3" />

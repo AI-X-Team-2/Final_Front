@@ -1,13 +1,9 @@
-import React, { forwardRef, useState, useRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Camera from "./Camera";
 import MainButton from "./MainButton";
 import { useSessionStore } from "../store/useSessionStore";
-
-
-// forwardRef를 사용하여 ref를 받을 수 있도록 수정
 const Audio = forwardRef(({
-
   target,
   onResult,
   onRecorded,
@@ -20,10 +16,7 @@ const Audio = forwardRef(({
 
 }, ref) => {
 
-
-
   const sessionId = useSessionStore((s) => s.session_id);
-
 
   const mediaRecorderRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -45,6 +38,7 @@ const Audio = forwardRef(({
       cameraStream = await cameraRef.current.startCamera();
       if (cameraStream) {
         cameraRef.current.startRecording();
+        // cameraRef.current.stopStream(); // 이 줄을 삭제했습니다.
       } else {
         console.warn("📷 카메라 stream을 받아오지 못했습니다.");
         return;
@@ -92,7 +86,7 @@ const Audio = forwardRef(({
 
       if (cameraRef.current) {
         cameraRef.current.stopRecording();
-        cameraRef.current.stopStream();
+        cameraRef.current.stopStream(); 
       }
     }
   };
@@ -105,7 +99,7 @@ const Audio = forwardRef(({
     }
   };
 
-  // useImperativeHandle을 사용하여 상위 컴포넌트에서 호출할 함수를 정의
+    // useImperativeHandle을 사용하여 상위 컴포넌트에서 호출할 함수를 정의
   useImperativeHandle(ref, () => ({
     toggleRecording,
     startRecording,
@@ -130,6 +124,11 @@ const Audio = forwardRef(({
       console.warn("세션 ID가 없습니다. 새로고침 시 세션 복구 로직을 확인하세요.");
     }
 
+    // 1. 단어/문장 판별
+    const isSentence = target.length >= 6 || target.includes(' ');
+    // 2. 판별 결과에 따라 API 주소 결정
+    const endpoint = isSentence ? '/analyze_sentence' : '/analyze';
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/analyze",
@@ -147,16 +146,19 @@ const Audio = forwardRef(({
         onResult(response.data);
       }
     } catch (error) {
+      // 3. 결과 데이터에 type 정보 추가해서 전달
+      onResult({ ...response.data, type: isSentence ? 'sentence' : 'word' });
+
       console.error("전송 실패:", error);
     }
   };
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col gap-3">
       <MainButton
         onClick={toggleRecording}
         disabled={disabled || !!audioURL}
-        className="w-40 h-10 text-lg font-bold rounded  max-w-[20rem]"
+        className="w-40 h-10 text-lg font-bold rounded"
         label={isRecording ? "녹음 중지" : "녹음 시작"}
       />
       
