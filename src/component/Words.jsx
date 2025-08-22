@@ -39,7 +39,7 @@ const Words = ({ data, isReview }) => {
 
   const [showResultPopup, setShowResultPopup] = useState(false);
   const [resultInfo, setResultInfo] = useState(null);
- 
+
 
 
 
@@ -105,7 +105,7 @@ const Words = ({ data, isReview }) => {
       ) || [],
     [result]
   );
-  const hasCorrectVideo = !!(currentWord && currentWord.videoPath);
+  const hasCorrectVideo = !!(currentWord && result?.correct_video_url);
   const hasUserVideo = !!mouthVideoURL;
   const hasFeedback = filteredFeedback.length > 0;
   const hasMissing = missingPoints.length > 0;
@@ -180,32 +180,35 @@ const Words = ({ data, isReview }) => {
   const isLastWord = currentWordIndex === data.length - 1;
 
   return (
-    <div className="mb-10 flex flex-col items-center gap-2 p-4">
-      {currentWord && (
-        <div className="text-center bg-white w-64 h-24 flex items-center justify-center rounded-xl mt-10">
-          <p className="text-3xl font-bold text-gray-800">{currentWord.word}</p>
-        </div>
-      )}
+    <div className="mb-10 flex flex-col items-center gap-2 h-screen">
+      <div className="flex flex-col w-full items-center gap-3">
+        {currentWord && (
+          <div className="text-center bg-white w-64 h-24 flex items-center justify-center rounded-xl mt-10">
+            <p className="text-3xl font-bold text-gray-800">{currentWord.word}</p>
+          </div>
+        )}
 
-      <div className="flex flex-col md:flex-row  items-start">
-        <Audio
-          target={currentWord ? currentWord.word : ""}
-          onResult={handleResult}
-          disabled={audioDisabled}
-          reset={currentWordIndex}
-          onRecordingChange={handleRecordingChange}
-          camerareset={currentWordIndex}
-          onMouthVideoReady={setMouthVideoURL}
-          onAudioRecorded={setUserAudioURL}
-          isReview={isReview}
+       
+          <Audio
+            target={currentWord ? currentWord.word : ""}
+            onResult={handleResult}
+            disabled={audioDisabled}
+            reset={currentWordIndex}
+            onRecordingChange={handleRecordingChange}
+            camerareset={currentWordIndex}
+            onMouthVideoReady={setMouthVideoURL}
+            onAudioRecorded={setUserAudioURL}
+            isReview={isReview}
 
-        />
+          />
+  
+
       </div>
-
-      {!isRecording && isWaitingResult && <LodadingSpinner />}
+      <div className={`${!isRecording && isWaitingResult ? "flex items-center justify-center" : "h-auto overflow-y-auto scrollbar-hide"}`}>
+         {!isRecording && isWaitingResult && <LodadingSpinner />}
 
       {result && (
-        <div className="w-full max-w-2xl p-5 ">
+        <div className="w-full max-w-2xl">
           {result.my_text && (
             <div>
               <p className="text-lg">
@@ -230,7 +233,7 @@ const Words = ({ data, isReview }) => {
             </p>
           </div>
 
-          <div className="flex flex-col items-center gap-8 mt-4">
+          <div className="flex flex-col items-center gap-8 ">
             {result.score === "0" ? (
               <p className="mt-2 p-4 bg-customFeedBack text-white rounded-lg text-center font-semibold mb-36">
                 일치하지 않는 단어입니다.
@@ -244,17 +247,15 @@ const Words = ({ data, isReview }) => {
                   onMouseLeave={handleMouseLeave}
                   onMouseUp={handleMouseUp}
                   onMouseMove={handleMouseMove}
-                  className="
+                  className={`
+                   w-[30rem] max-w-full mx-auto
                     flex flex-nowrap items-center gap-2 
                     bg-white/5 p-2 rounded-2xl 
                     overflow-x-auto whitespace-nowrap select-none
                     scrollbar-hide
-                  "
-                  style={{
-                    width: tabWidth,
-                    maxWidth: "100%",
-                    cursor: isDragging ? "grabbing" : "grab",
-                  }}
+                    ${isDragging ? "cursor-grabbing" : "cursor-grab"}
+                  `}
+
                 >
                   <TabButton
                     label={TABS.CORRECT_VIDEO}
@@ -297,14 +298,14 @@ const Words = ({ data, isReview }) => {
                 </div>
 
                 {/* 탭 콘텐츠 */}
-                <div className="mt-6">
+                <div className=" min-h-[30rem]">
                   {activeTab === TABS.CORRECT_VIDEO && hasCorrectVideo && (
-                    <div >
-                      <p className="font-semibold mb-2 text-center text-white">
+                    <div>
+                      <p className="text-xl font-semibold mb-2 text-start text-white">
                         올바른 발음 영상
                       </p>
                       <div className="w-[30rem]">
-                        <SmoothVideo src={currentWord.videoPath} />
+                        <SmoothVideo src={result.correct_video_url} />
 
                       </div>
                     </div>
@@ -314,7 +315,7 @@ const Words = ({ data, isReview }) => {
                     <div >
                       {mouthVideoURL && ( // 비디오와 오디오를 그룹으로 묶어 렌더링 
                         <>
-                          <p className="font-semibold mb-2 text-center text-white">
+                          <p className="text-xl font-semibold mb-2 text-start text-white">
                             추출된 입모양 영상
                           </p>
                           <div className="w-[30rem]">
@@ -327,91 +328,63 @@ const Words = ({ data, isReview }) => {
                   )}
 
                   {activeTab === TABS.FEEDBACK && hasFeedback && (
-                    <>
+                    <div className="floex flex-col relative">
                       <h3 className="text-xl font-bold mb-3 text-white">
                         상세 피드백
                       </h3>
                       <div className="flex items-center gap-2 ">
                         <button
                           onClick={() => scrollByCard(-1)}
-                          className="bg-gray-800 bg-opacity-90 text-white p-2 rounded-full shadow"
+                          className="absolute -left-12 top-1/2 -translate-y-1/2 bg-gray-800 bg-opacity-90 text-white p-2 rounded-full shadow"
                           aria-label="이전 피드백"
                         >
                           <ChevronLeftIcon className="h-6 w-6" />
                         </button>
 
                         <div
-                          
-                          className="w-[20rem] overflow-x-auto overflow-y-hidden snap-x snap-mandatory flex gap-4 pb-2 scroll-smooth scrollbar-hide flex-1"
+                          ref={feedbackScrollRef}
+
+                          className="w-[30rem] overflow-x-auto overflow-y-hidden snap-x snap-mandatory flex gap-4 pb-2 scroll-smooth scrollbar-hide flex-1"
                         >
                           {filteredFeedback.map((point, index) => (
                             <div
-                           
+
                               key={index}
                               data-card="true"
-                              className="w-full snap-start rounded-xl p-4 bg-customFeedBack shadow-md flex-shrink-0 "
-                              style={{ minWidth: "80%" }}
+                              className="w-[30rem] snap-start rounded-xl p-4 bg-customFeedBack shadow-md flex-shrink-0 "
+
                             >
-                              <h4 className="font-semibold text-lg mb-2 text-white">
-                                틀린 발음: "{point.actual}" → "{point.expected}"
-                              </h4>
+                              <p className="font-bold text-lg mb-2 text-white">
+                                틀린 발음: <span className="font-normal ">"{point.actual}" → "{point.expected}"</span>
+                              </p>
 
                               {point.teaching_point && (
-                                <p className="font-bold text-md text-white mb-3">
-                                  교정 포인트: {point.teaching_point}
+                                <p className="font-bold text-lg text-white mb-3">
+                                  교정 포인트:  <span className="font-normal">{point.teaching_point}</span>
                                 </p>
                               )}
 
-                              <div className="my-3 flex justify-center items-start gap-3">
-                                {point.image_guides?.chosung_img && (
-                                  <div className="text-center">
-                                    <img
-                                      src={`http://127.0.0.1:8000/static/images/${point.image_guides.chosung_img}`}
-                                      alt="자음 가이드"
-                                      className="w-28 h-28 object-contain border rounded p-1 bg-customFeedBack"
-                                    />
-                                    <span className="text-xs font-semibold mt-1 block">
-                                      자음(초성)
-                                    </span>
-                                  </div>
-                                )}
-                                {point.image_guides?.jungsung_img && (
-                                  <div className="text-center">
-                                    <img
-                                      src={`http://127.0.0.1:8000/static/images/${point.image_guides.jungsung_img}`}
-                                      alt="모음 가이드"
-                                      className="w-28 h-28 object-contain border rounded p-1 bg-customFeedBack"
-                                    />
-                                    <span className="text-xs font-semibold mt-1 block">
-                                      모음(중성)
-                                    </span>
-                                  </div>
-                                )}
-                                {point.image_guides?.default_img && (
-                                  <div className="text-center">
-                                    <img
-                                      src={`http://127.0.0.1:8000/static/images/${point.image_guides.default_img}`}
-                                      alt="발음 가이드"
-                                      className="w-28 h-28 object-contain border rounded p-1 bg-customFeedBack"
-                                    />
-                                    <span className="text-xs font-semibold mt-1 block">
-                                      올바른 입모양
-                                    </span>
-                                  </div>
+                              <div className="my-3 flex justify-center items-start ">
+                                {point.correct_img_url && (
+                                  <img
+                                    src={point.correct_img_url}
+                                    alt="정답 이미지"
+                                    className="w-64 h-32 object-contain"
+                                  />
                                 )}
                               </div>
 
                               <div className="space-y-1 text-sm text-white">
                                 <p>
-                                  <strong>입모양:</strong>{" "}
+                                  <p className="font-bold text-base">입모양:</p>{" "}
                                   {point.mouth_feedback}
                                 </p>
                                 <p>
-                                  <strong>혀 위치:</strong>{" "}
+                                  <p className="font-bold text-base">혀 위치:</p>{" "}
                                   {point.tongue_position_feedback}
                                 </p>
                                 <p>
-                                  <strong>호흡법:</strong>{" "}
+                                  <p className="font-bold text-base">호흡법:</p>{" "}
                                   {point.breathing_feedback}
                                 </p>
                               </div>
@@ -421,25 +394,25 @@ const Words = ({ data, isReview }) => {
 
                         <button
                           onClick={() => scrollByCard(1)}
-                          className="bg-gray-800 bg-opacity-90 text-white p-2 rounded-full shadow"
+                          className="absolute -right-12 top-1/2 -translate-y-1/2 bg-gray-800 bg-opacity-90 text-white p-2 rounded-full shadow"
                           aria-label="다음 피드백"
                         >
                           <ChevronRightIcon className="h-6 w-6" />
                         </button>
                       </div>
-                    </>
+                    </div>
                   )}
 
                   {activeTab === TABS.MISSING && hasMissing && (
-                    <div style={{ width: tabWidth, maxWidth: "100%" }}>
-                      <h4 className="text-lg font-bold text-white mb-2">
+                    <div >
+                      <h4 className="text-xl font-bold text-white mb-2">
                         누락된 단어
                       </h4>
                       <ul className="space-y-3">
                         {missingPoints.map((point, idx) => (
                           <li
                             key={idx}
-                            className="w-full px-4 py-3 rounded-xl bg-customFeedBack text-white shadow-sm"
+                            className="w-[30rem] px-4 py-3 rounded-xl bg-customFeedBack text-white shadow-sm"
                           >
                             <span className="font-semibold break-keep">
                               누락된 단어:
@@ -455,14 +428,14 @@ const Words = ({ data, isReview }) => {
 
                   {activeTab === TABS.EXTRA && hasExtra && (
                     <div style={{ width: tabWidth, maxWidth: "100%" }}>
-                      <h4 className="text-lg font-bold text-white mb-3">
+                      <h4 className="text-xl font-bold text-white mb-3">
                         추가된 단어
                       </h4>
                       <ul className="space-y-3">
                         {extraPoints.map((point, idx) => (
                           <li
                             key={idx}
-                            className="w-full px-4 py-3 rounded-xl bg-white/10 text-white shadow-sm"
+                            className="w-[30rem] px-4 py-3 rounded-xl bg-white/10 text-white shadow-sm"
                           >
                             <span className="font-semibold break-keep">
                               추가된 단어:
@@ -481,6 +454,11 @@ const Words = ({ data, isReview }) => {
           </div>
         </div>
       )}
+
+      </div>
+
+
+     
       <MainButton
         onClick={isLastWord ? handleComplete : goToNextWord}
         disabled={!result}

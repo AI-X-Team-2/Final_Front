@@ -5,8 +5,8 @@ import MainButton from "../component/MainButton"; // MainButton 컴포넌트 경
 import RegameButton from "../component/RegameButton";
 import gameimage from "../assets/gameimage.png"; // PNG 배경 이미지 경로 수정 확인
 import "../fonts.css";
-
-
+import { useMutation } from "@tanstack/react-query";
+import { createLeaderboardEntry } from "../api/game";
 import "../index.css";
 
 const WORD_LIST = [
@@ -77,6 +77,24 @@ export default function WordGame() {
   useEffect(() => { startedRef.current = started; }, [started]);
   useEffect(() => { scoreRef.current   = score;   }, [score]);
   useEffect(() => { livesRef.current   = lives;   }, [lives]);
+
+const postLeaderboard = useMutation({
+  mutationFn: (points) => createLeaderboardEntry(points),
+  onSuccess: (data) => {
+    console.log("리더보드 저장 성공:", data);
+  },
+  onError: (err) => {
+    console.error("리더보드 저장 실패:", err);
+  },
+});
+
+// 게임 종료 시 한 번만 호출
+useEffect(() => {
+    console.log(score)
+  if (!started && lives <= 0) {
+    postLeaderboard.mutate(score);
+  }
+}, [started, lives]);
 
   // ====== 새로 추가된 상태/Ref(요청 기능) ======
   const [showSpeedUp, setShowSpeedUp] = useState(false);
