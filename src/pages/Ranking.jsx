@@ -1,34 +1,35 @@
 // src/pages/Ranking.jsx
-import React, { useMemo } from "react";
+
 import { useNavigate } from "react-router-dom";
 import MainButton from "../component/MainButton";
-
-// 임시 데이터 (백엔드 연동 전 테스트용)
-const MOCK_SCORES = [
-    { id: "seoyoung 7562", points: 180 },
-    { id: "tester 1021", points: 160 },
-    { id: "user 33", points: 160 },
-    { id: "hana", points: 130 },
-    { id: "neo", points: 95 },
-];
+import { fetchLeaderboard } from "../api/game";
+import React, { useMemo, useState, useEffect } from "react";
 
 export default function Ranking() {
     const navigate = useNavigate();
-
-    // 동점자 동일순위 처리 + 내림차순
-    const rows = useMemo(() => {
-        const sorted = [...MOCK_SCORES].sort((a, b) => b.points - a.points);
-        let lastPoints = null;
-        let lastRank = 0;
-        return sorted.map((p, i) => {
-            const rank = p.points === lastPoints ? lastRank : i + 1;
-            lastPoints = p.points;
-            lastRank = rank;
-            return { ...p, rank };
-        });
+    const [leaderboardData, setLeaderboardData] = useState(null);
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const res = await fetchLeaderboard();
+                console.log("fetchLeaderboard response:", res);
+                setLeaderboardData(res);
+            } catch (err) {
+                console.error("Leaderboard fetch error:", err);
+            }
+        };
+        loadData();
     }, []);
 
-    // ⭐ 게임 페이지로 이동하면서 "autoStart: true" 상태를 전달
+    if (!leaderboardData) {
+        return (
+            <div className="min-h-screen bg-cus text-white flex items-center justify-center">
+                <p>랭킹 불러오는 중...</p>
+            </div>
+        );
+    }
+
+
     const goGame = () => navigate("/game", { state: { autoStart: true } });
 
     return (
@@ -37,8 +38,7 @@ export default function Ranking() {
                 {/* 타이틀 */}
                 <h1 className="text-white text-3xl font-semibold mb-8 self-start">포인트 랭킹</h1>
 
-                {/* 표 카드 */}
-                <div className="bg-customFeedBack rounded-2xl overflow-hidden shadow-xl divide-customLightGray">
+                <div className="bg-customFeedBack overflow-hidden rounded-2xl shadow-xl divide-customLightGray">
                     {/* 헤더 */}
                     <div className="grid grid-cols-12 bg-white/10 py-5 px-10 text-lg font-semibold">
                         <div className="col-span-2 text-center">순위</div>
@@ -46,21 +46,40 @@ export default function Ranking() {
                         <div className="col-span-7 pl-3">아이디</div>
                     </div>
                     <hr className="w-full border-t border-customLightGray" />
-                    
+                     {leaderboardData.my_rank && (
+                        <>
+                        
+                            <div className="px-8 py-6">
+                                <div className="grid grid-cols-12 items-center text-lg bg-white/15 
+                      border border-white/40 rounded-md  p-6 ">
+                                    <div className="col-span-2 text-center">{leaderboardData.my_rank.rank}</div>
+                                    <div className="col-span-3 text-center">{leaderboardData.my_rank.points}</div>
+                                    <div className="col-span-7 pl-3 truncate">{leaderboardData.my_rank.username}</div>
+                                </div>
+                            </div>
+                        </>
+                    )}
 
-                    {/* 데이터 */}
-                    {rows.map((r, idx) => (
+                    {/* 상위 랭킹 데이터 */}
+                    {leaderboardData.leaderboard.map((r, idx) => (
                         <div
                             key={`${r.id}-${idx}`}
-                            className={`grid grid-cols-12 items-center px-8 py-6 text-lg ${idx === 0 ? "bg-white/15" : "bg-white/5"
+                            className={`grid grid-cols-12 items-center px-8 py-6 text-lg ${idx === 0 ? "bg-customFeedBack" : "bg-white/5"
                                 }`}
                         >
-                            <div className="col-span-2 text-center">{r.rank}</div>
+                            <div className="col-span-2 text-center">{idx + 1}</div>
                             <div className="col-span-3 text-center">{r.points}</div>
-                            <div className="col-span-7 pl-3 truncate">{r.id}</div>
+                            <div className="col-span-7 pl-3 truncate">{r.username}</div>
                         </div>
                     ))}
+                   
                 </div>
+
+
+
+
+
+
             </div>
 
 

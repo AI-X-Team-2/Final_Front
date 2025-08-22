@@ -138,7 +138,7 @@ const [openIds, setOpenIds] = useState(new Set());
               <div
                 onClick={() => toggleOpen(item.review_id)}
                 className={`flex justify-between items-center px-4 py-2 cursor-pointer transition-all duration-150 rounded-md ${
-                  isSelected ? 'bg-sky-200 text-black' : 'bg-transparent text-white'
+                  isSelected ? ' text-white' : 'bg-transparent text-white'
                 }`}
               >
                 <span className="font-medium text-lg">{item.target_word}</span>
