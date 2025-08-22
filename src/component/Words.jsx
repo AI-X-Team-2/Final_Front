@@ -355,7 +355,7 @@ const Words = ({ data, isReview }) => {
 
                             >
                               <p className="font-bold text-lg mb-2 text-white">
-                                틀린 발음: <span className="font-normal ">"{point.actual}" → "{point.expected}"</span>
+                                틀린 발음: <span className="font-normal ">"{point.wrong_text}" → "{point.expected}"</span>
                               </p>
 
                               {point.teaching_point && (

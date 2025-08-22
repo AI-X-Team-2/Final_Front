@@ -16,13 +16,16 @@ const WordFeedback = ({ data }) => (
         {data.incorrect_points && data.incorrect_points.length > 0 && (
             <div>
                 <h4 className="font-bold text-white mt-4 mb-2">상세 피드백</h4>
-                <div className="space-y-3 max-h-48 overflow-y-auto pr-2">
+                <div className="space-y-3 max-h-48 overflow-y-auto pr-2 scrollbar-hide">
+                    {/* ===== 여기가 핵심 수정 부분입니다 ===== */}
                     {data.incorrect_points.map((point, index) => (
                         <div key={index} className="p-3 bg-black bg-opacity-20 rounded-lg text-left text-sm">
+                            {/* 글자별 교정 내용을 표시합니다. */}
                             <p className="font-bold">
-                                <span className="text-white">"{point.actual}"</span> → <span className="text-white">"{point.expected}"</span>
+                                {/* 'point.actual'이 비어있으면 '-'로 표시하여 ""가 나오는 것을 방지합니다. */}
+                                <span className="text-white">"{point.wrong_text || '-'}"</span> → <span className="text-white">"{point.expected}"</span>
                             </p>
-                            <p className="text-xs text-gray-300 mt-1 mb-2">{point.teaching_point}</p>
+                            <p className="text-xs text-gray-300 mt-1 mb-2">초성: {point.teaching_point}</p>
                             <div className="text-xs space-y-1 border-t border-white/10 pt-2">
                                 <p><strong>입모양:</strong> {point.mouth_feedback}</p>
                                 <p><strong>혀 위치:</strong> {point.tongue_position_feedback}</p>
@@ -58,14 +61,24 @@ const FeedbackCard = ({ feedbackData, onClose }) => {
     const data = isSentence ? feedbackData.sentence_feedback : feedbackData;
 
     return (
-        <div className="relative w-full max-w-md p-6 mx-4 bg-custom-blue-gradient rounded-2xl shadow-lg text-white">
+        <div className="relative w-full max-w-md p-6 mx-4 bg-customFeedBack rounded-2xl shadow-lg text-white">
             <button onClick={onClose} className="absolute top-3 right-3 text-white hover:text-gray-300">
                 <XMarkIcon className="w-6 h-6" />
             </button>
             
-            <div className="mb-4 text-center">
-                <p className="text-sm text-gray-300">입력한 내용</p>
-                <p className="text-xl font-bold">"{feedbackData.userInput}"</p>
+            {/* ===== 1. 이 부분 수정 ===== */}
+            <div className="mb-4 text-center space-y-2">
+                <div>
+                    <p className="text-sm text-gray-300">입력한 내용</p>
+                    <p className="text-xl font-bold">"{feedbackData.userInput}"</p>
+                </div>
+                {/* 2. 문장일 때만 "사용자 발음" 표시 */}
+                {isSentence && (
+                     <div>
+                        <p className="text-sm text-gray-300">사용자 발음</p>
+                        <p className="text-lg font-bold text-gray-100">"{feedbackData.my_text || '-'}"</p>
+                    </div>
+                )}
             </div>
 
             <hr className="border-white/20 my-3" />
