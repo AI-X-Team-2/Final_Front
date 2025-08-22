@@ -19,3 +19,7 @@
 body {
     font-family: 'NanumSquareRound', sans-serif;
 }
+
+html{
+  overflow: hidden;
+}
