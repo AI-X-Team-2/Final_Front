@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../store/useAuthStore";
 
 export const api = axios.create({
-  baseURL: "http://localhost:8000",  // ✅ 직접 localhost 지정
+  baseURL: "http://15.165.141.230",  // ✅ 직접 localhost 지정
   timeout: 15000,
 });
 
