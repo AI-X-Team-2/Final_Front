@@ -132,7 +132,7 @@ const Audio = forwardRef(({
 
     try {
       const response = await axios.post(
-        "http://15.165.141.230/analyze",
+        "https://youum.kro.kr/analyze",
         formData,
         {
           headers: {
