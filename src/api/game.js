@@ -6,7 +6,7 @@ const token = useAuthStore.getState()?.token;
 console.log(token)
 export async function createLeaderboardEntry(points) {
   const res = await axios.post(
-    "http://localhost:8000/api/leaderboard/create",
+    "http://15.165.141.230/api/leaderboard/create",
     { points },
     {
       headers: {
