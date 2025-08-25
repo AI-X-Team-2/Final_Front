@@ -76,10 +76,6 @@ export default function Ranking() {
                 </div>
 
 
-
-
-
-
             </div>
 
 

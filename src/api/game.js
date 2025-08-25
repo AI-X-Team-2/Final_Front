@@ -2,9 +2,9 @@ import axios from "axios";
 import { useAuthStore } from '../store/useAuthStore'; 
 
 
-const token = useAuthStore.getState()?.token;
-console.log(token)
+
 export async function createLeaderboardEntry(points) {
+  const token = useAuthStore.getState()?.token;
   const res = await axios.post(
     "http://15.165.141.230/api/leaderboard/create",
     { points },
@@ -21,9 +21,9 @@ export async function createLeaderboardEntry(points) {
 }
 
 export async function fetchLeaderboard() {
-
+  const token = useAuthStore.getState()?.token;
   const res = await axios.get(
-    "http://localhost:8000/api/leaderboard/leaderboard",
+    "http://15.165.141.230/api/leaderboard/leaderboard",
     {
       headers: {
         Authorization: `Bearer ${token}`, 

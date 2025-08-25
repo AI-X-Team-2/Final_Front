@@ -37,7 +37,7 @@ const ChatPractice = () => {
     const [feedback, setFeedback] = useState(null);
     const [error, setError] = useState('');
     const [chatHistory, setChatHistory] = useState([]);
-    const [isHistoryVisible, setIsHistoryVisible] = useState(false);
+    const [isHistoryVisible, setIsHistoryVisible] = useState(true);
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
 
@@ -102,7 +102,7 @@ const ChatPractice = () => {
         const isSentence = text.length >= 6 || text.includes(' ');
         const endpoint = isSentence ? '/analyze_sentence' : '/analyze';
         try {
-            const response = await axios.post(`http://127.0.0.1:8000${endpoint}`, formData, {
+            const response = await axios.post(`http://15.165.141.230${endpoint}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             setFeedback({ ...response.data, type: isSentence ? 'sentence' : 'word', userInput: text });
@@ -137,7 +137,7 @@ const ChatPractice = () => {
                             {chatHistory.length > 0 ? (
                                 chatHistory.map(item => <HistoryItem key={item.id} item={item} onClick={handleHistoryClick} />)
                             ) : (
-                                <div className=" text-gray-500 pt-10">
+                                <div className="text-center text-gray-500 pt-10">
                                     <p>아직 학습 내역이 없습니다.</p>
                                 </div>
                             )}

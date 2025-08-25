@@ -85,6 +85,12 @@ const Camera = forwardRef(({ onRecorded, reset, onUploadComplete }, ref) => {
             const videoBlob = new Blob(recordedChunksRef.current, {
                 type: "video/webm",
             });
+            const videoUrl = URL.createObjectURL(videoBlob);
+            // setRecordedVideoURL(videoBlob) // 이 부분은 원본 영상을 보여줄 때 필요하지만 현재는 사용하지 않음
+
+            if (onRecorded) {
+                onRecorded(videoUrl);
+            }
        
             await uploadVideoToServer(videoBlob);
         };

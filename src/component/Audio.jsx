@@ -130,6 +130,11 @@ const Audio = forwardRef(({
       console.warn("세션 ID가 없습니다. 새로고침 시 세션 복구 로직을 확인하세요.");
     }
 
+    // 1. 단어/문장 판별
+    const isSentence = target.length >= 6 || target.includes(' ');
+    // 2. 판별 결과에 따라 API 주소 결정
+    const endpoint = isSentence ? '/analyze_sentence' : '/analyze';
+
     try {
       const response = await axios.post(
         "http://15.165.141.230/analyze",
@@ -147,6 +152,8 @@ const Audio = forwardRef(({
         onResult(response.data);
       }
     } catch (error) {
+      // 3. 결과 데이터에 type 정보 추가해서 전달
+      onResult({ ...response.data, type: isSentence ? 'sentence' : 'word' });
       console.error("전송 실패:", error);
     }
   };
