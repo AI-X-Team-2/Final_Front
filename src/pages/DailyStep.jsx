@@ -34,7 +34,7 @@ const DailyStep = () => {
     return (
         <>
             <div className='flex flex-col justify-center items-center gap-10 mt-20'>
-                {[1, 2].map((step) => (
+                {[1, 2, 3, 4, 5].map((step) => (
                     <div key={step} className={`flex w-full cursor-pointer ${step % 2 === 1 ? 'justify-start pl-60' : 'justify-end pr-60'}`} onClick={() => handleClick(step)}>
                         <StageButton step={step} status={maxLevel.includes(step) ? "opened" : "locked"} />
 

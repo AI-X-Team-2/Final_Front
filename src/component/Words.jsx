@@ -180,7 +180,7 @@ const Words = ({ data, isReview }) => {
   const isLastWord = currentWordIndex === data.length - 1;
 
   return (
-    <div className="mb-10 flex flex-col items-center gap-2 h-screen">
+    <div className="mb-10 flex flex-col items-center h-screen">
       <div className="flex flex-col w-full items-center gap-3">
         {currentWord && (
           <div className="text-center bg-white w-64 h-24 flex items-center justify-center rounded-xl mt-10">
@@ -222,7 +222,7 @@ const Words = ({ data, isReview }) => {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-x-8 mb-4">
+          <div className="grid grid-cols-2 gap-x-8 ">
             <p className="text-lg">
               <span className="font-semibold text-white text-xl">
                 종합 점수:
@@ -234,7 +234,7 @@ const Words = ({ data, isReview }) => {
           </div>
 
           <div className="flex flex-col items-center gap-8 ">
-            {result.score === "0" ? (
+            {result.score == "0" ? (
               <p className="mt-2 p-4 bg-customFeedBack text-white rounded-lg text-center font-semibold mb-36">
                 일치하지 않는 단어입니다.
               </p>
@@ -355,7 +355,7 @@ const Words = ({ data, isReview }) => {
 
                             >
                               <p className="font-bold text-lg mb-2 text-white">
-                                틀린 발음: <span className="font-normal ">"{point.wrong_text}" → "{point.expected}"</span>
+                                틀린 발음: <span className="font-normal">"{point.wrong_text}" → "{point.expected}"</span>
                               </p>
 
                               {point.teaching_point && (
