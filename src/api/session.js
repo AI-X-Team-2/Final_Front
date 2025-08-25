@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useAuthStore } from "../store/useAuthStore";
 import { useProgressStore } from "../store/useProgressStore";
-const API_BASE = "http://15.165.141.230"; 
+const API_BASE = "process.env.REACT_APP_API_URL.141.230"; 
 
 
 export const completeSession = async (sessionId) => {

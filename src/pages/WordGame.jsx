@@ -365,7 +365,7 @@ useEffect(() => {
           fd.append("audio", blob, "audio.webm");
 
           try {
-            const res = await fetch("http://15.165.141.230/transcribe_audio", { method: "POST", body: fd });
+            const res = await fetch("process.env.REACT_APP_API_URL.141.230/transcribe_audio", { method: "POST", body: fd });
             if (res.ok) {
               const data = await res.json();
               const spoken = (data.my_text || "").trim();

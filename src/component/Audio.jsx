@@ -137,7 +137,7 @@ const Audio = forwardRef(({
 
     try {
       const response = await axios.post(
-        "http://15.165.141.230/analyze",
+        "process.env.REACT_APP_API_URL.141.230/analyze",
         formData,
         {
           headers: {

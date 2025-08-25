@@ -102,7 +102,7 @@ const ChatPractice = () => {
         const isSentence = text.length >= 6 || text.includes(' ');
         const endpoint = isSentence ? '/analyze_sentence' : '/analyze';
         try {
-            const response = await axios.post(`http://15.165.141.230${endpoint}`, formData, {
+            const response = await axios.post(`process.env.REACT_APP_API_URL.141.230${endpoint}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             setFeedback({ ...response.data, type: isSentence ? 'sentence' : 'word', userInput: text });
