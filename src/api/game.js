@@ -23,7 +23,7 @@ export async function createLeaderboardEntry(points) {
 export async function fetchLeaderboard() {
 
   const res = await axios.get(
-    "http://localhost:8000/api/leaderboard/leaderboard",
+    "http://15.165.141.230/api/leaderboard/leaderboard",
     {
       headers: {
         Authorization: `Bearer ${token}`, 
