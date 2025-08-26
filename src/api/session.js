@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useAuthStore } from "../store/useAuthStore";
 import { useProgressStore } from "../store/useProgressStore";
-const API_BASE = ""; 
+const API_BASE = "http://localhost:8000"; 
 
 
 export const completeSession = async (sessionId) => {

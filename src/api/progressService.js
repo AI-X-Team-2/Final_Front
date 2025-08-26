@@ -4,7 +4,7 @@ import axios from 'axios';
 export async function fetchMyProgress(token) {
   try {
     const res = await axios.get(
-      `/api/progress/me`,
+      `http://localhost:8000/api/progress/me`,
       {
         headers: {
           'Content-Type': 'application/json',

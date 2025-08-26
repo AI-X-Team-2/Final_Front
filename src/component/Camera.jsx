@@ -52,7 +52,7 @@ const Camera = forwardRef(({ onRecorded, reset, onUploadComplete }, ref) => {
             formData.append("video_file", videoBlob, "recording.webm");
 
             const response = await axios.post(
-                "/api/upload_video",
+                "http://localhost:8000/api/upload_video",
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
