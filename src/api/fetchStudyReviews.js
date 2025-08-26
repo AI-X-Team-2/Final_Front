@@ -2,7 +2,7 @@
 import axios from "axios";
 
 export async function fetchStudyReviews(token) {
-  const res = await axios.get("https://youum.kro.kr/api/reviews/", {
+  const res = await axios.get("https://15.165.141.230/api/reviews/", {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
