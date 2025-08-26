@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../store/useAuthStore";
 
 export const api = axios.create({
-  baseURL: "process.env.REACT_APP_API_URL",  // ✅ 직접 localhost 지정
+  baseURL: "import.meta.env.VITE_API_URL",  // ✅ 직접 localhost 지정
   timeout: 15000,
 });
 

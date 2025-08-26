@@ -2,7 +2,7 @@
 import axios from "axios";
 
 export async function fetchStudyReviews(token) {
-  const res = await axios.get("process.env.REACT_APP_API_URL", {
+  const res = await axios.get("import.meta.env.VITE_API_URL", {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",

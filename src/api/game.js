@@ -6,7 +6,7 @@ import { useAuthStore } from '../store/useAuthStore';
 export async function createLeaderboardEntry(points) {
   const token = useAuthStore.getState()?.token;
   const res = await axios.post(
-    "process.env.REACT_APP_API_URL/api/leaderboard/create",
+    "import.meta.env.VITE_API_URL/api/leaderboard/create",
     { points },
     {
       headers: {

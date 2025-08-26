@@ -4,7 +4,7 @@ import axios from 'axios';
 export async function fetchMyProgress(token) {
   try {
     const res = await axios.get(
-      `process.env.REACT_APP_API_URL/api/progress/me`,
+      `import.meta.env.VITE_API_URL/api/progress/me`,
       {
         headers: {
           'Content-Type': 'application/json',

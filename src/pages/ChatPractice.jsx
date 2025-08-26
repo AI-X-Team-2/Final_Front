@@ -137,7 +137,7 @@ const ChatPractice = () => {
                             {chatHistory.length > 0 ? (
                                 chatHistory.map(item => <HistoryItem key={item.id} item={item} onClick={handleHistoryClick} />)
                             ) : (
-                                <div className="text-center text-gray-500 pt-10">
+                                <div className=" text-gray-500 pt-10">
                                     <p>아직 학습 내역이 없습니다.</p>
                                 </div>
                             )}
