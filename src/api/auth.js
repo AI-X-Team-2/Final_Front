@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://youum.kro.kr', 
+  baseURL: 'https://15.165.141.230', 
   headers: {
     'Content-Type': 'application/json',
   },

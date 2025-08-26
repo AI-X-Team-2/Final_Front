@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../store/useAuthStore";
 
 export const api = axios.create({
-  baseURL: "https://youum.kro.kr",  
+  baseURL: "https://15.165.141.230",  
   timeout: 15000,
 });
 
