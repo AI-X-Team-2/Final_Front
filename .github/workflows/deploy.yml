@@ -30,6 +30,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/*"
           target: "/var/www/html/dist"
+          rm: true
 
       - name: Restart Nginx
         uses: appleboy/ssh-action@v0.1.6
